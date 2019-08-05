@@ -20,4 +20,4 @@
 * 图书馆接口
   暂不开放，敬请期待。
 
-![baidu](http://www.baidu.com/img/bdlogo.gif "百度logo")  
+![baidu](http://47.94.255.154:8080/zhximage/qidong.png "百度logo")  
