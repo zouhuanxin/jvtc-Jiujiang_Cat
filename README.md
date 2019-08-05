@@ -1,2 +1,16 @@
-# jvtc-九职小猫手
- 九职小猫手 程序集成了九江职业技术学院 学工平台 教务系统 图书馆日常操作 并且新增了部分功能 义务维修 事件倒计时等 目前仅仅支持九江职业技术学院 ps:提供九职图书馆部分接口   程序开发是为了方便同学日常操作 以及技术交流 绝不允许用于非法用途 如有侵权请联系作者处理 qq:634448817
+# flutter_app01
+
+A new Flutter application.
+
+## Getting Started
+
+This project is a starting point for a Flutter application.
+
+A few resources to get you started if this is your first Flutter project:
+
+- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
+- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+
+For help getting started with Flutter, view our
+[online documentation](https://flutter.dev/docs), which offers tutorials,
+samples, guidance on mobile development, and a full API reference.
