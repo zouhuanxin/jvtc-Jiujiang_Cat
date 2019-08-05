@@ -20,4 +20,4 @@
 * 图书馆接口
   暂不开放，敬请期待。
 
-![baidu](http://47.94.255.154:8080/zhximage/qidong.png "百度logo")  
+![九江小猫手](http://47.94.255.154:8080/zhximage/qidong.png "九江小猫手")  
