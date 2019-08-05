@@ -1,16 +1,6 @@
-# flutter_app01
+# 九职小猫手
 
-A new Flutter application.
+介绍：此程序集成了九江职业技术学院，学工平台，教务系统，图书馆系统等常用功能用户从此可以在移动端在进行日常操作不必繁琐进入网站。并增加了一些常用有趣功能 ，事件倒计时，义务维修，成绩分析，学习周期等等这会让学生在学习时间安排上自我认知上有充分的进步。
 
-## Getting Started
+#目前程序全部功能仅支持九江技术学院学生使用非本校学生支持处学工平台，教务系统，图书馆系统外的功能使用。
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
