@@ -66,7 +66,7 @@ class System_notice_State extends State<System_notice>{
         decoration: BoxDecoration(
             color: Color(int.parse(color4)),
             border: new Border.all(width: 1.0, color: Color(int.parse(tempmap['level']))),
-            borderRadius: BorderRadius.all(Radius.circular(10.0))
+            //borderRadius: BorderRadius.all(Radius.circular(10.0))
         ),
         margin: EdgeInsets.all(10.0),
         child: new GestureDetector(
