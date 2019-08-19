@@ -20,6 +20,9 @@ import 'package:flutter_app01/Countdown/Countdown.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_app01/Results_analysis/Results_analysis.dart';
 import 'package:flutter_app01/Student_assistant/Student_assistant.dart';
+import 'package:flutter_app01/Lovers_space/Lovers_space.dart';
+import 'package:flutter_app01/Utils/WebViewPage.dart';
+import 'package:flutter_app01/common/System_notice.dart';
 
 class HomePage extends StatefulWidget{
   @override
@@ -93,6 +96,14 @@ class _HomePageState extends State<HomePage> {
       case '学习周期':
         Navigator.push(context,
             new MaterialPageRoute(builder: (context) => new Student_assistant()));
+        break;
+      case '情侣空间':
+        Navigator.push(context,
+            new MaterialPageRoute(builder: (context) => new Lovers_space()));
+        break;
+      case '软件协会官方网站':
+        Navigator.push(context,
+            new MaterialPageRoute(builder: (context) => new WebViewPage(url:'http://47.94.255.154:8080/software2.0/index.html',title:'软件协会官方网站')));
         break;
     }
   }
@@ -238,6 +249,65 @@ class _HomePageState extends State<HomePage> {
       );
     };
 
+    Widget buildButtonColumn2(String imageurl, String label1,label2) {
+      Color color = Color(int.parse(color2));
+      return new Container(
+        margin: EdgeInsets.all(5.0),
+        child: new Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Expanded(
+              child: new GestureDetector(
+                child: new Image(image: new AssetImage(imageurl),height: 40,width: 40,),
+                onTap:(){
+                  _model_click(label1);
+                },
+              ),
+              flex: 1,
+            ),
+            Expanded(
+              child: new Align(
+                alignment: FractionalOffset.bottomLeft,
+                child: new GestureDetector(
+                  child:new Column(
+                    children: <Widget>[
+                      new Align(
+                        alignment: FractionalOffset.bottomLeft,
+                        child: new Text(
+                          label1,
+                          style: new TextStyle(
+                            fontSize: 15.0,
+                            fontWeight: FontWeight.w600,
+                            color: color,
+                          ),
+                        ),
+                      ),
+                      new Align(
+                        alignment: FractionalOffset.bottomLeft,
+                        child: new Text(
+                          label2,
+                          style: new TextStyle(
+                            fontSize: 10.0,
+                            fontWeight: FontWeight.w100,
+                            color: color,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  onTap:(){
+                    _model_click(label1);
+                  },
+                ),
+              ),
+              flex: 3,
+            ),
+          ],
+        ),
+      );
+    };
+
     //校园功能模块
     Widget campus_funcation_text = new Container(
       padding: const EdgeInsets.all(32.0),
@@ -291,7 +361,7 @@ class _HomePageState extends State<HomePage> {
       ),
     );
 
-    //校园生活模块
+    //工具箱模块
     Widget campus_toolkit_text = new Container(
       padding: const EdgeInsets.all(32.0),
       child: new Text(
@@ -310,6 +380,30 @@ class _HomePageState extends State<HomePage> {
         children: [
           buildButtonColumn(Icons.library_books, '学习周期','不拼命久了，学习一个小时你觉得自己在拼命！记录你的学习时间,采集你学习周期时间给予建议，并用数据告诉你自己有没有拼命学习。'),
           buildButtonColumn(Icons.chat, '强制qq聊天','输入对方qq号可以强制拉起qq与对方进行交流,如果对方没有打开在线咨询则无法发送消息,你可以直接加为好友。'),
+          //buildButtonColumn(Icons.supervisor_account, '情侣空间','你和对象的私人空间.'), //no open
+        ],
+      ),
+    );
+
+    //协会模块
+    Widget campus_xh_text = new Container(
+      padding: const EdgeInsets.all(32.0),
+      child: new Text(
+        '九职协会',
+        softWrap: true,
+        style: new TextStyle(
+          color: Color(int.parse(color2)),
+          fontSize: 20.0,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+    );
+    Widget campus_xh_button = new Container(
+      child: new Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          buildButtonColumn2('images/2.0.x/rjxh.jpg', '软件协会官方网站','软件协会欢迎您!'),
+          //buildButtonColumn(Icons.supervisor_account, '情侣空间','你和对象的私人空间.'), //no open
         ],
       ),
     );
@@ -333,6 +427,15 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           ),
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.notifications,color: Color(int.parse(color2))),
+              onPressed: (){
+                Navigator.push(context,
+                    new MaterialPageRoute(builder: (context) => new System_notice()));
+              },
+            ),
+          ],
           backgroundColor: Color(int.parse(color1)),
           centerTitle: true,
         ),
@@ -349,6 +452,8 @@ class _HomePageState extends State<HomePage> {
               campus_life_button,
               campus_toolkit_text,
               campus_toolkit_button,
+              campus_xh_text,
+              campus_xh_button,
               SizedBox(height: 30,),
             ],
           ),

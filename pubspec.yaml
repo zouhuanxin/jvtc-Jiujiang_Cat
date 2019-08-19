@@ -14,7 +14,7 @@ description: A new Flutter application.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.2.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -38,6 +38,7 @@ dependencies:
   flutter_localizations: # 添加
       sdk: flutter         # 添加
   audioplayers: ^0.10.0
+  flutter_webview_plugin: 0.3.7
 
 dev_dependencies:
   flutter_test:
