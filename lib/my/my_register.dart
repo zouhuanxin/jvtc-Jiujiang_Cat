@@ -54,10 +54,13 @@ class my_register_State extends State<my_register>{
 
   void _imagetobase64(File value) async{
     String path=await androidplatform.invokeMethod("getFile",{"path":value.path});
+    print('_imagetobase64path:$path');
     File file=new File(path);
     List bytes=await file.readAsBytes();
+    print('_imagetobase64size:${bytes.length}');
     bs64 = base64Encode(bytes);
-    if(bs64.length>160000){
+    print('_imagetobase64size:${bs64.length}');
+    if(bs64.length>180000){
       bs64=null;
       Fluttertoast.showToast(
           msg: "图片过大,请重新选择头像",

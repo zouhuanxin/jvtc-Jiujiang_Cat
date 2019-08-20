@@ -59,10 +59,11 @@ class Collection_State extends State<Collection> {
     File file=new File(path);
     List bytes=await file.readAsBytes();
     bs64 = base64Encode(bytes);
-    if(bs64.length>160000){
-      bs64=null;
-       _showmodel('图片过大,请重新选择一张.', Toast.LENGTH_SHORT,Colors.red);
-    }
+    //此处用自己的服务器 上传大小限制为10M 所以这里不加限制
+//    if(bs64.length>160000){
+//      bs64=null;
+//       _showmodel('图片过大,请重新选择一张.', Toast.LENGTH_SHORT,Colors.red);
+//    }
   }
   Widget _previewImage() {
     return new GestureDetector(
