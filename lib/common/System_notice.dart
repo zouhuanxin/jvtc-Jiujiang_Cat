@@ -58,59 +58,71 @@ class System_notice_State extends State<System_notice>{
 
   List<Widget>System_Notice_ui_list=[];
   void _loading_ui(){
+    List<String>listtemp=[];
+    listtemp.add('test');
     System_Notice_ui_list.clear();
     for(var i=0;i<_list.length;i++){
       Map<String,Object> tempmap=json.decode(json.encode(_list[i]));
+      listtemp.add(tempmap['createdAt'].toString().split(' ')[0]);
+      print(listtemp);
       System_Notice_ui_list.add(Container(
-        padding: EdgeInsets.all(10.0),
-        decoration: BoxDecoration(
-            color: Color(int.parse(color4)),
-            border: new Border.all(width: 1.0, color: Color(int.parse(tempmap['level']))),
-            //borderRadius: BorderRadius.all(Radius.circular(10.0))
-        ),
-        margin: EdgeInsets.all(10.0),
-        child: new GestureDetector(
-          onTap: (){
-            Navigator.push(context,
-                new MaterialPageRoute(builder: (context) => new WebViewPage(url:tempmap['url'],title:tempmap['title'])));
-          },
-          child: new Column(
-            children: <Widget>[
-              new Row(
-                children: <Widget>[
-                  Expanded(
-                    flex: 1,
-                    child: new Text(tempmap==null?'':tempmap['title'],textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,style: TextStyle(fontSize: 20,
-                        fontWeight: FontWeight.w400),),
-                  ),
-                ],
+        child: new Column(
+          children: <Widget>[
+            Text(tempmap['createdAt'].toString().split(' ')[0]==listtemp[i]?'':tempmap['createdAt'].toString().split(' ')[0]
+              ,style: TextStyle(fontWeight: FontWeight.w600,fontSize: tempmap['createdAt'].toString().split(' ')[0]==listtemp[i]?0:20),),
+            Container(
+              padding: EdgeInsets.all(10.0),
+              decoration: BoxDecoration(
+                color: Color(int.parse(color4)),
+                border: new Border.all(width: 1.0, color: Color(int.parse(tempmap['level']))),
+                //borderRadius: BorderRadius.all(Radius.circular(10.0))
               ),
-              SizedBox(height: 10,),
-              new Row(
-                children: <Widget>[
-                  Expanded(
-                    flex: 1,
-                    child: new Text(tempmap==null?'':tempmap['content'],textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,),
-                  ),
-                ],
+              margin: EdgeInsets.all(10.0),
+              child: new GestureDetector(
+                onTap: (){
+                  Navigator.push(context,
+                      new MaterialPageRoute(builder: (context) => new WebViewPage(url:tempmap['url'],title:tempmap['title'])));
+                },
+                child: new Column(
+                  children: <Widget>[
+                    new Row(
+                      children: <Widget>[
+                        Expanded(
+                          flex: 1,
+                          child: new Text(tempmap==null?'':tempmap['title'],textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,style: TextStyle(fontSize: 20,
+                              fontWeight: FontWeight.w400),),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 10,),
+                    new Row(
+                      children: <Widget>[
+                        Expanded(
+                          flex: 1,
+                          child: new Text(tempmap==null?'':tempmap['content'],textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 10,),
+                    new Row(
+                      children: <Widget>[
+                        Expanded(
+                          flex: 1,
+                          child: new Text(tempmap==null?'':tempmap['author'],textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,style: TextStyle(fontSize: 10,
+                              fontWeight: FontWeight.w200),),
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child: new Text(tempmap==null?'':tempmap['createdAt'],textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,style: TextStyle(fontSize: 10,
+                              fontWeight: FontWeight.w200),),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-              SizedBox(height: 10,),
-              new Row(
-                children: <Widget>[
-                  Expanded(
-                    flex: 1,
-                    child: new Text(tempmap==null?'':tempmap['author'],textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,style: TextStyle(fontSize: 10,
-                        fontWeight: FontWeight.w200),),
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: new Text(tempmap==null?'':tempmap['createdAt'],textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,style: TextStyle(fontSize: 10,
-                        fontWeight: FontWeight.w200),),
-                  ),
-                ],
-              ),
-            ],
-          ),
+            )
+          ],
         ),
       ));
     }

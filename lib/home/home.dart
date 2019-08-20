@@ -23,6 +23,7 @@ import 'package:flutter_app01/Student_assistant/Student_assistant.dart';
 import 'package:flutter_app01/Lovers_space/Lovers_space.dart';
 import 'package:flutter_app01/Utils/WebViewPage.dart';
 import 'package:flutter_app01/common/System_notice.dart';
+import 'JZ_association/Collection.dart';
 
 class HomePage extends StatefulWidget{
   @override
@@ -104,6 +105,10 @@ class _HomePageState extends State<HomePage> {
       case '软件协会官方网站':
         Navigator.push(context,
             new MaterialPageRoute(builder: (context) => new WebViewPage(url:'http://47.94.255.154:8080/software2.0/index.html',title:'软件协会官方网站')));
+        break;
+      case '协会收款':
+        Navigator.push(context,
+            new MaterialPageRoute(builder: (context) => new Collection()));
         break;
     }
   }
@@ -403,6 +408,7 @@ class _HomePageState extends State<HomePage> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           buildButtonColumn2('images/2.0.x/rjxh.jpg', '软件协会官方网站','软件协会欢迎您!'),
+          buildButtonColumn2('images/2.0.x/sk.png', '协会收款','九职协会收款助手，帮助协会活动招新收款项目的整理以及归纳，谨慎交钱，开心你我他。'),
           //buildButtonColumn(Icons.supervisor_account, '情侣空间','你和对象的私人空间.'), //no open
         ],
       ),

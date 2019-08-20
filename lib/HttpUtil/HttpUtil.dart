@@ -11,6 +11,10 @@ class HttpUtil {
   static final learn_host = 'http://47.94.255.154:8080';
   static final learn_baseUrl = learn_host + '/test/';
 
+  //node Server //192.168.0.105
+  static final node_host = 'http://47.94.255.154:3000';
+  static final node_baseUrl = node_host + '/rjxhmange/collection/';
+
   //Teach platform Server address
   static final teach_host = 'http://api.ncgame.cc';
   static final teach_baseUrl = teach_host + '/jvtc/';
@@ -27,6 +31,13 @@ class HttpUtil {
   static Future<String> jw_resluts_information(url,kksj,kcxz,jwcookie) async {
     String dataURL = learn_baseUrl+url;
     var temp={'kksj': kksj, 'kcxz': kcxz,'kcmc': '','xsfs': 'all','cookie': jwcookie};
+    http.Response response = await http.post(dataURL,body: json.encode(temp));;
+    return response.body.toString();
+  }
+
+  static Future<String> image_text_sb(url,client_id,client_secret,image) async {
+    String dataURL = learn_baseUrl+url;
+    var temp={'client_id': client_id, 'client_secret': client_secret,'image': image};
     http.Response response = await http.post(dataURL,body: json.encode(temp));;
     return response.body.toString();
   }
@@ -176,6 +187,13 @@ class HttpUtil {
     String dataURL = learn_baseUrl+url;
     var temp={'cookie': cookie};
     http.Response response = await http.post(dataURL,body: json.encode(temp));;
+    return response.body.toString();
+  }
+
+  static Future<String> add_collection_information(url,collection_image,collection_name,collection_association,collection_studentid,collection_projectname,collection_time) async {
+    String dataURL = node_baseUrl+url;
+    var temp={'collection_image': collection_image,'collection_name': collection_name,'collection_association': collection_association,'collection_studentid': collection_studentid,'collection_projectname': collection_projectname,'collection_time': collection_time};
+    http.Response response = await http.post(dataURL,body: temp);;
     return response.body.toString();
   }
 
