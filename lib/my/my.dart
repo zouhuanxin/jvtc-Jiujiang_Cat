@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app01/Utils/Animation_list.dart';
+import 'package:flutter_app01/Utils/WebViewPage.dart';
+import 'package:flutter_app01/course/course.dart';
 import 'package:meta/meta.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:data_plugin/bmob/bmob.dart';
@@ -44,6 +47,10 @@ class my_State extends State<my>{
       case '检查更新':
         IndexState().bmob_get_app_Version_information(context,'my');
         break;
+      case '免责声明':
+        Navigator.push(context,
+            new MaterialPageRoute(builder: (context) => new WebViewPage(url:'http://47.94.255.154:8080/zhxword/九职小猫手免责声明.html',title:'免责声明')));
+        break;
       case '退出登陆':
         _showmodel_cancel_login_stystem('退出登陆','你确定退出登陆吗?');
         break;
@@ -72,6 +79,17 @@ class my_State extends State<my>{
               ),
             ),
           ),
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.refresh,color: Color(int.parse(color2))),
+              onPressed: (){
+                CoursePageState cp=new CoursePageState();
+                cp.disdl();
+                Navigator.pushAndRemoveUntil(context, CustomRouteJianBian(Index(index: 2,)), (check) => false);
+                //Navigator.push(context, CustomRouteJianBian(HomePage()));
+              },
+            ),
+          ],
           backgroundColor: Color(int.parse(color1)),
           centerTitle: true,
         ),
@@ -91,6 +109,7 @@ class my_State extends State<my>{
                 body_component01('images/2.0.x/dark_model.png', '暗黑模式'),
                 body_component02('images/2.0.x/uploadpassword.png',40, '修改密码'),
                 body_component02('images/2.0.x/app_update.png',45, '检查更新'),
+                body_component02('images/2.0.x/mzsm.png',45, '免责声明'),
                 body_component02('images/2.0.x/cancel_stystem.png',35, '退出登陆'),
                 SizedBox(height: 10,)
               ],

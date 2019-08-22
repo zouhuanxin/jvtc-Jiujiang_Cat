@@ -17,8 +17,17 @@ import 'package:data_plugin/bmob/bmob_query.dart';
 // 创建一个 带有状态的 Widget Index
 class Index extends StatefulWidget {
   //  固定的写法
+  final int index;
+
+  const Index({Key key, this.index}) : super(key: key);
+
   @override
-  State<StatefulWidget> createState() => new IndexState();
+  State<StatefulWidget> createState(){
+    //resh_state=index;
+    IndexState indexState=new IndexState();
+    indexState.currentIndex=index==null?0:index;
+    return indexState;
+  }
 }
 
 // 要让主页面 Index 支持动效，要在它的定义中附加mixin类型的对象TickerProviderStateMixin
@@ -29,7 +38,7 @@ class IndexState extends State<Index> with TickerProviderStateMixin {
     bus.off("icon"); //移除广播机制
   }
 
-  int _currentIndex = 0; // 当前界面的索引值
+  int currentIndex = 0; // 当前界面的索引值
   List<NavigationIconView> _navigationViews; // 底部图标按钮区域
   List<StatefulWidget> _pageList; // 用来存放我们的图标对应的页面
   StatefulWidget _currentPage; // 当前的显示页面
@@ -42,13 +51,15 @@ class IndexState extends State<Index> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    bmob_get_app_Version_information(context, 'index');
+    if(widget.index == null){
+      bmob_get_app_Version_information(context, 'index');
+    }
     _load_bottom();
     _load_default_color();
     //监听登录事件
     bus.on("dart_event", (arg) {
       setState(() {
-        _currentIndex = 2;
+        currentIndex = 2;
         _load_bottom();
       });
     });
@@ -64,7 +75,7 @@ class IndexState extends State<Index> with TickerProviderStateMixin {
             size: 30,
           ),
           title: new Text(
-            _currentIndex == 0 ? '___' : '',
+            currentIndex == 0 ? '___' : '',
             style: TextStyle(color: Color(int.parse(color2))),
           ),
           vsync: this), // vsync 默认属性和参数
@@ -72,14 +83,14 @@ class IndexState extends State<Index> with TickerProviderStateMixin {
           icon: new Icon(Icons.grid_on,
               color: Color(int.parse(color2)), size: 30),
           title: new Text(
-            _currentIndex == 1 ? '___' : '',
+            currentIndex == 1 ? '___' : '',
             style: TextStyle(color: Color(int.parse(color2))),
           ),
           vsync: this),
       new NavigationIconView(
           icon: new Icon(Icons.face, color: Color(int.parse(color2)), size: 30),
           title: new Text(
-            _currentIndex == 2 ? '___' : '',
+            currentIndex == 2 ? '___' : '',
             style: TextStyle(color: Color(int.parse(color2))),
           ),
           vsync: this)
@@ -92,7 +103,7 @@ class IndexState extends State<Index> with TickerProviderStateMixin {
 
     // 将我们 bottomBar 上面的按钮图标对应的页面存放起来，方便我们在点击的时候
     _pageList = <StatefulWidget>[new HomePage(), new CoursPage(), new my()];
-    _currentPage = _pageList[_currentIndex];
+    _currentPage = _pageList[currentIndex];
   }
 
   //Load default color
@@ -206,18 +217,24 @@ class IndexState extends State<Index> with TickerProviderStateMixin {
               navigationIconView.item)
           .toList(),
       // 添加 icon 按钮
-      currentIndex: _currentIndex,
+      currentIndex: currentIndex,
       // 当前点击的索引值
       type: BottomNavigationBarType.fixed,
       // 设置底部导航工具栏的类型：fixed 固定
       onTap: (int index) {
+        //为了方便判断是自启动还是手动点击课表 当手动点击课表时候才自动跳转登陆界面在没有登陆的情况下  启动程序与刷新课表界面不跳出自动登陆
+        resh_state=index;
+        if(index==1){
+          CoursePageState cp=new CoursePageState();
+          cp.resh_course_data(context);
+        }
         // 添加点击事件
         setState(() {
           // 点击之后，需要触发的逻辑事件
-          _navigationViews[_currentIndex].controller.reverse();
-          _currentIndex = index;
-          _navigationViews[_currentIndex].controller.forward();
-          _currentPage = _pageList[_currentIndex];
+          _navigationViews[currentIndex].controller.reverse();
+          currentIndex = index;
+          _navigationViews[currentIndex].controller.forward();
+          _currentPage = _pageList[currentIndex];
           _load_bottom();
         });
       },
@@ -226,8 +243,12 @@ class IndexState extends State<Index> with TickerProviderStateMixin {
     return new MaterialApp(
       debugShowCheckedModeBanner: false,
       home: new Scaffold(
-        body: new Center(child: _currentPage // 动态的展示我们当前的页面
-            ),
+        body: IndexedStack(
+          index:currentIndex,
+          children: _pageList,
+        ),
+        //new Center(child: _currentPage // 动态的展示我们当前的页面
+        //            )
         bottomNavigationBar: bottomNavigationBar, // 底部工具栏
       ),
       theme: new ThemeData(

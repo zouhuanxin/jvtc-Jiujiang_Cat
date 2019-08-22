@@ -1,8 +1,10 @@
 import 'dart:convert';
 
 import 'package:data_plugin/bmob/bmob_query.dart';
+import 'package:data_plugin/bmob/response/bmob_error.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app01/Bean/System_Notice.dart';
+import 'package:flutter_app01/Bean/lunbo.dart';
 import 'package:flutter_app01/Utils/Record_Text.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter_app01/Utils/WebViewPage.dart';
@@ -17,32 +19,13 @@ class System_notice extends StatefulWidget{
 class System_notice_State extends State<System_notice>{
   List<System_Notice>_list=[];
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    _bmob_get_System_Notice_information();
-  }
-
-  void _bmob_get_System_Notice_information(){
-    BmobQuery<System_Notice> query = BmobQuery();
-    query.addWhereNotEqualTo("imageurl", "12%%%3");
-    query.queryObjects().then((data) {
-      _list.clear();
-      _list = data.map((i) => System_Notice.fromJson(i)).toList();
-      _loading_ui();
-    }).catchError((e) {
-      _showmodel('获取通知信息失败', Toast.LENGTH_SHORT);
-    });
-  }
-
-  void _showmodel(String mes, var type) {
+  void _showmodel(String mes, var type,var color) {
     Fluttertoast.showToast(
         msg: mes,
         toastLength: type,
         gravity: ToastGravity.TOP,
         timeInSecForIos: 1,
-        backgroundColor: Colors.blue,
+        backgroundColor: color,
         textColor: Colors.white,
         fontSize: 16.0
     );
@@ -68,7 +51,7 @@ class System_notice_State extends State<System_notice>{
       System_Notice_ui_list.add(Container(
         child: new Column(
           children: <Widget>[
-            Text(tempmap['createdAt'].toString().split(' ')[0]==listtemp[i]?'':tempmap['createdAt'].toString().split(' ')[0]
+            Text(tempmap['createdAt'].toString().split(' ')[0]==listtemp[i]?'':tempmap['createdAt'].toString().split(' ')[0]==null?'BUG':tempmap['createdAt'].toString().split(' ')[0]
               ,style: TextStyle(fontWeight: FontWeight.w600,fontSize: tempmap['createdAt'].toString().split(' ')[0]==listtemp[i]?0:20),),
             Container(
               padding: EdgeInsets.all(10.0),
@@ -89,7 +72,7 @@ class System_notice_State extends State<System_notice>{
                       children: <Widget>[
                         Expanded(
                           flex: 1,
-                          child: new Text(tempmap==null?'':tempmap['title'],textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,style: TextStyle(fontSize: 20,
+                          child: new Text(tempmap['title']==null?'':tempmap['title'],textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,style: TextStyle(fontSize: 20,
                               fontWeight: FontWeight.w400),),
                         ),
                       ],
@@ -99,7 +82,7 @@ class System_notice_State extends State<System_notice>{
                       children: <Widget>[
                         Expanded(
                           flex: 1,
-                          child: new Text(tempmap==null?'':tempmap['content'],textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,),
+                          child: new Text(tempmap['content']==null?'':tempmap['content'],textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,maxLines:4 ,),
                         ),
                       ],
                     ),
@@ -108,12 +91,12 @@ class System_notice_State extends State<System_notice>{
                       children: <Widget>[
                         Expanded(
                           flex: 1,
-                          child: new Text(tempmap==null?'':tempmap['author'],textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,style: TextStyle(fontSize: 10,
+                          child: new Text(tempmap['author']==null?'':tempmap['author'],textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,style: TextStyle(fontSize: 10,
                               fontWeight: FontWeight.w200),),
                         ),
                         Expanded(
                           flex: 1,
-                          child: new Text(tempmap==null?'':tempmap['createdAt'],textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,style: TextStyle(fontSize: 10,
+                          child: new Text(tempmap['createdAt']==null?'':tempmap['createdAt'],textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,style: TextStyle(fontSize: 10,
                               fontWeight: FontWeight.w200),),
                         ),
                       ],
@@ -130,6 +113,20 @@ class System_notice_State extends State<System_notice>{
 
     });
   }
+
+  void _bmob_get_System_Notice_information(){
+    BmobQuery<System_Notice> query = BmobQuery();
+    query.addWhereNotEqualTo("imageurl", "12%%%3");
+    query.queryObjects().then((data) {
+      _list.clear();
+      _list = data.map((i) => System_Notice.fromJson(i)).toList();
+      _loading_ui();
+    }).catchError((e) {
+      print(BmobError.convert(e).error);
+      _showmodel('获取通知信息失败', Toast.LENGTH_SHORT,Colors.red);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -156,4 +153,10 @@ class System_notice_State extends State<System_notice>{
     );
   }
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _bmob_get_System_Notice_information();
+  }
 }
