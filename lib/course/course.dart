@@ -204,7 +204,7 @@ class CoursePageState extends State<CoursPage> {
                       .trim(),
               Color(int.parse(color1)),
               i * 8,
-              int.parse(DateTime.parse(now_choose_date).weekday.toString()),now_choose_date),
+              xia,now_choose_date),
           buildButtonColumn_ui2(
               course_data.length < 5
                   ? course_data2[i * 8 + 1].toString()
@@ -220,7 +220,7 @@ class CoursePageState extends State<CoursPage> {
                       .trim(),
               i == 0 ? Color(int.parse(color1)) : dart_model==true?Colors.transparent:Color(int.parse('0xffEFCEE8')),
               i * 8 + 1,
-              int.parse(DateTime.parse(now_choose_date).weekday.toString()),now_choose_date),
+              xia,now_choose_date),
           buildButtonColumn_ui2(
               course_data.length < 5
                   ? course_data2[i * 8 + 2].toString()
@@ -236,7 +236,7 @@ class CoursePageState extends State<CoursPage> {
                       .trim(),
               i == 0 ? Color(int.parse(color1)) : dart_model==true?Colors.transparent:Color(int.parse('0xffF3D7B5')),
               i * 8 + 2,
-              int.parse(DateTime.parse(now_choose_date).weekday.toString()),now_choose_date),
+              xia,now_choose_date),
           buildButtonColumn_ui2(
               course_data.length < 5
                   ? course_data2[i * 8 + 3].toString()
@@ -252,7 +252,7 @@ class CoursePageState extends State<CoursPage> {
                       .trim(),
               i == 0 ? Color(int.parse(color1)) : dart_model==true?Colors.transparent:Color(int.parse('0xffFDFFDF')),
               i * 8 + 3,
-              int.parse(DateTime.parse(now_choose_date).weekday.toString()),now_choose_date),
+              xia,now_choose_date),
           buildButtonColumn_ui2(
               course_data.length < 5
                   ? course_data2[i * 8 + 4].toString()
@@ -268,7 +268,7 @@ class CoursePageState extends State<CoursPage> {
                       .trim(),
               i == 0 ? Color(int.parse(color1)) : dart_model==true?Colors.transparent:Color(int.parse('0xffDAF9CA')),
               i * 8 + 4,
-              int.parse(DateTime.parse(now_choose_date).weekday.toString()),now_choose_date),
+              xia,now_choose_date),
           buildButtonColumn_ui2(
               course_data.length < 5
                   ? course_data2[i * 8 + 5].toString()
@@ -284,7 +284,7 @@ class CoursePageState extends State<CoursPage> {
                       .trim(),
               i == 0 ? Color(int.parse(color1)) : dart_model==true?Colors.transparent:Color(int.parse('0xffC7B3E5')),
               i * 8 + 5,
-              int.parse(DateTime.parse(now_choose_date).weekday.toString()),now_choose_date),
+              xia,now_choose_date),
           buildButtonColumn_ui2(
               course_data.length < 5
                   ? course_data2[i * 8 + 6].toString()
@@ -300,7 +300,7 @@ class CoursePageState extends State<CoursPage> {
                       .trim(),
               i == 0 ? Color(int.parse(color1)) : dart_model==true?Colors.transparent:Color(int.parse('0xffEDE387')),
               i * 8 + 6,
-              int.parse(DateTime.parse(now_choose_date).weekday.toString()),now_choose_date),
+              xia,now_choose_date),
           buildButtonColumn_ui2(
               course_data.length < 5
                   ? course_data2[i * 8 + 7].toString()
@@ -316,7 +316,7 @@ class CoursePageState extends State<CoursPage> {
                       .trim(),
               i == 0 ? Color(int.parse(color1)) : dart_model==true?Colors.transparent:Color(int.parse('0xffFF534D')),
               i * 8 + 7,
-              int.parse(DateTime.parse(now_choose_date).weekday.toString()),now_choose_date),
+              xia,now_choose_date),
         ],
       ));
     }
@@ -547,6 +547,7 @@ class CoursePageState extends State<CoursPage> {
                                 //print(val.toString().split(' ')[0].toString());
                                 now_choose_date =
                                     val.toString().split(' ')[0].toString();
+                                xia=int.parse(DateTime.parse(now_choose_date).weekday.toString());
                                 _query_course_data(
                                     val.toString().split(' ')[0].toString(),
                                     context); // 2018-07-12 00:00:00.000
