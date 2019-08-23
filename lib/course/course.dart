@@ -1,4 +1,6 @@
+import 'package:data_plugin/bmob/bmob_query.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app01/Bean/Have_class_time.dart';
 import 'package:flutter_app01/HttpUtil/HttpUtil.dart';
 import 'package:flutter_app01/Utils/Animation_list.dart';
 import 'package:flutter_app01/index/index.dart';
@@ -82,7 +84,20 @@ class CoursePageState extends State<CoursPage> {
     await _query_course_data(now_choose_date, context);
   }
 
+  //访问上课时间信息
+  void _bmob_get_class_time_information() {
+    BmobQuery<Have_class_time> query = BmobQuery();
+    query.addWhereEqualTo("isstart", "true");
+    query.queryObjects().then((data) {
+      List<Have_class_time> sfs = data.map((i) => Have_class_time.fromJson(i)).toList();
+      course_class_time = sfs[0].content;
+    }).catchError((e) {
+      showmodel('访问数据失败,使用默认夏季作息时间', Colors.red);
+    });
+  }
+
   _query_course_data(String date, context) async {
+    _bmob_get_class_time_information();
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     if (sharedPreferences.getString('jwcookie') != null) {
       String str1 = await HttpUtil.query_course(
@@ -94,7 +109,7 @@ class CoursePageState extends State<CoursPage> {
         if (await HttpUtil.Automatic_landing() == '0') {
           _query_course_data(date, context);
         } else {
-          showmodel('请先登录学教平台', Colors.red);
+          //showmodel('请先登录学教平台', Colors.red);
         }
       } else {
         showmodel('无课程信息,请选择有效日期', Colors.red);
@@ -105,7 +120,7 @@ class CoursePageState extends State<CoursPage> {
             context,
             new MaterialPageRoute(
                 builder: (context) => new learn_teach_login()));
-        showmodel('请先登录学教平台', Colors.red);
+        //showmodel('请先登录学教平台', Colors.red);
       }
     }
   }
@@ -144,13 +159,7 @@ class CoursePageState extends State<CoursPage> {
               content: Text((content)),
               actions: <Widget>[
                 new FlatButton(
-                  child: new Text("取消"),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-                new FlatButton(
-                  child: new Text("确定"),
+                  child: new Text("关闭"),
                   onPressed: () {
                     Navigator.of(context).pop();
                   },

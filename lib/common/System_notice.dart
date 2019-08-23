@@ -116,6 +116,7 @@ class System_notice_State extends State<System_notice>{
 
   void _bmob_get_System_Notice_information(){
     BmobQuery<System_Notice> query = BmobQuery();
+    query.setOrder("-createdAt");
     query.addWhereNotEqualTo("imageurl", "12%%%3");
     query.queryObjects().then((data) {
       _list.clear();

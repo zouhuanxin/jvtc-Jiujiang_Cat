@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_app01/Utils/Record_Text.dart';
 
@@ -7,10 +9,13 @@ import 'course.dart';
 Widget buildButtonColumn_ui2(String label, color, int index,int xia,String date) {
   var today=DateTime.parse(date);
 //  print('today:${today.weekday.toString()}');
+  //print(json.decode(json.encode(json.decode(course_class_time)[int.parse((8/8).toString().split('.')[0])]))['time']);
   return new GestureDetector(
     onTap: () {
-      CoursePageState cp = new CoursePageState();
-      cp.course_click(index);
+      if(label!=''){
+        CoursePageState cp = new CoursePageState();
+        cp.course_click(index);
+      }
     },
     child: new Column(
       children: <Widget>[
@@ -57,9 +62,16 @@ Widget buildButtonColumn_ui2(String label, color, int index,int xia,String date)
               : const EdgeInsets.only(top: 2.0, left: 2.0, right: 2.0),
           alignment: Alignment.center,
           child: Text(
-            index<8&&index>0?(index==int.parse(today.weekday.toString())?label+'\n'+date.substring(5,date.length):
+            index<8&&index>0
+                ?(index==int.parse(today.weekday.toString())?label+'\n'+date.substring(5,date.length):
             index<int.parse(today.weekday.toString())?label+'\n'+'${today.subtract(new Duration(days: 4-index)).toString().substring(5,10)}':
-            label+'\n'+'${today.add(new Duration(days: index-4)).toString().substring(5,10)}'):label,
+            label+'\n'+'${today.add(new Duration(days: index-4)).toString().substring(5,10)}')
+                :(index == 8 ||
+                index == 16 ||
+                index == 24 ||
+                index == 32 ||
+                index == 40 ||
+                index == 48?label+'\n'+json.decode(json.encode(json.decode(course_class_time)[int.parse((index/8).toString().split('.')[0])-1]))['time']:label),
             textAlign: TextAlign.center,
             overflow: TextOverflow.ellipsis,
             maxLines: 5,
