@@ -38,6 +38,17 @@ class my_State extends State<my>{
     _load_data();
   }
 
+  void _showmodel(mes, var type, var color) {
+    Fluttertoast.showToast(
+        msg: mes,
+        toastLength: type,
+        gravity: ToastGravity.TOP,
+        timeInSecForIos: 1,
+        backgroundColor: color,
+        textColor: Colors.white,
+        fontSize: 16.0);
+  }
+
   void component02_click(String str){
     switch(str){
       case '修改密码':
@@ -71,8 +82,14 @@ class my_State extends State<my>{
             margin: EdgeInsets.all(10.0),
             child: new GestureDetector(
               onTap: (){
-                Navigator.push(context,
-                    new MaterialPageRoute(builder: (context) => new my_login()));
+                if(login_state==false){
+                  Navigator.push(
+                      context,
+                      new MaterialPageRoute(
+                          builder: (context) => new my_login()));
+                }else{
+                  _showmodel('你已登陆', Toast.LENGTH_SHORT, Colors.red);
+                }
               },
               child: new ClipOval(
                 child: new Image.memory(base64.decode(now_login_image_base64),fit: BoxFit.fill),

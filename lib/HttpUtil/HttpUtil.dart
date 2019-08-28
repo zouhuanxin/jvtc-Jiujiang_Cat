@@ -15,6 +15,9 @@ class HttpUtil {
   static final node_host = 'http://47.94.255.154:3000';
   static final node_baseUrl = node_host + '/rjxhmange/collection/';
 
+  static final node_host2 = 'http://47.94.255.154:3000';
+  static final node_baseUrl2 = node_host2 + '/rjxhmange';
+
   //Teach platform Server address
   static final teach_host = 'http://api.ncgame.cc';
   static final teach_baseUrl = teach_host + '/jvtc/';
@@ -190,10 +193,29 @@ class HttpUtil {
     return response.body.toString();
   }
 
-  static Future<String> add_collection_information(url,collection_image,collection_name,collection_association,collection_studentid,collection_projectname,collection_time) async {
+  static Future<String> add_collection_information(url,collection_image,collection_name,collection_association,collection_studentid,collection_projectname,collection_time,collection_id) async {
     String dataURL = node_baseUrl+url;
-    var temp={'collection_image': collection_image,'collection_name': collection_name,'collection_association': collection_association,'collection_studentid': collection_studentid,'collection_projectname': collection_projectname,'collection_time': collection_time};
+    var temp={'collection_image': collection_image,'collection_name': collection_name,'collection_association': collection_association,'collection_studentid': collection_studentid,'collection_projectname': collection_projectname,'collection_time': collection_time,'collection_id': collection_id};
     http.Response response = await http.post(dataURL,body: temp);;
+    return response.body.toString();
+  }
+
+  static Future<String> query_collection_information(url,collection_association,collection_name,collection_studentid,collection_projectname) async {
+    String dataURL = node_baseUrl+url;
+    http.Response response = await http.get(dataURL+'?collection_name='+collection_name+'&collection_association='
+        +collection_association+'&collection_studentid='+collection_studentid+'&collection_projectname='+collection_projectname);
+    return response.body.toString();
+  }
+
+  static Future<String> get_collection_drow_single_information(url,association_name) async {
+    String dataURL = node_baseUrl2+url;
+    http.Response response = await http.get(dataURL+'?association_name='+association_name);
+    return response.body.toString();
+  }
+
+  static Future<String> get_association_drow_single_information(url) async {
+    String dataURL = node_baseUrl2+url;
+    http.Response response = await http.get(dataURL);
     return response.body.toString();
   }
 

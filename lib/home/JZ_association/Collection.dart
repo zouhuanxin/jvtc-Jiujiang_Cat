@@ -20,6 +20,37 @@ class Collection_State extends State<Collection> {
   final _formKey = GlobalKey<FormState>();
   String bs64=null;
   static const androidplatform = const MethodChannel("test");
+  List<dynamic>association_drow=[{"name":"请刷新"}];
+  List<dynamic>collection_drow=[{"name":"请刷新"}];
+  int _collection_max_number=0;
+
+  get_association_drow() async{
+    String res=await HttpUtil.get_association_drow_single_information('/association_drow_router/get_association_drow_single');
+    association_drow=json.decode(res);
+    getListData1();
+//    print('association_drow:$association_drow');
+  }
+
+  get_collection_drow() async{
+    String res=await HttpUtil.get_collection_drow_single_information('/collection_drow_router/get_collection_drow_single',_association);
+    collection_drow=json.decode(res);
+    getListData2();
+//    print('association_drow:$association_drow');
+  }
+
+  get_collection_id() async{
+    String res=await HttpUtil.query_collection_information('getcollection_single', _association, '%', '%',_projectname);
+    List<dynamic> list=json.decode(res);
+    for(var i=0;i<list.length;i++){
+      Map<String,dynamic> map =json.decode(json.encode(list[i]));
+      if(int.parse(map['collection_id'].toString())>_collection_max_number){
+        _collection_max_number=int.parse(map['collection_id'].toString());
+      }
+    }
+    //print('_collection_max_number:$_collection_max_number');
+    return _collection_max_number+1;
+  }
+
 
   void _showmodel(mes,var type,var color){
     Fluttertoast.showToast(
@@ -89,11 +120,34 @@ class Collection_State extends State<Collection> {
   }
   List<DropdownMenuItem> getListData1(){
     List<DropdownMenuItem> items=new List();
-    DropdownMenuItem dropdownMenuItem1=new DropdownMenuItem(
-      child:new Text('软件协会'),
-      value: '软件协会',
-    );
-    items.add(dropdownMenuItem1);
+    for(var i=0;i<association_drow.length;i++){
+      Map<String,dynamic> map =json.decode(json.encode(association_drow[i]));
+      DropdownMenuItem dropdownMenuItem1=new DropdownMenuItem(
+        child:new Text(map['name']),
+        value: map['name'],
+      );
+      items.add(dropdownMenuItem1);
+    }
+    setState(() {
+
+
+    });
+    return items;
+  }
+
+  List<DropdownMenuItem> getListData2(){
+    List<DropdownMenuItem> items=new List();
+    for(var i=0;i<collection_drow.length;i++){
+      Map<String,dynamic> map =json.decode(json.encode(collection_drow[i]));
+      DropdownMenuItem dropdownMenuItem1=new DropdownMenuItem(
+        child:new Text(map['name']),
+        value: map['name'],
+      );
+      items.add(dropdownMenuItem1);
+    }
+    setState(() {
+
+    });
     return items;
   }
 
@@ -105,6 +159,26 @@ class Collection_State extends State<Collection> {
       onChanged: (T){//下拉菜单item点击之后的回调
         setState(() {
           _association=T;
+          get_collection_drow();
+        });
+      },
+      elevation: 24,//设置阴影的高度
+      style: new TextStyle(//设置文本框里面文字的样式
+          color: Colors.grey
+      ),
+//              isDense: false,//减少按钮的高度。默认情况下，此按钮的高度与其菜单项的高度相同。如果isDense为true，则按钮的高度减少约一半。 这个当按钮嵌入添加的容器中时，非常有用
+      iconSize: 30.0,//设置三角标icon的大小
+    );
+  }
+
+  Widget xl2(){
+    return new DropdownButton(
+      items: getListData2(),
+      hint:new Text('收款项目名称',textAlign: TextAlign.center),//当没有默认值的时候可以设置的提示
+      value: _projectname,//下拉菜单选择完之后显示给用户的值
+      onChanged: (T){//下拉菜单item点击之后的回调
+        setState(() {
+          _projectname=T;
         });
       },
       elevation: 24,//设置阴影的高度
@@ -210,9 +284,19 @@ class Collection_State extends State<Collection> {
 
   _yz_image_wz() async{
     String str1=await HttpUtil.image_text_sb('bdtextsb','pOyNhIyUDMMXBovrTEKb4TX8','NIDGGuijgHgbpcR5o3sQy33j1ORfwS7A',bs64);
-    print('str1:$str1');
+    String query_str='成功';
+    for(var i=0;i<collection_drow.length;i++){
+      if(json.decode(json.encode(collection_drow[i]))['name']==_projectname){
+        query_str=json.decode(json.encode(collection_drow[i]))['money'];
+      }
+    }
     if(str1.toString().indexOf('支付成功')!=-1||str1.toString().indexOf('交易成功')!=-1){
-      _post_data();
+      if(str1.toString().indexOf(query_str.toString())!=-1){
+        _post_data();
+      }else{
+        Navigator.pop(showcon);
+        _showmodel('金额不符合', Toast.LENGTH_SHORT, Colors.red);
+      }
     }else{
       Navigator.pop(showcon);
       _showmodel('截图不符合规范', Toast.LENGTH_SHORT, Colors.red);
@@ -226,7 +310,8 @@ class Collection_State extends State<Collection> {
     String c=_association.toString();
     String d=_studentid.toString();
     String e=_projectname.toString();
-    String str1=await HttpUtil.add_collection_information('addcollection',a,b,c,d,e,_time);
+    int f=await get_collection_id();
+    String str1=await HttpUtil.add_collection_information('addcollection',a,b,c,d,e,_time,f.toString());
     //print('str1:$str1');
     if(str1=='0'){
       Navigator.pop(showcon);
@@ -310,9 +395,24 @@ class Collection_State extends State<Collection> {
                   child: new Column(
                     children: <Widget>[
                       SizedBox(height: 20,),
-                      xl1(),
+                      Row(
+                        children: <Widget>[
+                          Expanded(
+                            child: xl1(),
+                            flex: 2,
+                          ),
+                          Expanded(
+                            child: Text(''),
+                            flex: 1,
+                          ),
+                          Expanded(
+                            child: xl2(),
+                            flex: 2,
+                          ),
+                        ],
+                      ),
                       SizedBox(height: 10,),
-                      buildProjectnameTextField(),
+//                      buildProjectnameTextField(),
                       SizedBox(height: 10,),
                       buildNameTextField(),
                       SizedBox(height: 10,),
@@ -325,5 +425,12 @@ class Collection_State extends State<Collection> {
                 ),
               ],
             )));
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    get_association_drow();
   }
 }

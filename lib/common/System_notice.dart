@@ -52,7 +52,7 @@ class System_notice_State extends State<System_notice>{
         child: new Column(
           children: <Widget>[
             Text(tempmap['createdAt'].toString().split(' ')[0]==listtemp[i]?'':tempmap['createdAt'].toString().split(' ')[0]==null?'BUG':tempmap['createdAt'].toString().split(' ')[0]
-              ,style: TextStyle(fontWeight: FontWeight.w600,fontSize: tempmap['createdAt'].toString().split(' ')[0]==listtemp[i]?0:20),),
+              ,style: TextStyle(color:Color(int.parse(color2)),fontWeight: FontWeight.w600,fontSize: tempmap['createdAt'].toString().split(' ')[0]==listtemp[i]?0:20),),
             Container(
               padding: EdgeInsets.all(10.0),
               decoration: BoxDecoration(

@@ -27,6 +27,7 @@ import 'package:flutter_app01/Lovers_space/Lovers_space.dart';
 import 'package:flutter_app01/Utils/WebViewPage.dart';
 import 'package:flutter_app01/common/System_notice.dart';
 import 'JZ_association/Collection.dart';
+import 'Group_ck/group_ck.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -125,6 +126,10 @@ class _HomePageState extends State<HomePage> {
         } else {
           _showmodel('请先登陆九职小猫手', Toast.LENGTH_SHORT, Colors.red);
         }
+        break;
+      case '协会群号码':
+        Navigator.push(context,
+            new MaterialPageRoute(builder: (context) => new group_ck()));
         break;
     }
   }
@@ -464,6 +469,7 @@ class _HomePageState extends State<HomePage> {
           buildButtonColumn2('images/2.0.x/rjxh.jpg', '软件协会官方网站', '软件协会欢迎您!'),
           buildButtonColumn2('images/2.0.x/sk.png', '协会收款',
               '九职协会收款助手，帮助协会活动招新收款项目的整理以及归纳，谨慎交钱，开心你我他。'),
+          buildButtonColumn2('images/2.0.x/ck.png', '协会群号码', '输入你的学号然后就会出现相应你加入的协会群号码。'),
           //buildButtonColumn(Icons.supervisor_account, '情侣空间','你和对象的私人空间.'), //no open
         ],
       ),
@@ -486,10 +492,14 @@ class _HomePageState extends State<HomePage> {
             margin: EdgeInsets.all(10.0),
             child: new GestureDetector(
               onTap: () {
-                Navigator.push(
-                    context,
-                    new MaterialPageRoute(
-                        builder: (context) => new my_login()));
+                if(login_state==false){
+                  Navigator.push(
+                      context,
+                      new MaterialPageRoute(
+                          builder: (context) => new my_login()));
+                }else{
+                  _showmodel('你已登陆', Toast.LENGTH_SHORT, Colors.red);
+                }
               },
               child: new ClipOval(
                 child: new Image.memory(base64.decode(now_login_image_base64),
@@ -532,12 +542,12 @@ class _HomePageState extends State<HomePage> {
               SwiperView(),
               campus_funcation_text,
               campus_funcation_button,
+              campus_xh_text,
+              campus_xh_button,
               campus_life_text,
               campus_life_button,
               campus_toolkit_text,
               campus_toolkit_button,
-              campus_xh_text,
-              campus_xh_button,
               SizedBox(
                 height: 30,
               ),

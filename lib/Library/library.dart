@@ -205,7 +205,7 @@ class Library_State extends State<Library>{
           body_component01('images/2.0.x/ziyuan.png','        书籍查询'),
           body_component01('images/2.0.x/luqufenshubiao.png','        借阅历史'),
           body_component01('images/2.0.x/pingjia.png','        当前借阅'),
-          body_component01('images/2.0.x/cq.png','        账目清单'),
+          body_component01('images/2.0.x/zmqd.png','        账目清单'),
           body_component01('images/2.0.x/reservation.png','        当前预约'),
         ],
       ),

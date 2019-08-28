@@ -488,10 +488,14 @@ class CoursePageState extends State<CoursPage> {
             margin: EdgeInsets.all(10.0),
             child: new GestureDetector(
               onTap: () {
-                Navigator.push(
-                    context,
-                    new MaterialPageRoute(
-                        builder: (context) => new my_login()));
+                if(login_state==false){
+                  Navigator.push(
+                      context,
+                      new MaterialPageRoute(
+                          builder: (context) => new my_login()));
+                }else{
+                  showmodel('你已登陆', Colors.red);
+                }
               },
               child: new ClipOval(
                 child: new Image.memory(base64.decode(now_login_image_base64),
