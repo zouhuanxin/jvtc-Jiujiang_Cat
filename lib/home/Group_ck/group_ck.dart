@@ -17,19 +17,19 @@ class group_ck extends StatefulWidget {
 }
 
 class group_ck_State extends State<group_ck> {
-  String _studentid, _name;
+  String _studentid='', _name='';
   final _formKey = GlobalKey<FormState>();
   List<group> mblist = [];
   List<String> vislist = [];
 
-  loaddata() {
-    //目前就只有软件协会
-    group g1 = new group();
-    g1.association = '软件协会';
-    g1.projectname = '招新';
-    g1.groupnumber = '123456789';
-    mblist.add(g1);
-  }
+//  loaddata() {
+//    //目前就只有软件协会
+//    group g1 = new group();
+//    g1.association = '软件协会';
+//    g1.projectname = '招新';
+//    g1.groupnumber = '123456789';
+//    mblist.add(g1);
+//  }
 
   void _showmodel(mes, var type, var color) {
     Fluttertoast.showToast(
@@ -114,18 +114,22 @@ class group_ck_State extends State<group_ck> {
           ),
           color: Color(int.parse(color2)),
           onPressed: () {
-            showDialog(
-                context: context,
-                barrierDismissible: true,
-                builder: (con) {
-                  showcon=con;
-                  return new LoadingDialog(
-                    text: "查询中…",
-                  );
-                });
             _formKey.currentState.validate();
             _formKey.currentState.save();
-            query();
+            if(_studentid!=''||_name!=''){
+              showDialog(
+                  context: context,
+                  barrierDismissible: true,
+                  builder: (con) {
+                    showcon=con;
+                    return new LoadingDialog(
+                      text: "查询中…",
+                    );
+                  });
+              query();
+            }else{
+              _showmodel('请输入至少一个', Toast.LENGTH_SHORT, Colors.red);
+            }
           },
           shape: StadiumBorder(side: BorderSide()),
         ),
@@ -140,6 +144,7 @@ class group_ck_State extends State<group_ck> {
     if (_studentid != '') {
       res = await HttpUtil.query_collection_information(
           'getcollection_single', '%', '%', _studentid, '%');
+
       } else if (_name != '') {
         res = await HttpUtil.query_collection_information(
             'getcollection_single', '%', _name, '%', '%');
@@ -154,6 +159,8 @@ class group_ck_State extends State<group_ck> {
       for (var i = 0; i < templist.length; i++) {
         for (var j = 0; j < mblist.length; j++) {
           if (templist[i]['collection_association'] == mblist[j].association) {
+            print('${templist[i]['collection_projectname']}');
+            print('${mblist[j].projectname}');
             if (templist[i]['collection_projectname'] ==mblist[j].projectname) {
               vislist.add('欢迎加入' +
                   mblist[j].association +
