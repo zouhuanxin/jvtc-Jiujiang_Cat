@@ -98,7 +98,16 @@ class Collection_State extends State<Collection> {
   }
   Widget _previewImage() {
     return new GestureDetector(
-      onTap: (){_selectedImage();},
+      onTap: (){
+        _formKey.currentState.validate();
+        _formKey.currentState.save();
+        if(_association!=''&&_projectname!=''&&_name!=''&&_studentid!=''&&
+            _association!=null&&_projectname!=null&&_name!=null&&_studentid!=null){
+          _selectedImage();
+        }else{
+          _showmodel('请先填写完下面信息', Toast.LENGTH_SHORT, Colors.red);
+        }
+      },
       child: FutureBuilder<File>(
           future: _imageFile,
           builder: (BuildContext context, AsyncSnapshot<File> snapshot) {
@@ -281,25 +290,36 @@ class Collection_State extends State<Collection> {
   }
 
   //验证图片
-
   _yz_image_wz() async{
-    String str1=await HttpUtil.image_text_sb('bdtextsb','pOyNhIyUDMMXBovrTEKb4TX8','NIDGGuijgHgbpcR5o3sQy33j1ORfwS7A',bs64);
-    String query_str='成功';
-    for(var i=0;i<collection_drow.length;i++){
-      if(json.decode(json.encode(collection_drow[i]))['name']==_projectname){
-        query_str=json.decode(json.encode(collection_drow[i]))['money'];
+    //判断用户名或者学号是否重复
+    String res_name = await HttpUtil.query_collection_information('getcollection_single', _association, _name, '%', _projectname);
+    String res_stu = await HttpUtil.query_collection_information('getcollection_single', _association, '%', _studentid, _projectname);
+//    print('res_name:$res_name');
+//    print('res_stu:$res_stu');
+//    print(res_name=='[]');
+    if(res_name=='[]'&&res_stu=='[]'){
+      //判断图片是否是缴费图片
+      String str1=await HttpUtil.image_text_sb('bdtextsb','pOyNhIyUDMMXBovrTEKb4TX8','NIDGGuijgHgbpcR5o3sQy33j1ORfwS7A',bs64);
+      String query_str='成功';
+      for(var i=0;i<collection_drow.length;i++){
+        if(json.decode(json.encode(collection_drow[i]))['name']==_projectname){
+          query_str=json.decode(json.encode(collection_drow[i]))['money'];
+        }
       }
-    }
-    if(str1.toString().indexOf('支付成功')!=-1||str1.toString().indexOf('交易成功')!=-1){
-      if(str1.toString().indexOf(query_str.toString())!=-1){
-        _post_data();
+      if(str1.toString().indexOf('支付成功')!=-1||str1.toString().indexOf('交易成功')!=-1){
+        if(str1.toString().indexOf(query_str.toString())!=-1){
+          _post_data();
+        }else{
+          Navigator.pop(showcon);
+          _showmodel('金额不符合', Toast.LENGTH_SHORT, Colors.red);
+        }
       }else{
         Navigator.pop(showcon);
-        _showmodel('金额不符合', Toast.LENGTH_SHORT, Colors.red);
+        _showmodel('截图不符合规范', Toast.LENGTH_SHORT, Colors.red);
       }
     }else{
       Navigator.pop(showcon);
-      _showmodel('截图不符合规范', Toast.LENGTH_SHORT, Colors.red);
+      _showmodel('学号或者姓名已经存在', Toast.LENGTH_SHORT, Colors.red);
     }
   }
 
