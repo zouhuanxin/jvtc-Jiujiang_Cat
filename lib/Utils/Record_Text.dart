@@ -1,5 +1,5 @@
 
-String app_version='2.0.7'; // Current app version number
+String app_version='2.0.8'; // Current app version number
 String app_describe=''; // Current app version describe
 
 //Currently logged in user avatar

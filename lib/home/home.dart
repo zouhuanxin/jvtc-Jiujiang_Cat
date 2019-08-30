@@ -131,6 +131,14 @@ class _HomePageState extends State<HomePage> {
         Navigator.push(context,
             new MaterialPageRoute(builder: (context) => new group_ck()));
         break;
+      case '碰碰球':
+        Navigator.push(
+            context,
+            new MaterialPageRoute(
+                builder: (context) => new WebViewPage(
+                    url: 'http://47.94.255.154:8080/PPball/index.html',
+                    title: '碰碰球')));
+        break;
     }
   }
 
@@ -475,6 +483,28 @@ class _HomePageState extends State<HomePage> {
       ),
     );
 
+    //娱乐模块
+    Widget entertainment_text = new Container(
+    padding: const EdgeInsets.all(32.0),
+    child: new Text(
+    '娱乐休闲',
+    softWrap: true,
+    style: new TextStyle(
+    color: Color(int.parse(color2)),
+    fontSize: 20.0,
+    fontWeight: FontWeight.w600,
+    ),
+    ),
+    );
+    Widget entertainment_button = new Container(
+    child: new Column(
+    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    children: [
+    buildButtonColumn2('images/2.0.x/ppball.png', '碰碰球', '来吧，拼酒量，拼手速吧!'),
+    ],
+    ),
+    );
+
     return new MaterialApp(
       debugShowCheckedModeBanner: false,
       home: new Scaffold(
@@ -544,6 +574,8 @@ class _HomePageState extends State<HomePage> {
               campus_funcation_button,
               campus_xh_text,
               campus_xh_button,
+              entertainment_text,
+              entertainment_button,
               campus_life_text,
               campus_life_button,
               campus_toolkit_text,
