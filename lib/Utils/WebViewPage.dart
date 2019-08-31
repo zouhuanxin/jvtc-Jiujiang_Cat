@@ -104,7 +104,12 @@ class Widget_WebView_State extends State<WebViewPage>
         backgroundColor: Color(int.parse(color1)),
         centerTitle: true,
         actions: <Widget>[
-          new Container()
+          IconButton(
+            icon: Icon(Icons.refresh, color: Color(int.parse(color2))),
+            onPressed: () {
+              flutterWebviewPlugin.reload();
+            },
+          ),
         ],
       ),
       withJavascript:true,
