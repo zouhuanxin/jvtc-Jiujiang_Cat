@@ -155,7 +155,7 @@ class IndexState extends State<Index> with TickerProviderStateMixin {
       if (app_version.toString().trim() !=
           sfs[sfs.length - 1].gxversion.toString().trim()) {
         showmodel(context, '程序更新啦', sfs[sfs.length - 1].text,
-            sfs[sfs.length - 1].url);
+            sfs[sfs.length - 1].url,sfs[sfs.length - 1].url2,sfs[sfs.length - 1].url3);
       } else {
         if (note == 'my') {
           Fluttertoast.showToast(
@@ -172,29 +172,70 @@ class IndexState extends State<Index> with TickerProviderStateMixin {
   }
 
   //Prompt to update the application winod
-  showmodel(BuildContext context, String title, String content, String url) {
+  showmodel(BuildContext context, String title, String content, String url,String url2,String url3) {
     showDialog(
         context: context,
         builder: (context) => AlertDialog(
               title: Text(title),
               content: Text((content)),
               actions: <Widget>[
-                new FlatButton(
-                  child: new Text("取消"),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-                new FlatButton(
-                  child: new Text(
-                    "更新",
-                    style: TextStyle(color: Colors.red),
-                  ),
-                  onPressed: () {
-                    launchURL(url);
-                    Navigator.of(context).pop();
-                  },
-                ),
+                Column(
+                  children: <Widget>[
+                    Row(
+                      children: <Widget>[
+                        new FlatButton(
+                          child: new Text("取消"),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                        new Offstage(
+                          offstage: url!=''?false:true,
+                          child: new FlatButton(
+                            child: new Text(
+                              "${url!=''?'更新线路1':''}",
+                              style: TextStyle(color: Colors.red),
+                            ),
+                            onPressed: () {
+                              launchURL(url);
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: <Widget>[
+                        new Offstage(
+                          offstage: url2!=''?false:true,
+                          child: new FlatButton(
+                            child: new Text(
+                              "${url2!=''?'更新线路2':''}",
+                              style: TextStyle(color: Colors.red),
+                            ),
+                            onPressed: () {
+                              launchURL(url2);
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ),
+                        new Offstage(
+                          offstage: url3!=''?false:true,
+                          child: new FlatButton(
+                            child: new Text(
+                              "${url3!=''?'更新线路3':''}",
+                              style: TextStyle(color: Colors.red),
+                            ),
+                            onPressed: () {
+                              launchURL(url3);
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                )
               ],
             ));
   }

@@ -125,6 +125,7 @@ class my_State extends State<my>{
                 SizedBox(height: 30,),
                 body_component01('images/2.0.x/dark_model.png', '暗黑模式'),
                 body_component02('images/2.0.x/uploadpassword.png',40, '修改密码'),
+               // body_component02('images/2.0.x/myzlxg.png',40, '资料修改'),
                 body_component02('images/2.0.x/app_update.png',45, '检查更新'),
                 body_component02('images/2.0.x/mzsm.png',45, '免责声明'),
                 body_component02('images/2.0.x/cancel_stystem.png',35, '退出登陆'),
