@@ -11,7 +11,7 @@ class HttpUtil {
   static final learn_host = 'http://47.94.255.154:8080';
   static final learn_baseUrl = learn_host + '/test/';
 
-  //node Server //192.168.0.105
+  //node Server //192.168.0.104
   static final node_host = 'http://47.94.255.154:3000';
   static final node_baseUrl = node_host + '/rjxhmange/collection/';
 
@@ -201,6 +201,13 @@ class HttpUtil {
   }
 
   static Future<String> query_collection_information(url,collection_association,collection_name,collection_studentid,collection_projectname) async {
+    String dataURL = node_baseUrl+url;
+    http.Response response = await http.get(dataURL+'?collection_name='+collection_name+'&collection_association='
+        +collection_association+'&collection_studentid='+collection_studentid+'&collection_projectname='+collection_projectname);
+    return response.body.toString();
+  }
+
+  static Future<String> query_collection_information2(url,collection_association,collection_name,collection_studentid,collection_projectname) async {
     String dataURL = node_baseUrl+url;
     http.Response response = await http.get(dataURL+'?collection_name='+collection_name+'&collection_association='
         +collection_association+'&collection_studentid='+collection_studentid+'&collection_projectname='+collection_projectname);

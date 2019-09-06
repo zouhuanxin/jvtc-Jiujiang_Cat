@@ -39,7 +39,7 @@ class Collection_State extends State<Collection> {
   }
 
   get_collection_id() async{
-    String res=await HttpUtil.query_collection_information('getcollection_single', _association, '%', '%',_projectname);
+    String res=await HttpUtil.query_collection_information2('getcollection_single2', _association, '%', '%',_projectname);
     List<dynamic> list=json.decode(res);
     for(var i=0;i<list.length;i++){
       Map<String,dynamic> map =json.decode(json.encode(list[i]));
@@ -102,7 +102,7 @@ class Collection_State extends State<Collection> {
         _formKey.currentState.validate();
         _formKey.currentState.save();
         if(_association!=''&&_projectname!=''&&_name!=''&&_studentid!=''&&
-            _association!=null&&_projectname!=null&&_name!=null&&_studentid!=null){
+            _association!=null&&_projectname!=null&&_name!=null&&_studentid!=null&&_projectname!='请刷新'){
           _selectedImage();
         }else{
           _showmodel('请先填写完下面信息', Toast.LENGTH_SHORT, Colors.red);
@@ -292,8 +292,8 @@ class Collection_State extends State<Collection> {
   //验证图片
   _yz_image_wz() async{
     //判断用户名或者学号是否重复
-    String res_name = await HttpUtil.query_collection_information('getcollection_single', _association, _name, '%', _projectname);
-    String res_stu = await HttpUtil.query_collection_information('getcollection_single', _association, '%', _studentid, _projectname);
+    String res_name = await HttpUtil.query_collection_information2('getcollection_single2', _association, _name, '%', _projectname);
+    String res_stu = await HttpUtil.query_collection_information2('getcollection_single2', _association, '%', _studentid, _projectname);
 //    print('res_name:$res_name');
 //    print('res_stu:$res_stu');
 //    print(res_name=='[]');
