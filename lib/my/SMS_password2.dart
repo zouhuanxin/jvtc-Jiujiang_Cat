@@ -9,19 +9,18 @@ import 'package:flutter_app01/index/index.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class upload_password extends StatefulWidget {
+class SMS_password2 extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return upload_password_State();
+    return SMS_password2_State();
   }
 }
 
-class upload_password_State extends State<upload_password> {
+class SMS_password2_State extends State<SMS_password2> {
   SharedPreferences sharedPreferences;
   final _formKey = GlobalKey<FormState>();
-  var age_pass, now_pass1, now_pass2;
-  bool _isObscure1 = true,
-      _isObscure2 = true,
+  var  now_pass1, now_pass2;
+  bool _isObscure2 = true,
       _isObscure3 = true;
 
   //Data initialization
@@ -34,35 +33,6 @@ class upload_password_State extends State<upload_password> {
     // TODO: implement initState
     super.initState();
     _load_data();
-  }
-
-  Widget buildSearchTextField1() {
-    return new Container(
-      margin: EdgeInsets.all(5.0),
-      child: TextFormField(
-        obscureText: _isObscure1,
-        validator: (String value) {
-          if (value.isEmpty) {
-            return '请输入旧密码';
-          }
-        },
-        decoration: InputDecoration(
-            labelText: '旧密码',
-            fillColor: Colors.white,
-            filled: dart_model,
-            suffixIcon: IconButton(
-                icon: Icon(
-                  Icons.remove_red_eye,
-                  color: Color(int.parse(color4)),
-                ),
-                onPressed: () {
-                  setState(() {
-                    _isObscure1 = !_isObscure1;
-                  });
-                })),
-        onSaved: (String value) => age_pass = value,
-      ),
-    );
   }
 
   Widget buildSearchTextField2() {
@@ -164,14 +134,14 @@ class upload_password_State extends State<upload_password> {
 
   void _bmob_get_QTuser_information() {
     BmobQuery<QTuser> query = BmobQuery();
-    query.addWhereEqualTo("password", age_pass);
+    query.addWhereEqualTo("phone", phone);
     query.queryObjects().then((data) {
       List<QTuser> sfs = data.map((i) => QTuser.fromJson(i)).toList();
       if (sfs.length == 1) {
         //upload
         _updateSingle(sfs[0].objectId);
       } else {
-        _showmodel('旧密码输入错误', Toast.LENGTH_SHORT);
+        _showmodel('账号错误', Toast.LENGTH_SHORT);
       }
     }).catchError((e) {
 
@@ -204,13 +174,14 @@ class upload_password_State extends State<upload_password> {
 
     _showmodel('修改密码成功', Toast.LENGTH_SHORT);
     Navigator.pop(context);
+    Navigator.pop(context);
   }
 
 @override
 Widget build(BuildContext context) {
   return new Scaffold(
       appBar: new AppBar(
-        title: new Text('旧密码验证修改                                       ',
+        title: new Text('短信验证码修改                                       ',
           textAlign: TextAlign.left,
           style: TextStyle(color: Color(int.parse(color2)),
               fontWeight: FontWeight.w800,
@@ -235,27 +206,19 @@ Widget build(BuildContext context) {
                   child: new Container(
                     margin: EdgeInsets.all(10.0),
                     decoration: BoxDecoration(
-                        color: Color(int.parse('0xffF1F1F1')),
-                        border: new Border.all(
-                            width: 1.0, color: Color(int.parse('0xffF1F1F1'))),
-                        borderRadius: BorderRadius.circular(10.0)
+//                        color: Color(int.parse('0xffF1F1F1')),
+//                        border: new Border.all(
+//                            width: 1.0, color: Color(int.parse('0xffF1F1F1'))),
+//                        borderRadius: BorderRadius.circular(10.0)
                     ),
                     child: new Column(
                       children: <Widget>[
                         SizedBox(height: 20),
-                        buildSearchTextField1(),
-                        SizedBox(height: 10),
                         buildSearchTextField2(),
                         SizedBox(height: 10),
                         buildSearchTextField3(),
                         SizedBox(height: 50),
                         buildUploadButton(),
-                        SizedBox(height: 20),
-                        new Container(
-                          margin: EdgeInsets.all(10.0),
-                          child: new Text('由于本软件免费使用，为节省资金开销，此处采用旧密码验证模式，如有使用者忘记旧密码需要更改，请联系开发者进行处理。'
-                            ,style: TextStyle(fontWeight: FontWeight.w100),),
-                        ),
                         SizedBox(height: 20),
                       ],
                     ),

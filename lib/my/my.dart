@@ -15,6 +15,7 @@ import 'package:flutter_app01/my/my_login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_app01/index/index.dart';
 import 'package:flutter_app01/Utils/EventCallback.dart';
+import 'my_password.dart';
 import 'upload_password.dart';
 
 class my extends StatefulWidget{
@@ -53,7 +54,7 @@ class my_State extends State<my>{
     switch(str){
       case '修改密码':
         Navigator.push(context,
-            new MaterialPageRoute(builder: (context) => new upload_password()));
+            new MaterialPageRoute(builder: (context) => new my_password()));
         break;
       case '检查更新':
         IndexState().bmob_get_app_Version_information(context,'my');
