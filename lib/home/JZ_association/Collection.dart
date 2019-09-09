@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:convert';
@@ -21,7 +22,7 @@ class Collection_State extends State<Collection> {
   String bs64=null;
   static const androidplatform = const MethodChannel("test");
   List<dynamic>association_drow=[{"name":"请刷新"}];
-  List<dynamic>collection_drow=[{"name":"请刷新"}];
+  List<dynamic>collection_drow=[{"name":"请选择协会"}];
   int _collection_max_number=0;
 
   get_association_drow() async{
@@ -43,8 +44,8 @@ class Collection_State extends State<Collection> {
     List<dynamic> list=json.decode(res);
     for(var i=0;i<list.length;i++){
       Map<String,dynamic> map =json.decode(json.encode(list[i]));
-      if(int.parse(map['collection_id'].toString())>_collection_max_number){
-        _collection_max_number=int.parse(map['collection_id'].toString());
+      if(int.parse(map['collection_id'].toString().toString().split(' ')[1])>_collection_max_number){
+        _collection_max_number=int.parse(map['collection_id'].toString().split(' ')[1]);
       }
     }
     //print('_collection_max_number:$_collection_max_number');
@@ -268,16 +269,17 @@ class Collection_State extends State<Collection> {
               _formKey.currentState.save();
               if(bs64!=null&&bs64.length>1000&&_association!=null&&_association.toString().length>1
               &&bs64!=null&&_name!=null&&_association!=null&&_studentid!=null&&_projectname!=null){
-                _yz_image_wz();
                 showDialog(
                     context: context,
                     barrierDismissible: true,
                     builder: (con) {
                       showcon=con;
                       return new LoadingDialog(
-                        text: "提交中…",
+                        text: _codeCountdownStr,
                       );
                     });
+                reGetCountdown();
+                _yz_image_wz();
               }else{
                 _showmodel('请把信息填写完整', Toast.LENGTH_SHORT, Colors.red);
               }
@@ -288,6 +290,37 @@ class Collection_State extends State<Collection> {
       ),
     );
   }
+
+  Timer _countdownTimer=null;
+  String _codeCountdownStr = '提交中';
+  int _countdownNum = 5;
+  void reGetCountdown() {
+    setState(() {
+      if (_countdownTimer != null) {
+        _countdownNum = 5;
+        _countdownTimer.cancel();
+      }
+      // Timer的第一秒倒计时是有一点延迟的，为了立刻显示效果可以添加下一行。
+      _codeCountdownStr = '耐心等待60秒叭';
+      _countdownTimer =
+      new Timer.periodic(new Duration(seconds: 1), (timer) {
+        setState(() {
+          _countdownNum--;
+          if (_countdownNum > 0) {
+            _codeCountdownStr = '耐心等待60秒叭';
+          } else {
+            _showmodel('提交超时,请稍后重试', Toast.LENGTH_SHORT, Colors.red);
+            _codeCountdownStr = '提交超时';
+            _countdownNum = 5;
+            _countdownTimer.cancel();
+            _countdownTimer = null;
+            Navigator.pop(showcon);
+          }
+        });
+      });
+    });
+  }
+
 
   //验证图片
   _yz_image_wz() async{
@@ -331,9 +364,11 @@ class Collection_State extends State<Collection> {
     String d=_studentid.toString();
     String e=_projectname.toString();
     int f=await get_collection_id();
-    String str1=await HttpUtil.add_collection_information('addcollection',a,b,c,d,e,_time,f.toString());
-    //print('str1:$str1');
-    if(str1=='0'){
+    String str1=await HttpUtil.add_collection_information('addcollection',a,b,c,d,e,_time,e+' '+f.toString());
+    print('str1:$str1');
+    var emailReg = RegExp(
+        r'[0-9_]+$');
+    if(emailReg.hasMatch(str1)){
       Navigator.pop(showcon);
       Navigator.pop(context);
       _showmodel('提交成功', Toast.LENGTH_SHORT, Colors.blue);

@@ -64,8 +64,8 @@ Widget buildButtonColumn_ui2(String label, color, int index,int xia,String date)
           child: Text(
             index<8&&index>0
                 ?(index==int.parse(today.weekday.toString())?label+'\n'+date.substring(5,date.length):
-            index<int.parse(today.weekday.toString())?label+'\n'+'${today.subtract(new Duration(days: 4-index)).toString().substring(5,10)}':
-            label+'\n'+'${today.add(new Duration(days: index-4)).toString().substring(5,10)}')
+            index<int.parse(today.weekday.toString())?label+'\n'+'${today.subtract(new Duration(days: int.parse(today.weekday.toString())-index)).toString().substring(5,10)}':
+            label+'\n'+'${today.add(new Duration(days: index-int.parse(today.weekday.toString()))).toString().substring(5,10)}')
                 :(index == 8 ||
                 index == 16 ||
                 index == 24 ||

@@ -163,9 +163,9 @@ class group_ck_State extends State<group_ck> {
             print('${mblist[j].projectname}');
             if (templist[i]['collection_projectname'] ==mblist[j].projectname) {
               vislist.add('欢迎加入' +
-                  mblist[j].association +
+                  mblist[j].association +'  '+mblist[j].projectname+
                   '\n群号码:' +
-                  mblist[j].groupnumber+'\n你的编号为:'+templist[i]['collection_id'].toString());
+                  mblist[j].groupnumber+'\n你的编号为:'+templist[i]['collection_id'].toString().split(' ')[1]+'\n');
             }
           }
         }
