@@ -293,11 +293,11 @@ class Collection_State extends State<Collection> {
 
   Timer _countdownTimer=null;
   String _codeCountdownStr = '提交中';
-  int _countdownNum = 5;
+  int _countdownNum = 59;
   void reGetCountdown() {
     setState(() {
       if (_countdownTimer != null) {
-        _countdownNum = 5;
+        _countdownNum = 59;
         _countdownTimer.cancel();
       }
       // Timer的第一秒倒计时是有一点延迟的，为了立刻显示效果可以添加下一行。
@@ -311,7 +311,7 @@ class Collection_State extends State<Collection> {
           } else {
             _showmodel('提交超时,请稍后重试', Toast.LENGTH_SHORT, Colors.red);
             _codeCountdownStr = '提交超时';
-            _countdownNum = 5;
+            _countdownNum = 59;
             _countdownTimer.cancel();
             _countdownTimer = null;
             Navigator.pop(showcon);
