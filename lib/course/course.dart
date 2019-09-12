@@ -337,6 +337,7 @@ class CoursePageState extends State<CoursPage> {
     //print('initstate');
     load_data();
     _query_course_data(now_choose_date, context);
+    xia=int.parse(DateTime.parse(now_choose_date).weekday.toString());
   }
 
   @override
