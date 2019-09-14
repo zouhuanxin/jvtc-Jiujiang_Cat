@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_app01/Utils/Animation_list.dart';
 import 'package:flutter_app01/course/course.dart';
@@ -35,6 +37,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
   //Store information of rotation chart file
   List<String> imageList = List();
   String qqnumber = '';
@@ -187,6 +190,7 @@ class _HomePageState extends State<HomePage> {
     imageList.add(
         'https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=4010497054,3899149768&fm=26&gp=0.jpg');
     _bmob_get_Shuffing_figure_information();
+
   }
 
   void _lunbo_click(index){

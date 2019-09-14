@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:english_words/english_words.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_app01/index/index.dart';
 import 'package:data_plugin/bmob/table/bmob_user.dart';
 import 'package:data_plugin/bmob/bmob.dart';
@@ -7,6 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_app01/Utils/Record_Text.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'SplashPage.dart';
+import 'Utils/WebViewPage.dart';
 
 void main() => {
     runApp(MyApp())

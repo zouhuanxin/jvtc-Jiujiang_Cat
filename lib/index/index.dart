@@ -1,8 +1,12 @@
+import 'dart:async';
+
 import 'package:data_plugin/bmob/realtime/change.dart';
 import 'package:data_plugin/bmob/realtime/client.dart';
 import 'package:data_plugin/bmob/realtime/real_time_data_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_app01/Bean/gxinfo.dart';
+import 'package:flutter_app01/Utils/WebViewPage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'navigation_icon_view.dart';
@@ -22,10 +26,10 @@ class Index extends StatefulWidget {
   const Index({Key key, this.index}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState(){
+  State<StatefulWidget> createState() {
     //resh_state=index;
-    IndexState indexState=new IndexState();
-    indexState.currentIndex=index==null?0:index;
+    IndexState indexState = new IndexState();
+    indexState.currentIndex = index == null ? 0 : index;
     return indexState;
   }
 }
@@ -36,6 +40,10 @@ class IndexState extends State<Index> with TickerProviderStateMixin {
   void dispose() {
     super.dispose();
     bus.off("icon"); //移除广播机制
+//    if (_streamSubscription != null) {
+//      _streamSubscription.cancel();
+//      _streamSubscription = null;
+//    }
   }
 
   int currentIndex = 0; // 当前界面的索引值
@@ -43,15 +51,34 @@ class IndexState extends State<Index> with TickerProviderStateMixin {
   List<StatefulWidget> _pageList; // 用来存放我们的图标对应的页面
   StatefulWidget _currentPage; // 当前的显示页面
 
+  //与安卓原生进行通信
+  static const EventChannel _eventChannelPlugin = EventChannel("EventChannelPlugin");
+  StreamSubscription _streamSubscription;
+
   // 定义一个空的设置状态值的方法
   void _rebuild() {
     setState(() {});
   }
 
+  //通知栏点击启动打开浏览器监听
+  void _onToDart(message) {
+    print(message);
+    Navigator.push(
+        context,
+        new MaterialPageRoute(
+            builder: (context) => new WebViewPage(
+                url: message,
+                title: '推广')));
+  }
+  //当native出错时，发送的数据
+  void _onToDartError(error) {    print(error);  }
+  //当native发送数据完成时调用的方法，每一次发送完成就会调用
+  void _onDone() {    print("消息传递完毕");  }
+
   @override
   void initState() {
     super.initState();
-    if(widget.index == null){
+    if (widget.index == null) {
       bmob_get_app_Version_information(context, 'index');
     }
     _load_bottom();
@@ -63,6 +90,11 @@ class IndexState extends State<Index> with TickerProviderStateMixin {
         _load_bottom();
       });
     });
+
+
+    _streamSubscription = _eventChannelPlugin
+        .receiveBroadcastStream()
+        .listen(_onToDart, onError: _onToDartError, onDone: _onDone);
   }
 
   void _load_bottom() {
@@ -154,8 +186,13 @@ class IndexState extends State<Index> with TickerProviderStateMixin {
       List<gxinfo> sfs = data.map((i) => gxinfo.fromJson(i)).toList();
       if (app_version.toString().trim() !=
           sfs[sfs.length - 1].gxversion.toString().trim()) {
-        showmodel(context, '程序更新啦', sfs[sfs.length - 1].text,
-            sfs[sfs.length - 1].url,sfs[sfs.length - 1].url2,sfs[sfs.length - 1].url3);
+        showmodel(
+            context,
+            '程序更新啦',
+            sfs[sfs.length - 1].text,
+            sfs[sfs.length - 1].url,
+            sfs[sfs.length - 1].url2,
+            sfs[sfs.length - 1].url3);
       } else {
         if (note == 'my') {
           Fluttertoast.showToast(
@@ -172,7 +209,8 @@ class IndexState extends State<Index> with TickerProviderStateMixin {
   }
 
   //Prompt to update the application winod
-  showmodel(BuildContext context, String title, String content, String url,String url2,String url3) {
+  showmodel(BuildContext context, String title, String content, String url,
+      String url2, String url3) {
     showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -190,10 +228,10 @@ class IndexState extends State<Index> with TickerProviderStateMixin {
                           },
                         ),
                         new Offstage(
-                          offstage: url!=''?false:true,
+                          offstage: url != '' ? false : true,
                           child: new FlatButton(
                             child: new Text(
-                              "${url!=''?'更新线路1':''}",
+                              "${url != '' ? '更新线路1' : ''}",
                               style: TextStyle(color: Colors.red),
                             ),
                             onPressed: () {
@@ -207,10 +245,10 @@ class IndexState extends State<Index> with TickerProviderStateMixin {
                     Row(
                       children: <Widget>[
                         new Offstage(
-                          offstage: url2!=''?false:true,
+                          offstage: url2 != '' ? false : true,
                           child: new FlatButton(
                             child: new Text(
-                              "${url2!=''?'更新线路2':''}",
+                              "${url2 != '' ? '更新线路2' : ''}",
                               style: TextStyle(color: Colors.red),
                             ),
                             onPressed: () {
@@ -220,10 +258,10 @@ class IndexState extends State<Index> with TickerProviderStateMixin {
                           ),
                         ),
                         new Offstage(
-                          offstage: url3!=''?false:true,
+                          offstage: url3 != '' ? false : true,
                           child: new FlatButton(
                             child: new Text(
-                              "${url3!=''?'更新线路3':''}",
+                              "${url3 != '' ? '更新线路3' : ''}",
                               style: TextStyle(color: Colors.red),
                             ),
                             onPressed: () {
@@ -264,9 +302,9 @@ class IndexState extends State<Index> with TickerProviderStateMixin {
       // 设置底部导航工具栏的类型：fixed 固定
       onTap: (int index) {
         //为了方便判断是自启动还是手动点击课表 当手动点击课表时候才自动跳转登陆界面在没有登陆的情况下  启动程序与刷新课表界面不跳出自动登陆
-        resh_state=index;
-        if(index==1){
-          CoursePageState cp=new CoursePageState();
+        resh_state = index;
+        if (index == 1) {
+          CoursePageState cp = new CoursePageState();
           cp.resh_course_data(context);
         }
         // 添加点击事件
@@ -285,7 +323,7 @@ class IndexState extends State<Index> with TickerProviderStateMixin {
       debugShowCheckedModeBanner: false,
       home: new Scaffold(
         body: IndexedStack(
-          index:currentIndex,
+          index: currentIndex,
           children: _pageList,
         ),
         //new Center(child: _currentPage // 动态的展示我们当前的页面
