@@ -108,15 +108,23 @@ public class MainActivity extends FlutterActivity {
                     public void onSuccess(File file) {
                         // TODO 压缩成功后调用，返回压缩后的图片文件
                         System.out.println("压缩成功:" + file.getPath());
-                        res.success(file.getPath());
+                        try {
+                            res.success(file.getPath());
+                        }catch (Exception e){
+                            showToast("压缩对象错误");
+                        }
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         // TODO 当压缩过程出现问题时调用
                         System.out.println("压缩失败");
-                        res.success("压缩失败");
                         e.printStackTrace();
+                        try {
+                            res.success("压缩失败");
+                        }catch (Exception e2){
+                            showToast("压缩对象错误");
+                        }
                     }
                 }).launch();    //启动压缩
     }
