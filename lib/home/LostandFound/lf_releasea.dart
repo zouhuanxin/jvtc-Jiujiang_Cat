@@ -31,14 +31,12 @@ class lf_releasea_State extends State<lf_releasea> {
   Widget introduce_input() {
     return new Container(
       margin: EdgeInsets.all(5.0),
+      padding: EdgeInsets.all(5.0),
       child: TextField(
         maxLength: 250,
         maxLines: 10,
         decoration: InputDecoration(
             border: InputBorder.none,
-            fillColor: Colors.grey.shade100,
-            filled: true,
-            hintText: '丢失物品大概介绍',
             contentPadding: const EdgeInsets.symmetric(vertical: 0.0)),
         textAlign: TextAlign.start,
         onChanged: (T) {
@@ -51,15 +49,13 @@ class lf_releasea_State extends State<lf_releasea> {
 
   Widget address_input() {
     return new Container(
-      margin: EdgeInsets.all(5.0),
+      margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
+      padding: EdgeInsets.all(5.0),
       child: TextField(
-        maxLength: 12,
+        maxLines: 1,
         decoration: InputDecoration(
             border: InputBorder.none,
-            fillColor: Colors.grey.shade100,
-            filled: true,
-            hintText: '丢失物品大概地址',
-            contentPadding: const EdgeInsets.symmetric(vertical: 5.0)),
+            contentPadding: const EdgeInsets.symmetric(vertical: 0)),
         textAlign: TextAlign.start,
         onChanged: (T) {
           address_str=T;
@@ -110,14 +106,13 @@ class lf_releasea_State extends State<lf_releasea> {
 
   Widget money_input() {
     return new Container(
-      margin: EdgeInsets.all(5.0),
+      margin: EdgeInsets.fromLTRB(5, 0, 5, 5),
+      padding: EdgeInsets.all(5.0),
       child: TextField(
+        maxLines: 1,
         decoration: InputDecoration(
             border: InputBorder.none,
-            fillColor: Colors.grey.shade100,
-            filled: true,
-            hintText: '是否有奖励金，如果无则写0',
-            contentPadding: const EdgeInsets.symmetric(vertical: 5.0)),
+            contentPadding: const EdgeInsets.symmetric(vertical: 2.0)),
         inputFormatters: <TextInputFormatter>[
           WhitelistingTextInputFormatter.digitsOnly, //只输入数字
           LengthLimitingTextInputFormatter(4) //限制长度
@@ -268,10 +263,6 @@ class lf_releasea_State extends State<lf_releasea> {
       margin: EdgeInsets.all(10.0),
       child: Column(
         children: <Widget>[
-          Text(
-            '请选择图片,如果没有图片可以不选择.',
-            style: TextStyle(color: Color(int.parse(color2))),
-          ),
           Row(
             children: <Widget>[
               Expanded(
@@ -375,9 +366,23 @@ class lf_releasea_State extends State<lf_releasea> {
               height: 10,
             ),
             time_select(),
+            Text('   遗失物品介绍(必填)',style: TextStyle(color: Color(int.parse(color2)),fontSize: 16,fontWeight: FontWeight.w600,fontStyle: FontStyle.italic),),
             introduce_input(),
+            Text('   遗失物品地址(必填)',style: TextStyle(color: Color(int.parse(color2)),fontSize: 16,fontWeight: FontWeight.w600,fontStyle: FontStyle.italic),),
             address_input(),
+            Row(
+              children: <Widget>[
+                Text('   遗失物品奖励金(必填)',style: TextStyle(color: Color(int.parse(color2)),fontSize: 16,fontWeight: FontWeight.w600,fontStyle: FontStyle.italic),),
+                Text('   如果无奖励金请填写0',style: TextStyle(color: Color(int.parse(color2)),fontSize: 10,),),
+              ],
+            ),
             money_input(),
+            Row(
+              children: <Widget>[
+                Text('   拾取物品图片(必选)',style: TextStyle(color: Color(int.parse(color2)),fontSize: 16,fontWeight: FontWeight.w600,fontStyle: FontStyle.italic),),
+                Text('   如无图片可以不选择',style: TextStyle(color: Color(int.parse(color2)),fontSize: 10,),),
+              ],
+            ),
             three_image(),
             SizedBox(
               height: 10,

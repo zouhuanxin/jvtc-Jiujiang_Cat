@@ -53,7 +53,7 @@ class Lose_HttpUtil {
 
   static Future<String> get_loseb(url,currentPage,linesize) async {
     String dataURL = node_baseUrl+url;
-    http.Response response = await http.get(dataURL+'?currentPage='+currentPage+'&linesize='+linesize);
+    http.Response response = await http.get(dataURL+'?currentPage='+currentPage.toString()+'&linesize='+linesize.toString());
     return response.body.toString();
   }
 

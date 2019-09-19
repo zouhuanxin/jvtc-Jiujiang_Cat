@@ -45,11 +45,11 @@ class lf_release_State extends State<lf_release> with SingleTickerProviderStateM
           tabs: <Widget>[
             new Tab(
               icon: new Icon(Icons.send),
-              text: '捡到东西',
+              text: '拾取物品',
             ),
             new Tab(
               icon: new Icon(Icons.search),
-              text: '丢失东西',
+              text: '遗失物品',
             ),
           ],
           controller: _tabController,

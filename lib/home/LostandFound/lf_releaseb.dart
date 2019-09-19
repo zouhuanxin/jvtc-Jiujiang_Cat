@@ -45,9 +45,6 @@ class lf_releaseb_State extends State<lf_releaseb> {
         maxLines: 10,
         decoration: InputDecoration(
             border: InputBorder.none,
-            fillColor: Colors.grey.shade100,
-            filled: true,
-            hintText: '丢失物品大概介绍',
             contentPadding: const EdgeInsets.symmetric(vertical: 0.0)),
         textAlign: TextAlign.start,
         onChanged: (T) {
@@ -60,15 +57,12 @@ class lf_releaseb_State extends State<lf_releaseb> {
 
   Widget address_input() {
     return new Container(
-      margin: EdgeInsets.all(5.0),
+      margin: EdgeInsets.fromLTRB(5, 5, 5, 0),
       child: TextField(
         maxLength: 12,
         decoration: InputDecoration(
             border: InputBorder.none,
-            fillColor: Colors.grey.shade100,
-            filled: true,
-            hintText: '丢失物品大概地址',
-            contentPadding: const EdgeInsets.symmetric(vertical: 5.0)),
+            contentPadding: const EdgeInsets.symmetric(vertical: 0)),
         textAlign: TextAlign.start,
         onChanged: (T) {
           address_str = T;
@@ -146,7 +140,7 @@ class lf_releaseb_State extends State<lf_releaseb> {
         children: <Widget>[
           Expanded(
             child: Text(
-              '请选择分类',
+              '分类',
               textAlign: TextAlign.center,
               style: TextStyle(color: Color(int.parse(color2))),
             ),
@@ -317,10 +311,6 @@ class lf_releaseb_State extends State<lf_releaseb> {
       margin: EdgeInsets.all(10.0),
       child: Column(
         children: <Widget>[
-          Text(
-            '请选择图片,如果没有图片可以不选择.',
-            style: TextStyle(color: Color(int.parse(color2))),
-          ),
           Row(
             children: <Widget>[
               Expanded(
@@ -513,9 +503,18 @@ class lf_releaseb_State extends State<lf_releaseb> {
               height: 10,
             ),
             time_select(),
+            Text('   拾取物品介绍(必填)',style: TextStyle(color: Color(int.parse(color2)),fontSize: 16,fontWeight: FontWeight.w600,fontStyle: FontStyle.italic),),
             introduce_input(),
+            Text('   拾取物品地址(必填)',style: TextStyle(color: Color(int.parse(color2)),fontSize: 16,fontWeight: FontWeight.w600,fontStyle: FontStyle.italic),),
             address_input(),
+            Text('   拾取物品分类(必选)',style: TextStyle(color: Color(int.parse(color2)),fontSize: 16,fontWeight: FontWeight.w600,fontStyle: FontStyle.italic),),
             drop(),
+            Row(
+              children: <Widget>[
+                Text('   拾取物品图片(必选)',style: TextStyle(color: Color(int.parse(color2)),fontSize: 16,fontWeight: FontWeight.w600,fontStyle: FontStyle.italic),),
+                Text('   如无图片可以不选择',style: TextStyle(color: Color(int.parse(color2)),fontSize: 10,),),
+              ],
+            ),
             three_image(),
             SizedBox(
               height: 10,
