@@ -12,6 +12,7 @@ import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'dart:ui' as ui;
 import 'lf_search.dart';
 import 'dart:math';
+import 'dart:convert' as convert;
 
 //失物招领
 
@@ -44,7 +45,8 @@ class lf_home_State extends State<lf_home> {
   int linesize = 5; //一页多少条数据
   List<dynamic> alllosebdata = []; //得到loseball的总数据
   List<Widget> allui = []; //总数据  不分类
-  bool _body_loading = false;
+  bool _body_loading = false; //控制加载与总数据显示界面的切换
+  bool _search_all_data = false; //控制搜索结果与总数据界面的切换
   String nullimage =
       'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=15335368'
       '41326&di=682e2e7c3810ac92be325e62e173c0ea&imgtype=0&src=http%3A%2F%2Fs6.si'
@@ -52,8 +54,17 @@ class lf_home_State extends State<lf_home> {
   //初始化滚动监听器，加载更多使用
   ScrollController _controller = new ScrollController();
 
+  List<dynamic> search_data = []; //得到搜索结果集合数据
+  List<Object> search_tp_data = []; //得到图片搜索结果集合数据
+  List<Widget> search_allui = []; //搜索结果集合
+
   void _handleTapBoxBChanged(String value) {
     str = value;
+    if(str==''){
+      setState(() {
+        _search_all_data=false;
+      });
+    }
   }
 
   void _dropTapChanged(T) {
@@ -65,7 +76,78 @@ class lf_home_State extends State<lf_home> {
   void _click_search() {
     print('_click_search');
     print(drop_str);
-    print(str);
+    setState(() {
+      _search_all_data=true;
+    });
+    if(str!=null&&str!=''&&str.length>0){
+      switch(drop_str){
+        case '特征':
+          setState(() {
+            currentPage=1;
+            search_allui.clear();
+            tz_search(str);
+          });
+          break;
+        case '地点':
+          setState(() {
+            currentPage=1;
+            search_allui.clear();
+            address_search(str);
+          });
+          break;
+      }
+    }else if(drop_str=='时间'){
+      setState(() {
+        currentPage=1;
+        search_allui.clear();
+        time_search(date_str);
+      });
+    }else if(drop_str=='图片'){
+      setState(() {
+        currentPage=1;
+        search_allui.clear();
+        tp_bdsearch();
+      });
+    }
+  }
+  
+  //特征搜索
+  void tz_search(str) async{
+    String str1=await Lose_HttpUtil.get_loseb2('loseb_router/getloseb2', str, str, str, (currentPage - 1) * linesize, 2);
+    search_data = json.decode(str1);
+    _load_data(search_data, search_allui);
+  }
+
+  //地址搜索
+  void address_search(str) async{
+    String str1=await Lose_HttpUtil.get_loseb3('loseb_router/getloseb3', str, (currentPage - 1) * linesize, 2);
+    search_data = json.decode(str1);
+    _load_data(search_data, search_allui);
+  }
+
+  //时间搜索
+  void time_search(str) async{
+    String str1=await Lose_HttpUtil.get_loseb4('loseb_router/getloseb4', date_str, (currentPage - 1) * linesize, 2);
+    search_data = json.decode(str1);
+    _load_data(search_data, search_allui);
+  }
+
+  //图片百度服务器相似搜索
+  void tp_bdsearch() async{
+    String str1 = await Lose_HttpUtil.get_bdtoken();
+    String str2 = await Lose_HttpUtil.get_bdimage(convert.jsonDecode(str1)['access_token'], bs64);
+    //print(json.decode(str2)['result_num']);
+    if(int.parse(json.decode(str2)['result_num'].toString())>0){
+      search_tp_data=json.decode(json.encode(json.decode(str2)['result']));
+      tp_search(json.decode(json.encode(search_tp_data[0]))['brief']);
+    }
+  }
+  //图片自己服务器搜索
+  void tp_search(str) async{
+    String str1=await Lose_HttpUtil.get_loseb5('loseb_router/getloseb5', str, (currentPage - 1) * linesize, 2);
+    //print('tp_search:$str1');
+    search_data = json.decode(str1);
+    _load_data(search_data, search_allui);
   }
 
   void _selectedImage() async {
@@ -222,12 +304,23 @@ class lf_home_State extends State<lf_home> {
       ),
     );
   }
+  //搜索界面专用
+  String search_loadMoreText='没有更多数据';
+  Widget _search_buildProgressMoreIndicator() {
+    return new Padding(
+      padding: const EdgeInsets.all(15.0),
+      child: new Center(
+        child: new Text(search_loadMoreText, style: new TextStyle(color: const Color(0xFF999999), fontSize: 14.0)),
+      ),
+    );
+  }
+
   bool dataNotification(ScrollNotification notification) {
     if (notification is ScrollEndNotification) {
       //下滑到最底部
       if (notification.metrics.extentAfter == 0.0) {
-        print('======下滑到最底部======');
-        if(alllosebdata.length<2){
+       // print('======下滑到最底部======');
+        if(alllosebdata.length<linesize){
           setState(() {
             loadMoreText='没有更多数据';
           });
@@ -241,7 +334,7 @@ class lf_home_State extends State<lf_home> {
       }
       //滑动到最顶部
       if (notification.metrics.extentBefore == 0.0) {
-        print('======滑动到最顶部======');
+     //   print('======滑动到最顶部======');
         setState(() {
           currentPage = 1;
           allui.clear();
@@ -252,6 +345,42 @@ class lf_home_State extends State<lf_home> {
     }
     return true;
   }
+  //搜索界面专用
+  bool search_dataNotification(ScrollNotification notification) {
+    if (notification is ScrollEndNotification) {
+      //下滑到最底部
+      if (notification.metrics.extentAfter == 0.0) {
+      //  print('======下滑到最底部======');
+        if(search_data.length<2){
+          setState(() {
+            search_loadMoreText='没有更多数据';
+          });
+        }else{
+          if(drop_str=='特征'){
+            setState(() {
+              search_loadMoreText='加载中...';
+              currentPage++;
+              tz_search(str);
+            });
+          }else if(drop_str=='地点'){
+            setState(() {
+              search_loadMoreText='加载中...';
+              currentPage++;
+              address_search(str);
+            });
+          }else if(drop_str=='时间'){
+            setState(() {
+              search_loadMoreText='加载中...';
+              currentPage++;
+              time_search(drop_str);
+            });
+          }
+        }
+      }
+    }
+    return true;
+  }
+
   //瀑布流显示
   Widget pbl() {
     return new Offstage(
@@ -273,9 +402,27 @@ class lf_home_State extends State<lf_home> {
       ),
     );
   }
+  Widget search_pbl() {
+    return  new Container(
+      margin: EdgeInsets.all(10.0),
+      width: MediaQueryData.fromWindow(ui.window).size.width,
+      height: MediaQueryData.fromWindow(ui.window).size.height * 0.65,
+      child: new NotificationListener(
+        onNotification: search_dataNotification,
+        child: new ListView(
+          children: <Widget>[
+            Column(
+              children: search_allui,
+            ),
+            _search_buildProgressMoreIndicator()
+          ],
+        ),
+      ),
+    );
+  }
 
   Widget card(
-      String image1, String image2, String image3, String text, String name) {
+      String image1, String image2, String image3, String text,String address,String time, String name) {
     return new Container(
       margin: EdgeInsets.all(10.0),
       decoration: BoxDecoration(
@@ -284,8 +431,12 @@ class lf_home_State extends State<lf_home> {
       child: Column(
         children: <Widget>[
           new Container(
+            height:image1.indexOf('null')==-1||image2.indexOf('null')==-1||image3.indexOf('null')==-1?
+            MediaQueryData.fromWindow(ui.window).size.height *
+                0.18:0,
             padding: EdgeInsets.all(5.0),
-            child: Row(
+            child: ListView(
+                scrollDirection: Axis.horizontal,
               children: <Widget>[
                 GestureDetector(
                   onTap:(){
@@ -297,11 +448,11 @@ class lf_home_State extends State<lf_home> {
                         ? new Image.memory(
                       base64.decode(image1),
                       fit: BoxFit.fill,
-                      height:
+                      height:image1.indexOf('null')==-1?
                       MediaQueryData.fromWindow(ui.window).size.height *
-                          0.17,
-                      width: MediaQueryData.fromWindow(ui.window).size.width *
-                          0.25,
+                          0.17:0,
+                      width: image1.indexOf('null')==-1?MediaQueryData.fromWindow(ui.window).size.width *
+                          0.25:0,
                     )
                         : Text(''),
                   ),
@@ -316,11 +467,11 @@ class lf_home_State extends State<lf_home> {
                         ? new Image.memory(
                       base64.decode(image2),
                       fit: BoxFit.fill,
-                      height:
+                      height:image2.indexOf('null')==-1?
                       MediaQueryData.fromWindow(ui.window).size.height *
-                          0.17,
-                      width: MediaQueryData.fromWindow(ui.window).size.width *
-                          0.25,
+                          0.17:0,
+                      width: image2.indexOf('null')==-1?MediaQueryData.fromWindow(ui.window).size.width *
+                          0.25:0,
                     )
                         : Text(''),
                   ),
@@ -335,11 +486,11 @@ class lf_home_State extends State<lf_home> {
                         ? new Image.memory(
                       base64.decode(image3),
                       fit: BoxFit.fill,
-                      height:
+                      height:image3.indexOf('null')==-1?
                       MediaQueryData.fromWindow(ui.window).size.height *
-                          0.17,
-                      width: MediaQueryData.fromWindow(ui.window).size.width *
-                          0.25,
+                          0.17:0,
+                      width: image3.indexOf('null')==-1?MediaQueryData.fromWindow(ui.window).size.width *
+                          0.25:0,
                     )
                         : Text(''),
                   ),
@@ -349,18 +500,33 @@ class lf_home_State extends State<lf_home> {
           ),
           new Container(
             padding: EdgeInsets.all(5.0),
-            child: Text(
-              text,
-              style: TextStyle(color: Colors.black, fontSize: 11),
-              overflow: TextOverflow.ellipsis,
-              maxLines: 2,
+            child: Align(
+              child: Text(
+                text,
+                style: TextStyle(color: Colors.black, fontSize: 11),
+                overflow: TextOverflow.ellipsis,
+                maxLines: 2,
+              ),
+              alignment: Alignment.topLeft,
             ),
           ),
           new Container(
             padding: EdgeInsets.fromLTRB(5.0, 0, 5.0, 5.0),
             child: Align(
               child: Text(
-                '来自:$name',
+                '拾取位置:$address',
+                style: TextStyle(color: Colors.green, fontSize: 11),
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+              ),
+              alignment: Alignment.bottomLeft,
+            ),
+          ),
+          new Container(
+            padding: EdgeInsets.fromLTRB(5.0, 0, 5.0, 5.0),
+            child: Align(
+              child: Text(
+                '来自:$name    时间$time',
                 style: TextStyle(color: Colors.green, fontSize: 11),
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,
@@ -378,14 +544,14 @@ class lf_home_State extends State<lf_home> {
     String str1 = await Lose_HttpUtil.get_loseb(
         'loseb_router/getloseb', (currentPage - 1) * linesize, linesize);
     alllosebdata = json.decode(str1);
-    _load_data();
+    _load_data(alllosebdata,allui);
   }
 
   //装载数据
-  void _load_data() {
+  void _load_data(List<dynamic>list,List<Widget>uilist) {
     setState(() {
-      for (int i = 0; i < alllosebdata.length; i++) {
-        Map<String, dynamic> map = json.decode(json.encode(alllosebdata[i]));
+      for (int i = 0; i < list.length; i++) {
+        Map<String, dynamic> map = json.decode(json.encode(list[i]));
         String images = map['image']
             .toString()
             .substring(1, map['image'].toString().length - 1);
@@ -396,7 +562,7 @@ class lf_home_State extends State<lf_home> {
         String address = map['address'].toString().trim();
         String time = map['time'].toString().trim();
         String userphone = map['userphone'].toString().trim();
-        allui.add(card(image1, image2, image3, introduce, userphone));
+        uilist.add(card(image1, image2, image3, introduce,address ,time, userphone));
       }
       _body_loading = true;
     });
@@ -421,6 +587,33 @@ class lf_home_State extends State<lf_home> {
             ),
           ],
         ));
+  }
+
+  //搜索结果界面
+  Widget search_result(){
+    return new Container(
+      margin: EdgeInsets.all(5.0),
+      padding: EdgeInsets.all(5.0),
+      child: Column(
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              Text('   搜索结果',style: TextStyle(color: Color(int.parse(color2)),fontSize: 16,fontWeight: FontWeight.w600,fontStyle: FontStyle.normal),),
+              Text('   $drop_str',style: TextStyle(color: Color(int.parse(color2)),fontSize: 10,),),
+              GestureDetector(
+                onTap: (){
+                  setState(() {
+                    _search_all_data=false;
+                  });
+                },
+                child: Text('   关闭',style: TextStyle(color: Colors.red,fontSize: 10,),textAlign: TextAlign.right,),
+              )
+            ],
+          ),
+          search_pbl()
+        ],
+      ),
+    );
   }
 
   @override
@@ -468,9 +661,20 @@ class lf_home_State extends State<lf_home> {
               date_str: date_str,
               date_callback: date_callback,
             ),
-            bodytype(),
-            pbl(),
-            loading()
+            new Offstage(
+              offstage: _search_all_data,
+              child: Column(
+                children: <Widget>[
+                  bodytype(),
+                  pbl(),
+                  loading()
+                ],
+              ),
+            ),
+            new Offstage(
+              offstage: !_search_all_data,
+              child: search_result(),
+            )
           ],
         ),
       ),

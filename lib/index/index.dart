@@ -39,7 +39,7 @@ class IndexState extends State<Index> with TickerProviderStateMixin {
   @override
   void dispose() {
     super.dispose();
-    bus.off("icon"); //移除广播机制
+    bus.off("dart_event"); //移除广播机制
 //    if (_streamSubscription != null) {
 //      _streamSubscription.cancel();
 //      _streamSubscription = null;

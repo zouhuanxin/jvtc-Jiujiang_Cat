@@ -4,6 +4,7 @@ import 'dart:convert' as convert;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app01/HttpUtil/HttpUtil.dart';
+import 'package:flutter_app01/Utils/EventCallback.dart';
 import 'package:flutter_app01/Utils/Record_Text.dart';
 import 'package:flutter_app01/index/navigation_icon_view.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
@@ -40,6 +41,7 @@ class lf_releaseb_State extends State<lf_releaseb> {
   Widget introduce_input() {
     return new Container(
       margin: EdgeInsets.all(5.0),
+      padding: EdgeInsets.all(5.0),
       child: TextField(
         maxLength: 250,
         maxLines: 10,
@@ -57,9 +59,10 @@ class lf_releaseb_State extends State<lf_releaseb> {
 
   Widget address_input() {
     return new Container(
-      margin: EdgeInsets.fromLTRB(5, 5, 5, 0),
+      margin: EdgeInsets.fromLTRB(5, 5, 5, 5),
+      padding: EdgeInsets.all(5.0),
       child: TextField(
-        maxLength: 12,
+        maxLines: 1,
         decoration: InputDecoration(
             border: InputBorder.none,
             contentPadding: const EdgeInsets.symmetric(vertical: 0)),
@@ -194,7 +197,7 @@ class lf_releaseb_State extends State<lf_releaseb> {
               );
             } else {
               return new Image.asset(
-                "images/2.0.x/xz.png",
+                "images/2.2.x/addimage.png",
                 height: 70.0,
                 width: 70.0,
                 color: Color(int.parse(color2)),
@@ -238,7 +241,7 @@ class lf_releaseb_State extends State<lf_releaseb> {
               );
             } else {
               return new Image.asset(
-                "images/2.0.x/xz.png",
+                "images/2.2.x/addimage.png",
                 height: 70.0,
                 width: 70.0,
                 color: Color(int.parse(color2)),
@@ -282,7 +285,7 @@ class lf_releaseb_State extends State<lf_releaseb> {
               );
             } else {
               return new Image.asset(
-                "images/2.0.x/xz.png",
+                "images/2.2.x/addimage.png",
                 height: 70.0,
                 width: 70.0,
                 color: Color(int.parse(color2)),
@@ -475,6 +478,7 @@ class lf_releaseb_State extends State<lf_releaseb> {
       setState(() {
         _loading_frame = false;
       });
+      bus.emit("fb", (arg){});
       showTaost('提交成功', Toast.LENGTH_SHORT, Colors.blue);
     }
   }
@@ -503,15 +507,15 @@ class lf_releaseb_State extends State<lf_releaseb> {
               height: 10,
             ),
             time_select(),
-            Text('   拾取物品介绍(必填)',style: TextStyle(color: Color(int.parse(color2)),fontSize: 16,fontWeight: FontWeight.w600,fontStyle: FontStyle.italic),),
+            Text('   拾取物品介绍(必填)',style: TextStyle(color: Color(int.parse(color2)),fontSize: 16,fontWeight: FontWeight.w600,fontStyle: FontStyle.normal),),
             introduce_input(),
-            Text('   拾取物品地址(必填)',style: TextStyle(color: Color(int.parse(color2)),fontSize: 16,fontWeight: FontWeight.w600,fontStyle: FontStyle.italic),),
+            Text('   拾取物品地址(必填)',style: TextStyle(color: Color(int.parse(color2)),fontSize: 16,fontWeight: FontWeight.w600,fontStyle: FontStyle.normal),),
             address_input(),
-            Text('   拾取物品分类(必选)',style: TextStyle(color: Color(int.parse(color2)),fontSize: 16,fontWeight: FontWeight.w600,fontStyle: FontStyle.italic),),
+            Text('   拾取物品分类(必选)',style: TextStyle(color: Color(int.parse(color2)),fontSize: 16,fontWeight: FontWeight.w600,fontStyle: FontStyle.normal),),
             drop(),
             Row(
               children: <Widget>[
-                Text('   拾取物品图片(必选)',style: TextStyle(color: Color(int.parse(color2)),fontSize: 16,fontWeight: FontWeight.w600,fontStyle: FontStyle.italic),),
+                Text('   拾取物品图片(必选)',style: TextStyle(color: Color(int.parse(color2)),fontSize: 16,fontWeight: FontWeight.w600,fontStyle: FontStyle.normal),),
                 Text('   如无图片可以不选择',style: TextStyle(color: Color(int.parse(color2)),fontSize: 10,),),
               ],
             ),

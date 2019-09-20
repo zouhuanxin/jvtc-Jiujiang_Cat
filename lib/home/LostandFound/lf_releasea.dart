@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_app01/Utils/EventCallback.dart';
 import 'package:flutter_app01/Utils/Record_Text.dart';
 import 'package:flutter_app01/index/navigation_icon_view.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
@@ -12,6 +13,7 @@ import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:flutter_app01/HttpUtil/Lose_HttpUtil.dart';
 
 //失物招领
+//遗失物品不使用Ai接口进行识别搜索
 
 class lf_releasea extends StatefulWidget {
   @override
@@ -49,7 +51,7 @@ class lf_releasea_State extends State<lf_releasea> {
 
   Widget address_input() {
     return new Container(
-      margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
+      margin: EdgeInsets.all(5.0),
       padding: EdgeInsets.all(5.0),
       child: TextField(
         maxLines: 1,
@@ -146,7 +148,7 @@ class lf_releasea_State extends State<lf_releasea> {
               );
             } else {
               return new Image.asset(
-                "images/2.0.x/xz.png",
+                "images/2.2.x/addimage.png",
                 height: 70.0,
                 width: 70.0,
                 color: Color(int.parse(color2)),
@@ -190,7 +192,7 @@ class lf_releasea_State extends State<lf_releasea> {
               );
             } else {
               return new Image.asset(
-                "images/2.0.x/xz.png",
+                "images/2.2.x/addimage.png",
                 height: 70.0,
                 width: 70.0,
                 color: Color(int.parse(color2)),
@@ -234,7 +236,7 @@ class lf_releasea_State extends State<lf_releasea> {
               );
             } else {
               return new Image.asset(
-                "images/2.0.x/xz.png",
+                "images/2.2.x/addimage.png",
                 height: 70.0,
                 width: 70.0,
                 color: Color(int.parse(color2)),
@@ -315,7 +317,9 @@ class lf_releasea_State extends State<lf_releasea> {
             //print('imagelist:$image_list');
             //判断数据是否为空
             if(introduce_str!=null&&address_str!=null&&reware_str!=null){
-              _loading_frame=true;
+              setState(() {
+                _loading_frame=true;
+              });
               submit();
             }else{
               showTaost('请填写完信息', Toast.LENGTH_SHORT, Colors.red);
@@ -330,12 +334,15 @@ class lf_releasea_State extends State<lf_releasea> {
   void submit() async{
     String str1=await Lose_HttpUtil.add_losea('losea_router/addlosea',image_list.toString(),introduce_str,address_str,now_choose_date,reware_str,phone);
     var emailReg = RegExp(r'[0-9_]+$');
-    _loading_frame=false;
+    setState(() {
+      _loading_frame=false;
+    });
     if(emailReg.hasMatch(str1)){
       //提交成功后清除数据
 //      introduce_str=null;
 //      address_str=null;
 //      reware_str=null;
+      bus.emit("fb", (arg){});
       showTaost('提交成功', Toast.LENGTH_SHORT, Colors.blue);
     }else{
       showTaost('提交失败', Toast.LENGTH_SHORT, Colors.red);
@@ -366,20 +373,20 @@ class lf_releasea_State extends State<lf_releasea> {
               height: 10,
             ),
             time_select(),
-            Text('   遗失物品介绍(必填)',style: TextStyle(color: Color(int.parse(color2)),fontSize: 16,fontWeight: FontWeight.w600,fontStyle: FontStyle.italic),),
+            Text('   遗失物品介绍(必填)',style: TextStyle(color: Color(int.parse(color2)),fontSize: 16,fontWeight: FontWeight.w600,fontStyle: FontStyle.normal),),
             introduce_input(),
-            Text('   遗失物品地址(必填)',style: TextStyle(color: Color(int.parse(color2)),fontSize: 16,fontWeight: FontWeight.w600,fontStyle: FontStyle.italic),),
+            Text('   遗失物品地址(必填)',style: TextStyle(color: Color(int.parse(color2)),fontSize: 16,fontWeight: FontWeight.w600,fontStyle: FontStyle.normal),),
             address_input(),
             Row(
               children: <Widget>[
-                Text('   遗失物品奖励金(必填)',style: TextStyle(color: Color(int.parse(color2)),fontSize: 16,fontWeight: FontWeight.w600,fontStyle: FontStyle.italic),),
+                Text('   遗失物品奖励金(必填)',style: TextStyle(color: Color(int.parse(color2)),fontSize: 16,fontWeight: FontWeight.w600,fontStyle: FontStyle.normal),),
                 Text('   如果无奖励金请填写0',style: TextStyle(color: Color(int.parse(color2)),fontSize: 10,),),
               ],
             ),
             money_input(),
             Row(
               children: <Widget>[
-                Text('   拾取物品图片(必选)',style: TextStyle(color: Color(int.parse(color2)),fontSize: 16,fontWeight: FontWeight.w600,fontStyle: FontStyle.italic),),
+                Text('   拾取物品图片(必选)',style: TextStyle(color: Color(int.parse(color2)),fontSize: 16,fontWeight: FontWeight.w600,fontStyle: FontStyle.normal),),
                 Text('   如无图片可以不选择',style: TextStyle(color: Color(int.parse(color2)),fontSize: 10,),),
               ],
             ),

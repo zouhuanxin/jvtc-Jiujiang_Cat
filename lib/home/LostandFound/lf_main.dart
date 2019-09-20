@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app01/Utils/EventCallback.dart';
 import 'package:flutter_app01/Utils/Record_Text.dart';
 import 'package:flutter_app01/home/LostandFound/lf_my.dart';
 import 'package:flutter_app01/home/LostandFound/lf_release.dart';
@@ -29,7 +30,25 @@ class lf_main_State extends State<lf_main> with TickerProviderStateMixin{
     // TODO: implement initState
     super.initState();
     _load_bottom();
+    //监听广播事件
+    bus.on("fb", (arg) {
+      setState(() {
+        _navigationViews[currentIndex].controller.reverse();
+        currentIndex = 0;
+        _navigationViews[currentIndex].controller.forward();
+        _currentPage = _pageList[currentIndex];
+        _load_bottom();
+      });
+    });
   }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    bus.off("fb"); //移除广播机制
+  }
+
   void _load_bottom() {
     // 初始化导航图标
     _navigationViews = <NavigationIconView>[

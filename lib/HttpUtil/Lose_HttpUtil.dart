@@ -59,25 +59,25 @@ class Lose_HttpUtil {
 
   static Future<String> get_loseb2(url,introduce,tz,wz,currentPage,linesize) async {
     String dataURL = node_baseUrl+url;
-    http.Response response = await http.get(dataURL+'?currentPage='+currentPage+'&linesize='+linesize+'&introduce='+introduce+'&tz='+tz+'&wz='+wz);
+    http.Response response = await http.get(dataURL+'?currentPage='+currentPage.toString()+'&linesize='+linesize.toString()+'&introduce='+introduce.toString()+'&tz='+tz.toString()+'&wz='+wz.toString());
     return response.body.toString();
   }
 
   static Future<String> get_loseb3(url,address,currentPage,linesize) async {
     String dataURL = node_baseUrl+url;
-    http.Response response = await http.get(dataURL+'?currentPage='+currentPage+'&linesize='+linesize+'&address='+address);
+    http.Response response = await http.get(dataURL+'?currentPage='+currentPage.toString()+'&linesize='+linesize.toString()+'&address='+address);
     return response.body.toString();
   }
 
   static Future<String> get_loseb4(url,time,currentPage,linesize) async {
     String dataURL = node_baseUrl+url;
-    http.Response response = await http.get(dataURL+'?currentPage='+currentPage+'&linesize='+linesize+'&time='+time);
+    http.Response response = await http.get(dataURL+'?currentPage='+currentPage.toString()+'&linesize='+linesize.toString()+'&time='+time);
     return response.body.toString();
   }
 
   static Future<String> get_loseb5(url,tp,currentPage,linesize) async {
     String dataURL = node_baseUrl+url;
-    http.Response response = await http.get(dataURL+'?currentPage='+currentPage+'&linesize='+linesize+'&tp='+tp);
+    http.Response response = await http.get(dataURL+'?currentPage='+currentPage.toString()+'&linesize='+linesize.toString()+'&tp='+tp);
     return response.body.toString();
   }
 

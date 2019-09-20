@@ -111,7 +111,7 @@ public class MainActivity extends FlutterActivity {
                         try {
                             res.success(file.getPath());
                         }catch (Exception e){
-                            showToast("压缩对象错误");
+                            //showToast("压缩对象错误");
                         }
                     }
 
@@ -123,7 +123,7 @@ public class MainActivity extends FlutterActivity {
                         try {
                             res.success("压缩失败");
                         }catch (Exception e2){
-                            showToast("压缩对象错误");
+                            //showToast("压缩对象错误");
                         }
                     }
                 }).launch();    //启动压缩
