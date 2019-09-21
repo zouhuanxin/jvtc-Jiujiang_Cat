@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app01/Utils/Animation_list.dart';
 import 'package:flutter_app01/Utils/WebViewPage.dart';
 import 'package:flutter_app01/course/course.dart';
+import 'package:flutter_app01/home/LostandFound/lf_my.dart';
+import 'package:flutter_app01/home/LostandFound/lf_mylose.dart';
 import 'package:meta/meta.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:data_plugin/bmob/bmob.dart';
@@ -55,6 +57,22 @@ class my_State extends State<my>{
       case '修改密码':
         Navigator.push(context,
             new MaterialPageRoute(builder: (context) => new my_password()));
+        break;
+      case '拾取物品':
+        if(login_state==true){
+          Navigator.push(context,
+              new MaterialPageRoute(builder: (context) => new lf_my()));
+        }else{
+          _showmodel('请先登陆',Toast.LENGTH_SHORT,Colors.red);
+        }
+        break;
+      case '遗失物品':
+        if(login_state==true){
+          Navigator.push(context,
+              new MaterialPageRoute(builder: (context) => new lf_mylose()));
+        }else{
+          _showmodel('请先登陆',Toast.LENGTH_SHORT,Colors.red);
+        }
         break;
       case '检查更新':
         IndexState().bmob_get_app_Version_information(context,'my');
@@ -126,6 +144,8 @@ class my_State extends State<my>{
                 SizedBox(height: 30,),
                 body_component01('images/2.0.x/dark_model.png', '暗黑模式'),
                 body_component02('images/2.0.x/uploadpassword.png',40, '修改密码'),
+                body_component02('images/2.2.x/tz.png',40, '拾取物品'),
+                body_component02('images/2.2.x/swtz2.png',40, '遗失物品'),
                // body_component02('images/2.0.x/myzlxg.png',40, '资料修改'),
                 body_component02('images/2.0.x/app_update.png',45, '检查更新'),
                 body_component02('images/2.0.x/mzsm.png',45, '免责声明'),

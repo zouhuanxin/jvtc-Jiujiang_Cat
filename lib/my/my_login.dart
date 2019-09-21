@@ -166,7 +166,6 @@ class my_login_State extends State<my_login>{
             if (_formKey.currentState.validate()) {
               ///只有输入的内容符合要求通过才会到达此处
               _formKey.currentState.save();
-              //TODO 执行登录方法
               //print('email:$_studeng_id , assword:$_jw_password');
               showDialog(
                   context: context,

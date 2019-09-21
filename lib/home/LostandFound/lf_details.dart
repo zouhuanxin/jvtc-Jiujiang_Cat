@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app01/HttpUtil/Lose_HttpUtil.dart';
 import 'package:flutter_app01/Utils/Record_Text.dart';
 import 'package:flutter_app01/index/navigation_icon_view.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'dart:ui' as ui;
 import 'lf_details2.dart';
 import 'lf_search.dart';
@@ -12,20 +11,28 @@ import 'dart:convert';
 
 //失物招领
 
-class lf_my extends StatefulWidget {
+class lf_details extends StatefulWidget {
+  final String type;
 
+  const lf_details({Key key, this.type}) : super(key: key);
   @override
-  State<StatefulWidget> createState() => lf_my_State();
+  State<StatefulWidget> createState() => lf_details_State(type);
 }
 
-class lf_my_State extends State<lf_my> {
+class lf_details_State extends State<lf_details> {
   int currentPage = 1; //当前页数
   int linesize = 5; //一页多少条数据
   List<dynamic> alllosebdata = []; //得到loseball的总数据
   List<Widget> allui = []; //总数据  不分类
 
+  String type='';
+
+  lf_details_State(str){
+    type=str;
+  }
+
   Widget card(
-      String id,String image1, String image2, String image3, String text,String address,String time, String name,String type) {
+      String id,String image1, String image2, String image3, String text,String address,String time, String name,String values) {
     return GestureDetector(
       onTap: (){
         Navigator.push(context,
@@ -134,29 +141,12 @@ class lf_my_State extends State<lf_my> {
               padding: EdgeInsets.fromLTRB(5.0, 0, 5.0, 5.0),
               child: Align(
                 child: Text(
-                  '分类:$type    时间$time',
+                  type=='遗失物品'?'奖励金:$values    时间$time':'分类:$values    时间$time',
                   style: TextStyle(color: Colors.green, fontSize: 11),
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 ),
                 alignment: Alignment.bottomLeft,
-              ),
-            ),
-            new GestureDetector(
-              onTap:(){
-                delect(id);
-              },
-              child: new Container(
-                padding: EdgeInsets.fromLTRB(5.0, 0, 5.0, 5.0),
-                child: Align(
-                  child: Text(
-                    ' 删除   ',
-                    style: TextStyle(color: Colors.red, fontSize: 15),
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
-                  ),
-                  alignment: Alignment.bottomRight,
-                ),
               ),
             )
           ],
@@ -222,7 +212,7 @@ class lf_my_State extends State<lf_my> {
           setState(() {
             loadMoreText='加载中...';
             currentPage++;
-            getall(currentPage,phone);
+            getalltype(currentPage,type);
           });
         }
       }
@@ -233,7 +223,7 @@ class lf_my_State extends State<lf_my> {
           headloadMoreText='刷新中...';
           currentPage = 1;
           allui.clear();
-          getall(currentPage,phone);
+          getalltype(currentPage,type);
         });
       }
     }
@@ -260,36 +250,15 @@ class lf_my_State extends State<lf_my> {
   }
 
   //获取数据
-  getall(currentPage,str) async {
-    String str1 = await Lose_HttpUtil.get_loseb7('loseb_router/getloseb7', str, (currentPage - 1) * linesize, linesize);
+  getalltype(currentPage,str) async {
+    String str1='';
+    if(str=='遗失物品'){
+      str1 = await Lose_HttpUtil.get_losea('losea_router/getlosea', (currentPage - 1) * linesize, linesize);
+    }else{
+      str1 = await Lose_HttpUtil.get_loseb6('loseb_router/getloseb6', str, (currentPage - 1) * linesize, linesize);
+    }
     alllosebdata = json.decode(str1);
     _load_data(alllosebdata,allui);
-  }
-
-  //删除数据
-  delect(str) async {
-    String str1 = await Lose_HttpUtil.delect_loseb('loseb_router/delectloseb', str);
-    if(int.parse(str1)==1){
-      _Toast('删除成功', Toast.LENGTH_SHORT, Colors.blue);
-      setState(() {
-        alllosebdata.clear();
-        allui.clear();
-        currentPage=1;
-        getall(currentPage,phone);
-      });
-    }else{
-      _Toast('删除失败', Toast.LENGTH_SHORT, Colors.red);
-    }
-  }
-  void _Toast(mes, var type, var color) {
-    Fluttertoast.showToast(
-        msg: mes,
-        toastLength: type,
-        gravity: ToastGravity.TOP,
-        timeInSecForIos: 1,
-        backgroundColor: color,
-        textColor: Colors.white,
-        fontSize: 16.0);
   }
 
   //装载数据
@@ -297,17 +266,24 @@ class lf_my_State extends State<lf_my> {
     setState(() {
       for (int i = 0; i < list.length; i++) {
         Map<String, dynamic> map = json.decode(json.encode(list[i]));
-        String images = map['image'].toString().substring(1, map['image'].toString().length - 1);
+        String images = map['image']
+            .toString()
+            .substring(1, map['image'].toString().length - 1);
         String image1 = images.split(',')[0].toString().trim();
         String image2 = images.split(',')[1].toString().trim();
         String image3 = images.split(',')[2].toString().trim();
         String introduce = map['introduce'].toString().trim();
         String address = map['address'].toString().trim();
         String time = map['time'].toString().trim();
-        String type = map['type'].toString().trim();
+        String values;
+        if(type=='遗失物品'){
+          values = map['reward_money'].toString().trim();
+        }else{
+          values = map['type'].toString().trim();
+        }
         String userphone = map['userphone'].toString().trim();
         String id = map['id'].toString().trim();
-        uilist.add(card(id,image1, image2, image3, introduce,address ,time, userphone,type));
+        uilist.add(card(id,image1, image2, image3, introduce,address ,time, userphone,values));
       }
       headloadMoreText='下拉可刷新哦';
     });
@@ -333,7 +309,7 @@ class lf_my_State extends State<lf_my> {
     alllosebdata.clear();
     allui.clear();
     currentPage=1;
-    getall(currentPage,phone);
+    getalltype(currentPage,type);
   }
 
   @override
@@ -342,7 +318,7 @@ class lf_my_State extends State<lf_my> {
     return new Scaffold(
       appBar: new AppBar(
         title: new Text(
-          '失物招领-帖子                                       ',
+          '详情-${type}                                       ',
           textAlign: TextAlign.left,
           style: TextStyle(
               color: Color(int.parse(color2)),

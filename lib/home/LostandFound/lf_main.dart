@@ -71,13 +71,13 @@ class lf_main_State extends State<lf_main> with TickerProviderStateMixin{
             style: TextStyle(color: Color(int.parse(color2))),
           ),
           vsync: this),
-      new NavigationIconView(
-          icon: new Icon(Icons.face, color: Color(int.parse(color2)), size: 30),
-          title: new Text(
-            currentIndex == 2 ? '___' : '',
-            style: TextStyle(color: Color(int.parse(color2))),
-          ),
-          vsync: this)
+//      new NavigationIconView(
+//          icon: new Icon(Icons.face, color: Color(int.parse(color2)), size: 30),
+//          title: new Text(
+//            currentIndex == 2 ? '___' : '',
+//            style: TextStyle(color: Color(int.parse(color2))),
+//          ),
+//          vsync: this)
     ];
 
     // 给每一个按钮区域加上监听

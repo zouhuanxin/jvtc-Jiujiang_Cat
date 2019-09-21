@@ -19,7 +19,7 @@ class Lose_HttpUtil {
 
   static Future<String> get_losea(url,currentPage,linesize) async {
     String dataURL = node_baseUrl+url;
-    http.Response response = await http.get(dataURL+'?currentPage='+currentPage+'&linesize='+linesize);
+    http.Response response = await http.get(dataURL+'?currentPage='+currentPage.toString()+'&linesize='+linesize.toString());
     return response.body.toString();
   }
 
@@ -83,7 +83,13 @@ class Lose_HttpUtil {
 
   static Future<String> get_loseb6(url,type,currentPage,linesize) async {
     String dataURL = node_baseUrl+url;
-    http.Response response = await http.get(dataURL+'?currentPage='+currentPage+'&linesize='+linesize+'&type='+type);
+    http.Response response = await http.get(dataURL+'?currentPage='+currentPage.toString()+'&linesize='+linesize.toString()+'&type='+type);
+    return response.body.toString();
+  }
+
+  static Future<String> get_loseb7(url,userphone,currentPage,linesize) async {
+    String dataURL = node_baseUrl+url;
+    http.Response response = await http.get(dataURL+'?currentPage='+currentPage.toString()+'&linesize='+linesize.toString()+'&userphone='+userphone);
     return response.body.toString();
   }
 

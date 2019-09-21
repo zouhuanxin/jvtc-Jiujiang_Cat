@@ -12,13 +12,13 @@ import 'dart:convert';
 
 //失物招领
 
-class lf_my extends StatefulWidget {
+class lf_mylose extends StatefulWidget {
 
   @override
-  State<StatefulWidget> createState() => lf_my_State();
+  State<StatefulWidget> createState() => lf_mylose_State();
 }
 
-class lf_my_State extends State<lf_my> {
+class lf_mylose_State extends State<lf_mylose> {
   int currentPage = 1; //当前页数
   int linesize = 5; //一页多少条数据
   List<dynamic> alllosebdata = []; //得到loseball的总数据
@@ -134,7 +134,7 @@ class lf_my_State extends State<lf_my> {
               padding: EdgeInsets.fromLTRB(5.0, 0, 5.0, 5.0),
               child: Align(
                 child: Text(
-                  '分类:$type    时间$time',
+                  '奖励金:$type    时间$time',
                   style: TextStyle(color: Colors.green, fontSize: 11),
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
@@ -261,14 +261,14 @@ class lf_my_State extends State<lf_my> {
 
   //获取数据
   getall(currentPage,str) async {
-    String str1 = await Lose_HttpUtil.get_loseb7('loseb_router/getloseb7', str, (currentPage - 1) * linesize, linesize);
+    String str1 = await Lose_HttpUtil.get_losea('losea_router/getlosea', (currentPage - 1) * linesize, linesize);
     alllosebdata = json.decode(str1);
     _load_data(alllosebdata,allui);
   }
 
   //删除数据
   delect(str) async {
-    String str1 = await Lose_HttpUtil.delect_loseb('loseb_router/delectloseb', str);
+    String str1 = await Lose_HttpUtil.delect_losea('losea_router/delectlosea', str);
     if(int.parse(str1)==1){
       _Toast('删除成功', Toast.LENGTH_SHORT, Colors.blue);
       setState(() {
@@ -304,7 +304,7 @@ class lf_my_State extends State<lf_my> {
         String introduce = map['introduce'].toString().trim();
         String address = map['address'].toString().trim();
         String time = map['time'].toString().trim();
-        String type = map['type'].toString().trim();
+        String type = map['reward_money'].toString().trim();
         String userphone = map['userphone'].toString().trim();
         String id = map['id'].toString().trim();
         uilist.add(card(id,image1, image2, image3, introduce,address ,time, userphone,type));
