@@ -5,6 +5,7 @@ import 'package:flutter_app01/index/navigation_icon_view.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'dart:ui' as ui;
 import 'lf_details2.dart';
+import 'lf_detailslose.dart';
 import 'lf_search.dart';
 import 'dart:math';
 import 'dart:convert' as convert;
@@ -29,7 +30,7 @@ class lf_mylose_State extends State<lf_mylose> {
     return GestureDetector(
       onTap: (){
         Navigator.push(context,
-            new MaterialPageRoute(builder: (context) => new lf_details2(id: id,)));
+            new MaterialPageRoute(builder: (context) => new lf_detailslose(id: id,)));
       },
       child: new Container(
         margin: EdgeInsets.all(10.0),
@@ -227,15 +228,15 @@ class lf_mylose_State extends State<lf_mylose> {
         }
       }
       //滑动到最顶部
-      if (notification.metrics.extentBefore == 0.0) {
-        //   print('======滑动到最顶部======');
-        setState(() {
-          headloadMoreText='刷新中...';
-          currentPage = 1;
-          allui.clear();
-          getall(currentPage,phone);
-        });
-      }
+//      if (notification.metrics.extentBefore == 0.0) {
+//        //   print('======滑动到最顶部======');
+//        setState(() {
+//          headloadMoreText='刷新中...';
+//          currentPage = 1;
+//          allui.clear();
+//          getall(currentPage,phone);
+//        });
+//      }
     }
     return true;
   }
@@ -248,7 +249,7 @@ class lf_mylose_State extends State<lf_mylose> {
         onNotification: dataNotification,
         child: new ListView(
           children: <Widget>[
-            _headbuildProgressMoreIndicator(),
+            //_headbuildProgressMoreIndicator(),
             Column(
               children: allui,
             ),
@@ -261,7 +262,10 @@ class lf_mylose_State extends State<lf_mylose> {
 
   //获取数据
   getall(currentPage,str) async {
-    String str1 = await Lose_HttpUtil.get_losea('losea_router/getlosea', (currentPage - 1) * linesize, linesize);
+    String str1 = await Lose_HttpUtil.get_losea2('losea_router/getlosea',str, (currentPage - 1) * linesize, linesize);
+    if(str1=='[]'){
+      loadMoreText='没有更多数据';
+    }
     alllosebdata = json.decode(str1);
     _load_data(alllosebdata,allui);
   }
@@ -271,12 +275,10 @@ class lf_mylose_State extends State<lf_mylose> {
     String str1 = await Lose_HttpUtil.delect_losea('losea_router/delectlosea', str);
     if(int.parse(str1)==1){
       _Toast('删除成功', Toast.LENGTH_SHORT, Colors.blue);
-      setState(() {
-        alllosebdata.clear();
-        allui.clear();
-        currentPage=1;
-        getall(currentPage,phone);
-      });
+      alllosebdata.clear();
+      allui.clear();
+      currentPage=1;
+      getall(currentPage,phone);
     }else{
       _Toast('删除失败', Toast.LENGTH_SHORT, Colors.red);
     }
@@ -330,6 +332,9 @@ class lf_mylose_State extends State<lf_mylose> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    setState(() {
+      loadMoreText='加载中...';
+    });
     alllosebdata.clear();
     allui.clear();
     currentPage=1;
@@ -342,7 +347,7 @@ class lf_mylose_State extends State<lf_mylose> {
     return new Scaffold(
       appBar: new AppBar(
         title: new Text(
-          '失物招领-帖子                                       ',
+          '遗失物品                                      ',
           textAlign: TextAlign.left,
           style: TextStyle(
               color: Color(int.parse(color2)),

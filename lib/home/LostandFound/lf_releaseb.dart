@@ -434,8 +434,8 @@ class lf_releaseb_State extends State<lf_releaseb> {
   //提交信息到自己服务器
   //暂时不适用tp字段 以id代替brief
   void submit_bd() async {
-    print('tz$tz');
-    print('wz$wz');
+//    print('tz$tz');
+//    print('wz$wz');
     String str1 = await Lose_HttpUtil.add_loseb(
         'loseb_router/addloseb',
         image_list.toString(),

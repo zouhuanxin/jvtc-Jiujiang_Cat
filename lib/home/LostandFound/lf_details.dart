@@ -4,6 +4,7 @@ import 'package:flutter_app01/Utils/Record_Text.dart';
 import 'package:flutter_app01/index/navigation_icon_view.dart';
 import 'dart:ui' as ui;
 import 'lf_details2.dart';
+import 'lf_detailslose.dart';
 import 'lf_search.dart';
 import 'dart:math';
 import 'dart:convert' as convert;
@@ -35,8 +36,13 @@ class lf_details_State extends State<lf_details> {
       String id,String image1, String image2, String image3, String text,String address,String time, String name,String values) {
     return GestureDetector(
       onTap: (){
-        Navigator.push(context,
-            new MaterialPageRoute(builder: (context) => new lf_details2(id: id,)));
+        if(type=='遗失物品'){
+          Navigator.push(context,
+              new MaterialPageRoute(builder: (context) => new lf_detailslose(id: id,)));
+        }else{
+          Navigator.push(context,
+              new MaterialPageRoute(builder: (context) => new lf_details2(id: id,)));
+        }
       },
       child: new Container(
         margin: EdgeInsets.all(10.0),
@@ -217,15 +223,15 @@ class lf_details_State extends State<lf_details> {
         }
       }
       //滑动到最顶部
-      if (notification.metrics.extentBefore == 0.0) {
-        //   print('======滑动到最顶部======');
-        setState(() {
-          headloadMoreText='刷新中...';
-          currentPage = 1;
-          allui.clear();
-          getalltype(currentPage,type);
-        });
-      }
+//      if (notification.metrics.extentBefore == 0.0) {
+//        //   print('======滑动到最顶部======');
+//        setState(() {
+//          headloadMoreText='刷新中...';
+//          currentPage = 1;
+//          allui.clear();
+//          getalltype(currentPage,type);
+//        });
+//      }
     }
     return true;
   }
@@ -238,7 +244,7 @@ class lf_details_State extends State<lf_details> {
         onNotification: dataNotification,
         child: new ListView(
           children: <Widget>[
-            _headbuildProgressMoreIndicator(),
+            //_headbuildProgressMoreIndicator(),
             Column(
               children: allui,
             ),
@@ -256,6 +262,9 @@ class lf_details_State extends State<lf_details> {
       str1 = await Lose_HttpUtil.get_losea('losea_router/getlosea', (currentPage - 1) * linesize, linesize);
     }else{
       str1 = await Lose_HttpUtil.get_loseb6('loseb_router/getloseb6', str, (currentPage - 1) * linesize, linesize);
+    }
+    if(str1=='[]'){
+      loadMoreText='没有更多数据';
     }
     alllosebdata = json.decode(str1);
     _load_data(alllosebdata,allui);
@@ -306,6 +315,9 @@ class lf_details_State extends State<lf_details> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    setState(() {
+      loadMoreText='加载中...';
+    });
     alllosebdata.clear();
     allui.clear();
     currentPage=1;

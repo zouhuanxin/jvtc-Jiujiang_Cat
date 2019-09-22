@@ -23,6 +23,18 @@ class Lose_HttpUtil {
     return response.body.toString();
   }
 
+  static Future<String> get_losea2(url,userphone,currentPage,linesize) async {
+    String dataURL = node_baseUrl+url;
+    http.Response response = await http.get(dataURL+'?currentPage='+currentPage.toString()+'&linesize='+linesize.toString()+'&userphone='+userphone.toString());
+    return response.body.toString();
+  }
+
+  static Future<String> get_losea3(url,id,currentPage,linesize) async {
+    String dataURL = node_baseUrl+url;
+    http.Response response = await http.get(dataURL+'?currentPage='+currentPage.toString()+'&linesize='+linesize.toString()+'&id='+id.toString());
+    return response.body.toString();
+  }
+
   static Future<String> delect_losea(url,id) async {
     String dataURL = node_baseUrl+url;
     http.Response response = await http.get(dataURL+'?id='+id);

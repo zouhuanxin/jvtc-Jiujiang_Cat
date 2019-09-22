@@ -9,6 +9,7 @@ import 'lf_search.dart';
 import 'dart:math';
 import 'dart:convert' as convert;
 import 'dart:convert';
+import 'dart:convert' as convert;
 
 //失物招领
 
@@ -144,7 +145,7 @@ class lf_my_State extends State<lf_my> {
             ),
             new GestureDetector(
               onTap:(){
-                delect(id);
+                delect(id,image1,image2,image3);
               },
               child: new Container(
                 padding: EdgeInsets.fromLTRB(5.0, 0, 5.0, 5.0),
@@ -227,15 +228,15 @@ class lf_my_State extends State<lf_my> {
         }
       }
       //滑动到最顶部
-      if (notification.metrics.extentBefore == 0.0) {
-        //   print('======滑动到最顶部======');
-        setState(() {
-          headloadMoreText='刷新中...';
-          currentPage = 1;
-          allui.clear();
-          getall(currentPage,phone);
-        });
-      }
+//      if (notification.metrics.extentBefore == 0.0) {
+//        //   print('======滑动到最顶部======');
+//        setState(() {
+//          headloadMoreText='刷新中...';
+//          currentPage = 1;
+//          allui.clear();
+//          getall(currentPage,phone);
+//        });
+//      }
     }
     return true;
   }
@@ -248,7 +249,7 @@ class lf_my_State extends State<lf_my> {
         onNotification: dataNotification,
         child: new ListView(
           children: <Widget>[
-            _headbuildProgressMoreIndicator(),
+            //_headbuildProgressMoreIndicator(),
             Column(
               children: allui,
             ),
@@ -262,25 +263,44 @@ class lf_my_State extends State<lf_my> {
   //获取数据
   getall(currentPage,str) async {
     String str1 = await Lose_HttpUtil.get_loseb7('loseb_router/getloseb7', str, (currentPage - 1) * linesize, linesize);
+    if(str1=='[]'){
+      loadMoreText='没有更多数据';
+    }
     alllosebdata = json.decode(str1);
     _load_data(alllosebdata,allui);
   }
 
   //删除数据
-  delect(str) async {
+  delect(str,image1,image2,image3) async {
     String str1 = await Lose_HttpUtil.delect_loseb('loseb_router/delectloseb', str);
-    if(int.parse(str1)==1){
-      _Toast('删除成功', Toast.LENGTH_SHORT, Colors.blue);
-      setState(() {
+    //删除百度服务器相似图库
+    String str2 = await Lose_HttpUtil.get_bdtoken();
+    //删除第一张图片
+    if(image1.toString().length>10) {
+      String str3 = await Lose_HttpUtil.delect_bdimage(convert.jsonDecode(str2)['access_token'], image1);
+      //print('百度服务器删除返回:$str3');
+    }
+    //删除第二张图片
+    if(image2.toString().length>10) {
+      String str4 = await Lose_HttpUtil.delect_bdimage(convert.jsonDecode(str2)['access_token'], image2);
+     // print('百度服务器删除返回:$str4');
+    }
+      //删除第三张图片
+      if(image3.toString().length>10) {
+        String str5 = await Lose_HttpUtil.delect_bdimage(convert.jsonDecode(str2)['access_token'], image3);
+       // print('百度服务器删除返回:$str5');
+      }
+      if(int.parse(str1)==1){
+        _Toast('删除成功', Toast.LENGTH_SHORT, Colors.blue);
         alllosebdata.clear();
         allui.clear();
         currentPage=1;
         getall(currentPage,phone);
-      });
-    }else{
-      _Toast('删除失败', Toast.LENGTH_SHORT, Colors.red);
+      }else{
+        _Toast('删除失败', Toast.LENGTH_SHORT, Colors.red);
+      }
     }
-  }
+
   void _Toast(mes, var type, var color) {
     Fluttertoast.showToast(
         msg: mes,
@@ -330,6 +350,9 @@ class lf_my_State extends State<lf_my> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    setState(() {
+      loadMoreText='加载中...';
+    });
     alllosebdata.clear();
     allui.clear();
     currentPage=1;
@@ -342,7 +365,7 @@ class lf_my_State extends State<lf_my> {
     return new Scaffold(
       appBar: new AppBar(
         title: new Text(
-          '失物招领-帖子                                       ',
+          '拾取物品                                      ',
           textAlign: TextAlign.left,
           style: TextStyle(
               color: Color(int.parse(color2)),
