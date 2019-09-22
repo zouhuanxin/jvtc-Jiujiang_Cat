@@ -341,9 +341,19 @@ class lf_releaseb_State extends State<lf_releaseb> {
         height: 45.0,
         width: 270.0,
         child: RaisedButton(
-          child: Text(
-            '提交',
-            style: TextStyle(color: Color(int.parse(color1))),
+          child: Column(
+            children: <Widget>[
+              Text(
+                '提交',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Color(int.parse(color1))),
+              ),
+              Text(
+                '需要一定时间请耐心等待',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Color(int.parse(color1)),fontSize: 10),maxLines: 1,
+              )
+            ],
           ),
           color: Color(int.parse(color2)),
           onPressed: () {

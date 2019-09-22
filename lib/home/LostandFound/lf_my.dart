@@ -21,7 +21,7 @@ class lf_my extends StatefulWidget {
 
 class lf_my_State extends State<lf_my> {
   int currentPage = 1; //当前页数
-  int linesize = 5; //一页多少条数据
+  int linesize = 2; //一页多少条数据
   List<dynamic> alllosebdata = []; //得到loseball的总数据
   List<Widget> allui = []; //总数据  不分类
 

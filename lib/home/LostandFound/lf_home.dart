@@ -44,7 +44,7 @@ class lf_home_State extends State<lf_home> {
   ];
 
   int currentPage = 1; //当前页数
-  int linesize = 5; //一页多少条数据
+  int linesize = 2; //一页多少条数据
   List<dynamic> alllosebdata = []; //得到loseball的总数据
   List<Widget> allui = []; //总数据  不分类
   bool _body_loading = false; //控制加载与总数据显示界面的切换
@@ -62,9 +62,9 @@ class lf_home_State extends State<lf_home> {
 
   void _handleTapBoxBChanged(String value) {
     str = value;
-    if(str==''){
+    if (str == '') {
       setState(() {
-        _search_all_data=false;
+        _search_all_data = false;
       });
     }
   }
@@ -79,81 +79,87 @@ class lf_home_State extends State<lf_home> {
     print('_click_search');
     print(drop_str);
     setState(() {
-      _search_all_data=true;
+      _search_all_data = true;
       search_tp_data.clear();
       search_allui.clear();
-      search_loadMoreText='搜索中...';
+      search_loadMoreText = '搜索中...';
     });
-    if(str!=null&&str!=''&&str.length>0){
-      switch(drop_str){
+    if (str != null && str != '' && str.length > 0) {
+      switch (drop_str) {
         case '特征':
           setState(() {
-            currentPage=1;
+            currentPage = 1;
             search_allui.clear();
             tz_search(str);
           });
           break;
         case '地点':
           setState(() {
-            currentPage=1;
+            currentPage = 1;
             search_allui.clear();
             address_search(str);
           });
           break;
       }
-    }else if(drop_str=='时间'){
+    } else if (drop_str == '时间') {
       setState(() {
-        currentPage=1;
+        currentPage = 1;
         search_allui.clear();
         time_search(date_str);
       });
-    }else if(drop_str=='图片'){
+    } else if (drop_str == '图片') {
       setState(() {
-        currentPage=1;
+        currentPage = 1;
         search_allui.clear();
         tp_bdsearch();
       });
     }
   }
-  
+
   //特征搜索
-  void tz_search(str) async{
-    String str1=await Lose_HttpUtil.get_loseb2('loseb_router/getloseb2', str, str, str, (currentPage - 1) * linesize, 2);
+  void tz_search(str) async {
+    String str1 = await Lose_HttpUtil.get_loseb2('loseb_router/getloseb2', str,
+        str, str, (currentPage - 1) * linesize, 2);
     search_data = json.decode(str1);
     _load_data(search_data, search_allui);
   }
 
   //地址搜索
-  void address_search(str) async{
-    String str1=await Lose_HttpUtil.get_loseb3('loseb_router/getloseb3', str, (currentPage - 1) * linesize, 2);
+  void address_search(str) async {
+    String str1 = await Lose_HttpUtil.get_loseb3(
+        'loseb_router/getloseb3', str, (currentPage - 1) * linesize, 2);
     search_data = json.decode(str1);
     _load_data(search_data, search_allui);
   }
 
   //时间搜索
-  void time_search(str) async{
-    String str1=await Lose_HttpUtil.get_loseb4('loseb_router/getloseb4', date_str, (currentPage - 1) * linesize, 2);
+  void time_search(str) async {
+    String str1 = await Lose_HttpUtil.get_loseb4(
+        'loseb_router/getloseb4', date_str, (currentPage - 1) * linesize, 2);
     search_data = json.decode(str1);
     _load_data(search_data, search_allui);
   }
 
   //图片百度服务器相似搜索
-  void tp_bdsearch() async{
+  void tp_bdsearch() async {
     String str1 = await Lose_HttpUtil.get_bdtoken();
-    String str2 = await Lose_HttpUtil.get_bdimage(convert.jsonDecode(str1)['access_token'], bs64);
+    String str2 = await Lose_HttpUtil.get_bdimage(
+        convert.jsonDecode(str1)['access_token'], bs64);
     //print(json.decode(str2)['result_num']);
-    if(int.parse(json.decode(str2)['result_num'].toString())>0){
-      search_tp_data=json.decode(json.encode(json.decode(str2)['result']));
+    if (int.parse(json.decode(str2)['result_num'].toString()) > 0) {
+      search_tp_data = json.decode(json.encode(json.decode(str2)['result']));
 //      if(int.parse(json.decode(str2)['result_num'].toString())>2) tp_search(json.decode(json.encode(search_tp_data[2]))['brief']);
 //      if(int.parse(json.decode(str2)['result_num'].toString())>1) tp_search(json.decode(json.encode(search_tp_data[1]))['brief']);
       tp_search(json.decode(json.encode(search_tp_data[0]))['brief']);
-    }else{
-      search_loadMoreText='没有更多数据';
+    } else {
+      search_loadMoreText = '没有更多数据';
     }
   }
+
   //图片自己服务器搜索
-  void tp_search(str) async{
-    String str1=await Lose_HttpUtil.get_loseb5('loseb_router/getloseb5', str, (currentPage - 1) * linesize, 2);
+  void tp_search(str) async {
+    String str1 = await Lose_HttpUtil.get_loseb5(
+        'loseb_router/getloseb5', str, (currentPage - 1) * linesize, 2);
     //print('tp_search:$str1');
     search_data = json.decode(str1);
     _load_data(search_data, search_allui);
@@ -167,7 +173,7 @@ class lf_home_State extends State<lf_home> {
 
   void base64_callback(T) {
     bs64 = T;
-   // print('bs64:$bs64');
+    // print('bs64:$bs64');
   }
 
   void date_callback(T) {
@@ -217,10 +223,14 @@ class lf_home_State extends State<lf_home> {
             children: <Widget>[
               Expanded(
                 child: GestureDetector(
-                  onTap:(){
+                  onTap: () {
                     setState(() {
-                      Navigator.push(context,
-                          new MaterialPageRoute(builder: (context) => new lf_details(type: '衣物',)));
+                      Navigator.push(
+                          context,
+                          new MaterialPageRoute(
+                              builder: (context) => new lf_details(
+                                    type: '衣物',
+                                  )));
                     });
                   },
                   child: type_child1('images/2.2.x/yifu.png', '衣物'),
@@ -229,10 +239,14 @@ class lf_home_State extends State<lf_home> {
               ),
               Expanded(
                 child: GestureDetector(
-                  onTap:(){
+                  onTap: () {
                     setState(() {
-                      Navigator.push(context,
-                          new MaterialPageRoute(builder: (context) => new lf_details(type: '运动装备',)));
+                      Navigator.push(
+                          context,
+                          new MaterialPageRoute(
+                              builder: (context) => new lf_details(
+                                    type: '运动装备',
+                                  )));
                     });
                   },
                   child: type_child1('images/2.2.x/icon-test.png', '运动装备'),
@@ -241,10 +255,14 @@ class lf_home_State extends State<lf_home> {
               ),
               Expanded(
                 child: GestureDetector(
-                  onTap:(){
+                  onTap: () {
                     setState(() {
-                      Navigator.push(context,
-                          new MaterialPageRoute(builder: (context) => new lf_details(type: '卡片',)));
+                      Navigator.push(
+                          context,
+                          new MaterialPageRoute(
+                              builder: (context) => new lf_details(
+                                    type: '卡片',
+                                  )));
                     });
                   },
                   child: type_child1('images/2.2.x/qiapian.png', '卡片'),
@@ -253,10 +271,14 @@ class lf_home_State extends State<lf_home> {
               ),
               Expanded(
                 child: GestureDetector(
-                  onTap:(){
+                  onTap: () {
                     setState(() {
-                      Navigator.push(context,
-                          new MaterialPageRoute(builder: (context) => new lf_details(type: '书籍',)));
+                      Navigator.push(
+                          context,
+                          new MaterialPageRoute(
+                              builder: (context) => new lf_details(
+                                    type: '书籍',
+                                  )));
                     });
                   },
                   child: type_child1('images/2.2.x/shu.png', '书籍'),
@@ -269,10 +291,14 @@ class lf_home_State extends State<lf_home> {
             children: <Widget>[
               Expanded(
                 child: GestureDetector(
-                  onTap:(){
+                  onTap: () {
                     setState(() {
-                      Navigator.push(context,
-                          new MaterialPageRoute(builder: (context) => new lf_details(type: '钥匙',)));
+                      Navigator.push(
+                          context,
+                          new MaterialPageRoute(
+                              builder: (context) => new lf_details(
+                                    type: '钥匙',
+                                  )));
                     });
                   },
                   child: type_child1('images/2.2.x/yuechi.png', '钥匙'),
@@ -281,10 +307,14 @@ class lf_home_State extends State<lf_home> {
               ),
               Expanded(
                 child: GestureDetector(
-                  onTap:(){
+                  onTap: () {
                     setState(() {
-                      Navigator.push(context,
-                          new MaterialPageRoute(builder: (context) => new lf_details(type: '电子设备',)));
+                      Navigator.push(
+                          context,
+                          new MaterialPageRoute(
+                              builder: (context) => new lf_details(
+                                    type: '电子设备',
+                                  )));
                     });
                   },
                   child: type_child1('images/2.2.x/ebook.png', '电子设备'),
@@ -293,10 +323,14 @@ class lf_home_State extends State<lf_home> {
               ),
               Expanded(
                 child: GestureDetector(
-                  onTap:(){
+                  onTap: () {
                     setState(() {
-                      Navigator.push(context,
-                          new MaterialPageRoute(builder: (context) => new lf_details(type: '遗失物品',)));
+                      Navigator.push(
+                          context,
+                          new MaterialPageRoute(
+                              builder: (context) => new lf_details(
+                                    type: '遗失物品',
+                                  )));
                     });
                   },
                   child: type_child1('images/2.2.x/xzbd.png', '遗失物品'),
@@ -305,10 +339,14 @@ class lf_home_State extends State<lf_home> {
               ),
               Expanded(
                 child: GestureDetector(
-                  onTap:(){
+                  onTap: () {
                     setState(() {
-                      Navigator.push(context,
-                          new MaterialPageRoute(builder: (context) => new lf_details(type: '其他',)));
+                      Navigator.push(
+                          context,
+                          new MaterialPageRoute(
+                              builder: (context) => new lf_details(
+                                    type: '其他',
+                                  )));
                     });
                   },
                   child: type_child1('images/2.2.x/qita.png', '其他'),
@@ -365,25 +403,36 @@ class lf_home_State extends State<lf_home> {
       print('_controller');
     });
   }
+
   /**
    * 加载更多进度条
    */
-  String loadMoreText='没有更多数据';
+  String loadMoreText = '没有更多数据';
+
   Widget _buildProgressMoreIndicator() {
-    return new Padding(
-      padding: const EdgeInsets.all(15.0),
-      child: new Center(
-        child: new Text(loadMoreText, style: new TextStyle(color: const Color(0xFF999999), fontSize: 14.0)),
+    return new Container(
+      height: 35,
+      child: new Padding(
+        padding: const EdgeInsets.fromLTRB(5, 0, 5, 5),
+        child: new Center(
+          child: new Text(loadMoreText,
+              style:
+              new TextStyle(color: const Color(0xFF999999), fontSize: 14.0)),
+        ),
       ),
     );
   }
+
   //搜索界面专用
-  String search_loadMoreText='没有更多数据';
+  String search_loadMoreText = '没有更多数据';
+
   Widget _search_buildProgressMoreIndicator() {
     return new Padding(
       padding: const EdgeInsets.all(15.0),
       child: new Center(
-        child: new Text(search_loadMoreText, style: new TextStyle(color: const Color(0xFF999999), fontSize: 14.0)),
+        child: new Text(search_loadMoreText,
+            style:
+                new TextStyle(color: const Color(0xFF999999), fontSize: 14.0)),
       ),
     );
   }
@@ -392,58 +441,69 @@ class lf_home_State extends State<lf_home> {
     if (notification is ScrollEndNotification) {
       //下滑到最底部
       if (notification.metrics.extentAfter == 0.0) {
-       // print('======下滑到最底部======');
-        if(alllosebdata.length<linesize){
+        // print('======下滑到最底部======');
+        if (alllosebdata.length < linesize) {
           setState(() {
-            loadMoreText='没有更多数据';
+            loadMoreText = '没有更多数据';
           });
-        }else{
+        } else {
           setState(() {
-            loadMoreText='加载中...';
+            loadMoreText = '加载中...';
             currentPage++;
             getallloseb(currentPage);
           });
         }
       }
       //滑动到最顶部
-      if (notification.metrics.extentBefore == 0.0) {
-     //   print('======滑动到最顶部======');
-        setState(() {
-          currentPage = 1;
-          allui.clear();
-          _body_loading=false;
-          getallloseb(currentPage);
-        });
-      }
+//      if (notification.metrics.extentBefore == 0.0) {
+//     //   print('======滑动到最顶部======');
+//        setState(() {
+//          currentPage = 1;
+//          allui.clear();
+//          _body_loading=false;
+//          getallloseb(currentPage);
+//        });
+//      }
     }
     return true;
   }
+
+  Future<Null> _onRefresh() async {
+    await Future.delayed(Duration(seconds: 3), () {
+      setState(() {
+        currentPage = 1;
+        allui.clear();
+        getallloseb(currentPage);
+      });
+    });
+  }
+
   //搜索界面专用
   bool search_dataNotification(ScrollNotification notification) {
     if (notification is ScrollEndNotification) {
       //下滑到最底部
       if (notification.metrics.extentAfter == 0.0) {
-      //  print('======下滑到最底部======');
-        if(search_data.length<2){
+        //  print('======下滑到最底部======');
+        if (search_data.length < 2) {
           setState(() {
-            search_loadMoreText='没有更多数据';
+            search_loadMoreText = '没有更多数据';
           });
-        }else{
-          if(drop_str=='特征'){
+        } else {
+          if (drop_str == '特征') {
             setState(() {
-              search_loadMoreText='加载中...';
+              search_loadMoreText = '加载中...';
               currentPage++;
               tz_search(str);
             });
-          }else if(drop_str=='地点'){
+          } else if (drop_str == '地点') {
             setState(() {
-              search_loadMoreText='加载中...';
+              search_loadMoreText = '加载中...';
               currentPage++;
               address_search(str);
             });
-          }else if(drop_str=='时间'){
+          } else if (drop_str == '时间') {
             setState(() {
-              search_loadMoreText='加载中...';
+              search_loadMoreText = '加载中...';
               currentPage++;
               time_search(drop_str);
             });
@@ -460,23 +520,27 @@ class lf_home_State extends State<lf_home> {
       offstage: !_body_loading,
       child: new Container(
         margin: EdgeInsets.all(10.0),
-        height: MediaQueryData.fromWindow(ui.window).size.height * 0.43,
+        height: MediaQueryData.fromWindow(ui.window).size.height * 0.45,
         child: new NotificationListener(
           onNotification: dataNotification,
-          child: new ListView(
-            children: <Widget>[
-              Column(
-                children: allui,
+          child: new RefreshIndicator(
+              child: new ListView(
+                children: <Widget>[
+                  Column(
+                    children: allui,
+                  ),
+                  _buildProgressMoreIndicator()
+                ],
               ),
-              _buildProgressMoreIndicator()
-            ],
+              onRefresh: _onRefresh
           ),
         ),
       ),
     );
   }
+
   Widget search_pbl() {
-    return  new Container(
+    return new Container(
       margin: EdgeInsets.all(10.0),
       width: MediaQueryData.fromWindow(ui.window).size.width,
       height: MediaQueryData.fromWindow(ui.window).size.height * 0.65,
@@ -494,12 +558,16 @@ class lf_home_State extends State<lf_home> {
     );
   }
 
-  Widget card(
-      String id,String image1, String image2, String image3, String text,String address,String time, String name,String type) {
+  Widget card(String id, String image1, String image2, String image3,
+      String text, String address, String time, String name, String type) {
     return GestureDetector(
-      onTap: (){
-        Navigator.push(context,
-            new MaterialPageRoute(builder: (context) => new lf_details2(id: id,)));
+      onTap: () {
+        Navigator.push(
+            context,
+            new MaterialPageRoute(
+                builder: (context) => new lf_details2(
+                      id: id,
+                    )));
       },
       child: new Container(
         margin: EdgeInsets.all(10.0),
@@ -509,67 +577,96 @@ class lf_home_State extends State<lf_home> {
         child: Column(
           children: <Widget>[
             new Container(
-              height:image1.indexOf('null')==-1||image2.indexOf('null')==-1||image3.indexOf('null')==-1?
-              MediaQueryData.fromWindow(ui.window).size.height *
-                  0.18:0,
+              height: image1.indexOf('null') == -1 ||
+                      image2.indexOf('null') == -1 ||
+                      image3.indexOf('null') == -1
+                  ? MediaQueryData.fromWindow(ui.window).size.height * 0.18
+                  : 0,
               padding: EdgeInsets.all(5.0),
               child: ListView(
                 scrollDirection: Axis.horizontal,
                 children: <Widget>[
                   GestureDetector(
-                    onTap:(){
-                      image1.indexOf('null') == -1?_showmodel(name,image1):'';
+                    onTap: () {
+                      image1.indexOf('null') == -1
+                          ? _showmodel(name, image1)
+                          : '';
                     },
                     child: Container(
                       margin: EdgeInsets.all(5.0),
                       child: image1.indexOf('null') == -1
                           ? new Image.memory(
-                        base64.decode(image1),
-                        fit: BoxFit.fill,
-                        height:image1.indexOf('null')==-1?
-                        MediaQueryData.fromWindow(ui.window).size.height *
-                            0.17:0,
-                        width: image1.indexOf('null')==-1?MediaQueryData.fromWindow(ui.window).size.width *
-                            0.25:0,
-                      )
+                              base64.decode(image1),
+                              fit: BoxFit.fill,
+                              height: image1.indexOf('null') == -1
+                                  ? MediaQueryData.fromWindow(ui.window)
+                                          .size
+                                          .height *
+                                      0.17
+                                  : 0,
+                              width: image1.indexOf('null') == -1
+                                  ? MediaQueryData.fromWindow(ui.window)
+                                          .size
+                                          .width *
+                                      0.25
+                                  : 0,
+                            )
                           : Text(''),
                     ),
                   ),
                   GestureDetector(
-                    onTap:(){
-                      image2.indexOf('null') == -1?_showmodel(name,image2):'';
+                    onTap: () {
+                      image2.indexOf('null') == -1
+                          ? _showmodel(name, image2)
+                          : '';
                     },
                     child: Container(
                       margin: EdgeInsets.all(5.0),
                       child: image2.indexOf('null') == -1
                           ? new Image.memory(
-                        base64.decode(image2),
-                        fit: BoxFit.fill,
-                        height:image2.indexOf('null')==-1?
-                        MediaQueryData.fromWindow(ui.window).size.height *
-                            0.17:0,
-                        width: image2.indexOf('null')==-1?MediaQueryData.fromWindow(ui.window).size.width *
-                            0.25:0,
-                      )
+                              base64.decode(image2),
+                              fit: BoxFit.fill,
+                              height: image2.indexOf('null') == -1
+                                  ? MediaQueryData.fromWindow(ui.window)
+                                          .size
+                                          .height *
+                                      0.17
+                                  : 0,
+                              width: image2.indexOf('null') == -1
+                                  ? MediaQueryData.fromWindow(ui.window)
+                                          .size
+                                          .width *
+                                      0.25
+                                  : 0,
+                            )
                           : Text(''),
                     ),
                   ),
                   GestureDetector(
-                    onTap:(){
-                      image3.indexOf('null') == -1?_showmodel(name,image3):'';
+                    onTap: () {
+                      image3.indexOf('null') == -1
+                          ? _showmodel(name, image3)
+                          : '';
                     },
                     child: Container(
                       margin: EdgeInsets.all(5.0),
                       child: image3.indexOf('null') == -1
                           ? new Image.memory(
-                        base64.decode(image3),
-                        fit: BoxFit.fill,
-                        height:image3.indexOf('null')==-1?
-                        MediaQueryData.fromWindow(ui.window).size.height *
-                            0.17:0,
-                        width: image3.indexOf('null')==-1?MediaQueryData.fromWindow(ui.window).size.width *
-                            0.25:0,
-                      )
+                              base64.decode(image3),
+                              fit: BoxFit.fill,
+                              height: image3.indexOf('null') == -1
+                                  ? MediaQueryData.fromWindow(ui.window)
+                                          .size
+                                          .height *
+                                      0.17
+                                  : 0,
+                              width: image3.indexOf('null') == -1
+                                  ? MediaQueryData.fromWindow(ui.window)
+                                          .size
+                                          .width *
+                                      0.25
+                                  : 0,
+                            )
                           : Text(''),
                     ),
                   ),
@@ -623,11 +720,11 @@ class lf_home_State extends State<lf_home> {
     String str1 = await Lose_HttpUtil.get_loseb(
         'loseb_router/getloseb', (currentPage - 1) * linesize, linesize);
     alllosebdata = json.decode(str1);
-    _load_data(alllosebdata,allui);
+    _load_data(alllosebdata, allui);
   }
 
   //装载数据
-  void _load_data(List<dynamic>list,List<Widget>uilist) {
+  void _load_data(List<dynamic> list, List<Widget> uilist) {
     setState(() {
       for (int i = 0; i < list.length; i++) {
         Map<String, dynamic> map = json.decode(json.encode(list[i]));
@@ -643,36 +740,40 @@ class lf_home_State extends State<lf_home> {
         String type = map['type'].toString().trim();
         String userphone = map['userphone'].toString().trim();
         String id = map['id'].toString().trim();
-        uilist.add(card(id,image1, image2, image3, introduce,address ,time, userphone,type));
+        uilist.add(card(id, image1, image2, image3, introduce, address, time,
+            userphone, type));
       }
       _body_loading = true;
-      search_loadMoreText='没有更多数据';
+      search_loadMoreText = '没有更多数据';
     });
   }
 
   //弹窗
-  _showmodel(String name,String content) {
+  _showmodel(String name, String content) {
     showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: Text('九职小猫手-$name',style: TextStyle(fontSize: 16),),
-          content: new Image.memory(
-            base64.decode(content),
-            fit: BoxFit.fill,
-          ),
-          actions: <Widget>[
-            new FlatButton(
-              child: new Text("关闭"),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        ));
+              title: Text(
+                '九职小猫手-$name',
+                style: TextStyle(fontSize: 16),
+              ),
+              content: new Image.memory(
+                base64.decode(content),
+                fit: BoxFit.fill,
+              ),
+              actions: <Widget>[
+                new FlatButton(
+                  child: new Text("关闭"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            ));
   }
 
   //搜索结果界面
-  Widget search_result(){
+  Widget search_result() {
     return new Container(
       margin: EdgeInsets.all(5.0),
       padding: EdgeInsets.all(5.0),
@@ -680,15 +781,35 @@ class lf_home_State extends State<lf_home> {
         children: <Widget>[
           Row(
             children: <Widget>[
-              Text('   搜索结果',style: TextStyle(color: Color(int.parse(color2)),fontSize: 16,fontWeight: FontWeight.w600,fontStyle: FontStyle.normal),),
-              Text('   $drop_str',style: TextStyle(color: Color(int.parse(color2)),fontSize: 10,),),
+              Text(
+                '   搜索结果',
+                style: TextStyle(
+                    color: Color(int.parse(color2)),
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    fontStyle: FontStyle.normal),
+              ),
+              Text(
+                '   $drop_str',
+                style: TextStyle(
+                  color: Color(int.parse(color2)),
+                  fontSize: 10,
+                ),
+              ),
               GestureDetector(
-                onTap: (){
+                onTap: () {
                   setState(() {
-                    _search_all_data=false;
+                    _search_all_data = false;
                   });
                 },
-                child: Text('   关闭',style: TextStyle(color: Colors.red,fontSize: 10,),textAlign: TextAlign.right,),
+                child: Text(
+                  '   关闭',
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontSize: 10,
+                  ),
+                  textAlign: TextAlign.right,
+                ),
               )
             ],
           ),
@@ -702,7 +823,7 @@ class lf_home_State extends State<lf_home> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    currentPage=1;
+    currentPage = 1;
     getallloseb(currentPage);
   }
 
@@ -746,11 +867,7 @@ class lf_home_State extends State<lf_home> {
             new Offstage(
               offstage: _search_all_data,
               child: Column(
-                children: <Widget>[
-                  bodytype(),
-                  pbl(),
-                  loading()
-                ],
+                children: <Widget>[bodytype(), pbl(), loading()],
               ),
             ),
             new Offstage(
