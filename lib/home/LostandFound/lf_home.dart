@@ -115,6 +115,8 @@ class lf_home_State extends State<lf_home> {
   
   //特征搜索
   void tz_search(str) async{
+    search_tp_data.clear();
+    search_allui.clear();
     String str1=await Lose_HttpUtil.get_loseb2('loseb_router/getloseb2', str, str, str, (currentPage - 1) * linesize, 2);
     search_data = json.decode(str1);
     _load_data(search_data, search_allui);
@@ -162,7 +164,7 @@ class lf_home_State extends State<lf_home> {
 
   void base64_callback(T) {
     bs64 = T;
-    print('bs64:$bs64');
+   // print('bs64:$bs64');
   }
 
   void date_callback(T) {
