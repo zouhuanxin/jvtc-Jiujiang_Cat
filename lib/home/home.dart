@@ -438,9 +438,9 @@ class _HomePageState extends State<HomePage> {
       child: new Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
+          buildButtonColumn2('images/2.0.x/swzl.png', '失物招领', '公测\n采用AI识别技术及实名认证帮助你尽可能的准确快速找到你的物品'),
           buildButtonColumn(Icons.work, '义务维修', '电脑，平板，手机，系统重装，需要请发表'),
           buildButtonColumn(Icons.timer_10, '倒计时', '帮助你记录重要的事情'),
-          buildButtonColumn2('images/2.0.x/swzl.png', '失物招领', '采用AI识别技术及实名认证帮助你尽可能的准确快速找到你的物品'),
         ],
       ),
     );
@@ -586,12 +586,12 @@ class _HomePageState extends State<HomePage> {
               SwiperView(),
               campus_funcation_text,
               campus_funcation_button,
+              campus_life_text,
+              campus_life_button,
               campus_xh_text,
               campus_xh_button,
               entertainment_text,
               entertainment_button,
-              campus_life_text,
-              campus_life_button,
               campus_toolkit_text,
               campus_toolkit_button,
               SizedBox(

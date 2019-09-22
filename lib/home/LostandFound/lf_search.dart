@@ -170,7 +170,7 @@ class Search extends StatelessWidget {
         child: Row(
           children: <Widget>[
             Container(
-                height: drop_value=='图片'?100:MediaQueryData.fromWindow(ui.window).size.height * 0.05,
+                height: drop_value=='图片'?MediaQueryData.fromWindow(ui.window).size.height * 0.1:MediaQueryData.fromWindow(ui.window).size.height * 0.05,
                 width: MediaQueryData.fromWindow(ui.window).size.width * 0.8,
                 margin: EdgeInsets.fromLTRB(10.0, 5.0, 0, 0),
                 padding: EdgeInsets.all(5.0),

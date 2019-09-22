@@ -211,10 +211,10 @@ class lf_home_State extends State<lf_home> {
   Widget bodytype() {
     return new Container(
       decoration: BoxDecoration(
-          color: Color(int.parse('0xff4EEE94')),
+          color: Color(int.parse('0xff8EE5EE')),
           borderRadius: BorderRadius.all(Radius.circular(10.0))),
       height: MediaQueryData.fromWindow(ui.window).size.height * 0.24,
-      margin: EdgeInsets.all(10.0),
+      margin: EdgeInsets.all(MediaQueryData.fromWindow(ui.window).size.height*0.01),
       padding: EdgeInsets.all(
           MediaQueryData.fromWindow(ui.window).size.height * 0.01),
       child: new Column(
@@ -388,7 +388,7 @@ class lf_home_State extends State<lf_home> {
     return new Offstage(
       offstage: _body_loading,
       child: new Container(
-        margin: EdgeInsets.all(10.0),
+        margin: EdgeInsets.all(MediaQueryData.fromWindow(ui.window).size.height*0.01),
         height: MediaQueryData.fromWindow(ui.window).size.height * 0.43,
         child: new LoadingDialog(
           text: '加载数据中...',
@@ -519,13 +519,14 @@ class lf_home_State extends State<lf_home> {
     return new Offstage(
       offstage: !_body_loading,
       child: new Container(
-        margin: EdgeInsets.all(10.0),
-        height: MediaQueryData.fromWindow(ui.window).size.height * 0.45,
+        margin: EdgeInsets.all(MediaQueryData.fromWindow(ui.window).size.height*0.01),
+        height: MediaQueryData.fromWindow(ui.window).size.height * 0.71,
         child: new NotificationListener(
           onNotification: dataNotification,
           child: new RefreshIndicator(
               child: new ListView(
                 children: <Widget>[
+                  bodytype(),
                   Column(
                     children: allui,
                   ),
@@ -541,9 +542,9 @@ class lf_home_State extends State<lf_home> {
 
   Widget search_pbl() {
     return new Container(
-      margin: EdgeInsets.all(10.0),
+      margin: EdgeInsets.all(MediaQueryData.fromWindow(ui.window).size.height*0.01),
       width: MediaQueryData.fromWindow(ui.window).size.width,
-      height: MediaQueryData.fromWindow(ui.window).size.height * 0.65,
+      height: MediaQueryData.fromWindow(ui.window).size.height * 0.8,
       child: new NotificationListener(
         onNotification: search_dataNotification,
         child: new ListView(
@@ -570,7 +571,7 @@ class lf_home_State extends State<lf_home> {
                     )));
       },
       child: new Container(
-        margin: EdgeInsets.all(10.0),
+        margin:EdgeInsets.all(MediaQueryData.fromWindow(ui.window).size.height*0.01),
         decoration: BoxDecoration(
             color: Color(int.parse('0xfff1f1f1')),
             borderRadius: BorderRadius.all(Radius.circular(5.0))),
@@ -593,7 +594,7 @@ class lf_home_State extends State<lf_home> {
                           : '';
                     },
                     child: Container(
-                      margin: EdgeInsets.all(5.0),
+                      margin: EdgeInsets.all(MediaQueryData.fromWindow(ui.window).size.height*0.005),
                       child: image1.indexOf('null') == -1
                           ? new Image.memory(
                               base64.decode(image1),
@@ -621,7 +622,7 @@ class lf_home_State extends State<lf_home> {
                           : '';
                     },
                     child: Container(
-                      margin: EdgeInsets.all(5.0),
+                      margin: EdgeInsets.all(MediaQueryData.fromWindow(ui.window).size.height*0.005),
                       child: image2.indexOf('null') == -1
                           ? new Image.memory(
                               base64.decode(image2),
@@ -649,7 +650,7 @@ class lf_home_State extends State<lf_home> {
                           : '';
                     },
                     child: Container(
-                      margin: EdgeInsets.all(5.0),
+                      margin: EdgeInsets.all(MediaQueryData.fromWindow(ui.window).size.height*0.005),
                       child: image3.indexOf('null') == -1
                           ? new Image.memory(
                               base64.decode(image3),
@@ -775,7 +776,7 @@ class lf_home_State extends State<lf_home> {
   //搜索结果界面
   Widget search_result() {
     return new Container(
-      margin: EdgeInsets.all(5.0),
+      margin: EdgeInsets.all(MediaQueryData.fromWindow(ui.window).size.height*0.005),
       padding: EdgeInsets.all(5.0),
       child: Column(
         children: <Widget>[
@@ -867,7 +868,7 @@ class lf_home_State extends State<lf_home> {
             new Offstage(
               offstage: _search_all_data,
               child: Column(
-                children: <Widget>[bodytype(), pbl(), loading()],
+                children: <Widget>[pbl(), loading()],
               ),
             ),
             new Offstage(

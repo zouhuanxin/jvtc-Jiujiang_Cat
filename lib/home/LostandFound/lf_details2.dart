@@ -182,7 +182,6 @@ class lf_details2_State extends State<lf_details2> {
                 ? new Image.memory(
                     base64.decode(image1),
                     fit: BoxFit.fill,
-                    height: image1.indexOf('null') == -1 ? 200 : 0,
                     width: image1.indexOf('null') == -1
                         ? MediaQueryData.fromWindow(ui.window).size.width * 0.9
                         : 0,
@@ -195,7 +194,6 @@ class lf_details2_State extends State<lf_details2> {
                 ? new Image.memory(
               base64.decode(image2),
               fit: BoxFit.fill,
-              height: image2.indexOf('null') == -1 ? 200 : 0,
               width: image2.indexOf('null') == -1
                   ? MediaQueryData.fromWindow(ui.window).size.width * 0.9
                   : 0,
@@ -208,7 +206,6 @@ class lf_details2_State extends State<lf_details2> {
                 ? new Image.memory(
               base64.decode(image3),
               fit: BoxFit.fill,
-              height: image3.indexOf('null') == -1 ? 200 : 0,
               width: image3.indexOf('null') == -1
                   ? MediaQueryData.fromWindow(ui.window).size.width * 0.9
                   : 0,
