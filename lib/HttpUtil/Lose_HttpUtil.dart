@@ -123,6 +123,15 @@ class Lose_HttpUtil {
     http.Response response = await http.get('https://aip.baidubce.com/oauth/2.0/token?grant_type=client_credentials&client_id=Z4Gz3IMG09AZkb7xFNvfFY27&client_secret=sPUl64jF2jRFHrLoyh6n7FCbw4LYaucq');
     return response.body.toString();
   }
+  //百度网络文字识别接口
+  static Future<String> get_bdwlwz(token,image) async {
+    var temp={'image': image,'detect_direction':'true'};
+    http.Response response = await http.post('https://aip.baidubce.com/rest/2.0/ocr/v1/webimage?access_token='+token,
+        headers: {"content-type": "application/x-www-form-urlencoded"},body: temp);;
+    Utf8Decoder uft8=new Utf8Decoder();
+    var result = json.decode(uft8.convert(response.bodyBytes));
+    return result.toString();
+  }
   //百度相似图片入库
   //brief为本地数据id
   static Future<String> add_bdimage(token,image,brief) async {

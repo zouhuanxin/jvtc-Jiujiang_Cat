@@ -80,6 +80,9 @@ class lf_home_State extends State<lf_home> {
     print(drop_str);
     setState(() {
       _search_all_data=true;
+      search_tp_data.clear();
+      search_allui.clear();
+      search_loadMoreText='搜索中...';
     });
     if(str!=null&&str!=''&&str.length>0){
       switch(drop_str){
@@ -115,8 +118,6 @@ class lf_home_State extends State<lf_home> {
   
   //特征搜索
   void tz_search(str) async{
-    search_tp_data.clear();
-    search_allui.clear();
     String str1=await Lose_HttpUtil.get_loseb2('loseb_router/getloseb2', str, str, str, (currentPage - 1) * linesize, 2);
     search_data = json.decode(str1);
     _load_data(search_data, search_allui);
@@ -143,9 +144,11 @@ class lf_home_State extends State<lf_home> {
     //print(json.decode(str2)['result_num']);
     if(int.parse(json.decode(str2)['result_num'].toString())>0){
       search_tp_data=json.decode(json.encode(json.decode(str2)['result']));
-      if(int.parse(json.decode(str2)['result_num'].toString())>2) tp_search(json.decode(json.encode(search_tp_data[2]))['brief']);
-      if(int.parse(json.decode(str2)['result_num'].toString())>1) tp_search(json.decode(json.encode(search_tp_data[1]))['brief']);
+//      if(int.parse(json.decode(str2)['result_num'].toString())>2) tp_search(json.decode(json.encode(search_tp_data[2]))['brief']);
+//      if(int.parse(json.decode(str2)['result_num'].toString())>1) tp_search(json.decode(json.encode(search_tp_data[1]))['brief']);
       tp_search(json.decode(json.encode(search_tp_data[0]))['brief']);
+    }else{
+      search_loadMoreText='没有更多数据';
     }
   }
   //图片自己服务器搜索
@@ -643,6 +646,7 @@ class lf_home_State extends State<lf_home> {
         uilist.add(card(id,image1, image2, image3, introduce,address ,time, userphone,type));
       }
       _body_loading = true;
+      search_loadMoreText='没有更多数据';
     });
   }
 

@@ -414,13 +414,16 @@ class lf_releaseb_State extends State<lf_releaseb> {
   }
 
   void sub_wz(bs64) async {
+    //这里取消使用百度通用文字识别 换成 网络文字识别 提高识别精准度问题
     if (bs64 != 'null') {
-      String str1 = await HttpUtil.image_text_sb('bdtextsb',
-          'pOyNhIyUDMMXBovrTEKb4TX8', 'NIDGGuijgHgbpcR5o3sQy33j1ORfwS7A', bs64);
+//      String str1 = await HttpUtil.image_text_sb('bdtextsb',
+//          'pOyNhIyUDMMXBovrTEKb4TX8', 'NIDGGuijgHgbpcR5o3sQy33j1ORfwS7A', bs64);
+      String str1 = await Lose_HttpUtil.get_bdtoken();
+      String str2 = await Lose_HttpUtil.get_bdwlwz(convert.jsonDecode(str1)['access_token'], bs64);
       if (wz == null) {
-        wz = str1;
+        wz = str2;
       } else {
-        wz = wz + ',' + str1;
+        wz = wz + ',' + str2;
       }
     }
     wz_net_num++;
