@@ -31,7 +31,6 @@ keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 
 android {
     compileSdkVersion 28
-    useLibrary 'org.apache.http.legacy'
     lintOptions {
         disable 'InvalidPackage'
     }
@@ -63,6 +62,7 @@ android {
             signingConfig signingConfigs.release
         }
     }
+    useLibrary 'org.apache.http.legacy'
 }
 
 flutter {
@@ -84,4 +84,8 @@ dependencies {
     implementation 'com.squareup.okio:okio:2.1.0'
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'com.squareup.okhttp3:okhttp:3.12.0'
+    implementation 'cn.bmob.android:bmob-sdk:3.5.5'
+
+    //如果你想应用能够兼容Android6.0，请添加此依赖(org.apache.http.legacy.jar)
+    implementation 'cn.bmob.android:http-legacy:1.0'
 }

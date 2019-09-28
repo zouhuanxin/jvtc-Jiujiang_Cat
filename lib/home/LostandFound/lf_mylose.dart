@@ -262,7 +262,7 @@ class lf_mylose_State extends State<lf_mylose> {
 
   //获取数据
   getall(currentPage,str) async {
-    String str1 = await Lose_HttpUtil.get_losea2('losea_router/getlosea',str, (currentPage - 1) * linesize, linesize);
+    String str1 = await Lose_HttpUtil.get_losea2('losea_router/getlosea2',str, (currentPage - 1) * linesize, linesize);
     if(str1=='[]'){
       loadMoreText='没有更多数据';
     }

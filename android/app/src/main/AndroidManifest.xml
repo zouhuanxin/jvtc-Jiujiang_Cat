@@ -25,7 +25,6 @@
         android:label="九职小猫手"
         android:usesCleartextTraffic="true"
         tools:replace="label">
-        <uses-library android:name="org.apache.http.legacy" android:required="false" />
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"

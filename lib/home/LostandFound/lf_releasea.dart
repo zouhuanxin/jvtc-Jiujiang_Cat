@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_app01/HttpUtil/FileHttp.dart';
 import 'package:flutter_app01/Utils/EventCallback.dart';
 import 'package:flutter_app01/Utils/Record_Text.dart';
 import 'package:flutter_app01/index/navigation_icon_view.dart';
@@ -165,6 +166,7 @@ class lf_releasea_State extends State<lf_releasea> {
   }
 
   void _imagetobase64(File value) async {
+    //上传bmob服务器
     String path =
         await androidplatform.invokeMethod("getFile", {"path": value.path});
     File file = new File(path);

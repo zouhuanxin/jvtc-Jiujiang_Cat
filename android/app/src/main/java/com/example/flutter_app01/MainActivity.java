@@ -56,7 +56,7 @@ public class MainActivity extends FlutterActivity {
                   }
               }
       );
-        Bmob.initialize(this, "931aa07205e9cddf2cd85458d029af79");
+        Bmob.initialize(this, "931aa07205e9 cddf2cd85458d029af79");
         // 使用推送服务时的初始化操作
         BmobInstallationManager.getInstance().initialize(new InstallationListener<BmobInstallation>() {
             @Override

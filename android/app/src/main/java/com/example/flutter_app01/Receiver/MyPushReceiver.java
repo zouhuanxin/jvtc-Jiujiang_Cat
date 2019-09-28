@@ -16,6 +16,7 @@ public class MyPushReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        System.out.println("开始执行push监听");
         if(intent.getAction().equals(PushConstants.ACTION_MESSAGE)){
             String str=intent.getStringExtra(PushConstants.EXTRA_PUSH_MESSAGE_STRING);
             JSONObject json=null;
