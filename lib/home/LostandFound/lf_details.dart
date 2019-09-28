@@ -22,7 +22,7 @@ class lf_details extends StatefulWidget {
 
 class lf_details_State extends State<lf_details> {
   int currentPage = 1; //当前页数
-  int linesize = 5; //一页多少条数据
+  int linesize = 1; //一页多少条数据
   List<dynamic> alllosebdata = []; //得到loseball的总数据
   List<Widget> allui = []; //总数据  不分类
 
@@ -343,7 +343,12 @@ class lf_details_State extends State<lf_details> {
         centerTitle: true,
         actions: <Widget>[new Container()],
       ),
-      body: type_result(),
+      body: Container(
+        decoration: BoxDecoration(
+          color: Color(int.parse(color1)),
+        ),
+        child: type_result(),
+      ),
     );
   }
 }

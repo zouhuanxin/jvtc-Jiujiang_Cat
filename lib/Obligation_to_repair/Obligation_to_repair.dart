@@ -2,6 +2,7 @@ import 'package:data_plugin/bmob/bmob_query.dart';
 import 'package:data_plugin/bmob/response/bmob_error.dart';
 import 'package:data_plugin/bmob/response/bmob_handled.dart';
 import 'package:data_plugin/bmob/response/bmob_saved.dart';
+import 'package:data_plugin/bmob/response/bmob_updated.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app01/Bean/Repairinfo.dart';
 import 'package:flutter_app01/Bean/czywwx.dart';
@@ -412,21 +413,19 @@ class Obligation_to_repair_State extends State<Obligation_to_repair>{
 
   void loading_czywwx(){
     czywwx_ui_list.clear();
-    for(var i=0;i<czywwx_list.length;i=i+2){
-      czywwx_ui_list.add(
-          new Row(
-            children: <Widget>[
-              Expanded(
-                child: Maintenance_personnel_component01(czywwx_list[i].imageurl,czywwx_list[i].name,czywwx_list[i].qq),
-                flex: 1,
-              ),
-              Expanded(
-                child: Maintenance_personnel_component01(czywwx_list[i+1].imageurl,czywwx_list[i+1].name,czywwx_list[i+1].qq),
-                flex: 1,
-              ),
-            ],
-          )
-      );
+    for(var i=0;i<czywwx_list.length;i++){
+      if(czywwx_list[i].vis=='true'){
+        czywwx_ui_list.add(
+            new Row(
+              children: <Widget>[
+                Expanded(
+                  child: Maintenance_personnel_component01(czywwx_list[i].imageurl,czywwx_list[i].name,czywwx_list[i].qq,czywwx_list[i].number,czywwx_list[i].objectId.toString()),
+                  flex: 1,
+                ),
+              ],
+            )
+        );
+      }
     }
     setState(() {
 
@@ -441,33 +440,40 @@ class Obligation_to_repair_State extends State<Obligation_to_repair>{
     );
   }
 
-  Widget Maintenance_personnel_component01(String imageurl,String name,String contact){
-    return new Container(
-      margin: EdgeInsets.all(10.0),
-      decoration: BoxDecoration(
-        color: Color(int.parse('0xffBBFFFF')),
-        borderRadius: BorderRadius.circular(10.0)
-      ),
-      child: new GestureDetector(
-        onTap: (){
-          launchURL('mqq://im/chat?chat_type=wpa&uin=$contact&version=1&src_type=web');
-        },
-        child: new Row(
-          children: <Widget>[
-            Expanded(
-              child: new Container(child: new Image(image: new NetworkImage(imageurl)),margin: EdgeInsets.all(10.0),),
-              flex: 1,
-            ),
-            Expanded(
-              child: new Column(
-                children: <Widget>[
-                  Text(name,textAlign: TextAlign.center,style: TextStyle(color: Color(int.parse('0xff00C5CD'))),),
-                  Text(contact,textAlign: TextAlign.center,style: TextStyle(color: Color(int.parse('0xff00C5CD'))),)
-                ],
+  Widget Maintenance_personnel_component01(String imageurl,String name,String contact,String number,String objectid){
+    return GestureDetector(
+      onTap: (){
+        //launchURL('mqq://im/chat?chat_type=wpa&uin=$contact&version=1&src_type=web');
+        _updateSingle(context,objectid,number);
+      },
+      child: new Container(
+        margin: EdgeInsets.fromLTRB(10, 5, 10, 0),
+        decoration: BoxDecoration(
+            color: Color(int.parse('0xffBBFFFF')),
+            borderRadius: BorderRadius.circular(10.0)
+        ),
+        child: new Container(
+          child: new Row(
+            children: <Widget>[
+              Expanded(
+                child: new Container(child: new Image(image: new NetworkImage(imageurl)),margin: EdgeInsets.all(10.0),),
+                flex: 1,
               ),
-              flex: 3,
-            )
-          ],
+              Expanded(
+                child: new Column(
+                  children: <Widget>[
+                    Text(name,textAlign: TextAlign.center,style: TextStyle(color: Color(int.parse('0xff00C5CD'))),),
+                    Text(contact,textAlign: TextAlign.center,style: TextStyle(color: Color(int.parse('0xff00C5CD'))),)
+                  ],
+                ),
+                flex: 3,
+              ),
+              Expanded(
+                child: new Container(child:  Text('已维修$number',textAlign: TextAlign.center,style: TextStyle(color: Color(int.parse('0xff00C5CD'))),),margin: EdgeInsets.all(10.0),),
+                flex: 1,
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -481,6 +487,20 @@ class Obligation_to_repair_State extends State<Obligation_to_repair>{
     }
   }
 
+  ///修改一条数据
+  _updateSingle(BuildContext context,String currentObjectId,String number) {
+    czywwx blog = czywwx();
+    blog.objectId = currentObjectId;
+    blog.number = (int.parse(number)+1).toString();
+    blog.update().then((BmobUpdated bmobUpdated) {
+      //Toastmodel("修改一条数据成功：${bmobUpdated.updatedAt}",Colors.blue);
+      setState(() {
+        _query_czywwx_all();
+      });
+    }).catchError((e) {
+      print(BmobError.convert(e).error);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
