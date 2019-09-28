@@ -443,7 +443,7 @@ class Obligation_to_repair_State extends State<Obligation_to_repair>{
   Widget Maintenance_personnel_component01(String imageurl,String name,String contact,String number,String objectid){
     return GestureDetector(
       onTap: (){
-        //launchURL('mqq://im/chat?chat_type=wpa&uin=$contact&version=1&src_type=web');
+        launchURL('mqq://im/chat?chat_type=wpa&uin=$contact&version=1&src_type=web');
         _updateSingle(context,objectid,number);
       },
       child: new Container(
@@ -494,9 +494,9 @@ class Obligation_to_repair_State extends State<Obligation_to_repair>{
     blog.number = (int.parse(number)+1).toString();
     blog.update().then((BmobUpdated bmobUpdated) {
       //Toastmodel("修改一条数据成功：${bmobUpdated.updatedAt}",Colors.blue);
-      setState(() {
-        _query_czywwx_all();
-      });
+//      setState(() {
+//        _query_czywwx_all();
+//      });
     }).catchError((e) {
       print(BmobError.convert(e).error);
     });
