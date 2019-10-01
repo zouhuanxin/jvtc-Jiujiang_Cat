@@ -1,9 +1,15 @@
+import 'dart:io';
+
+import 'package:data_plugin/bmob/response/bmob_updated.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_app01/Bean/QTuser.dart';
 import 'package:flutter_app01/Utils/Animation_list.dart';
 import 'package:flutter_app01/Utils/WebViewPage.dart';
 import 'package:flutter_app01/course/course.dart';
 import 'package:flutter_app01/home/LostandFound/lf_my.dart';
 import 'package:flutter_app01/home/LostandFound/lf_mylose.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:meta/meta.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:data_plugin/bmob/bmob.dart';
@@ -28,6 +34,7 @@ class my extends StatefulWidget{
 
 class my_State extends State<my>{
   SharedPreferences sharedPreferences;
+  static const androidplatform = const MethodChannel("test");
 
   //Data initialization
   void _load_data() async{
@@ -83,6 +90,9 @@ class my_State extends State<my>{
         break;
       case '退出登陆':
         _showmodel_cancel_login_stystem('退出登陆','你确定退出登陆吗?');
+        break;
+      case '更换头像':
+        _openGallery();
         break;
     }
   }
@@ -144,6 +154,7 @@ class my_State extends State<my>{
                 SizedBox(height: 30,),
                 body_component01('images/2.0.x/dark_model.png', '暗黑模式'),
                 body_component02('images/2.0.x/uploadpassword.png',40, '修改密码'),
+                body_component02('images/2.2.x/ghtx.png',36, '更换头像'),
                 body_component02('images/2.2.x/tz.png',40, '拾取物品'),
                 body_component02('images/2.2.x/swtz2.png',40, '遗失物品'),
                // body_component02('images/2.0.x/myzlxg.png',40, '资料修改'),
@@ -171,6 +182,47 @@ class my_State extends State<my>{
         ),
       ),
     );
+  }
+
+  /*相册*/
+  _openGallery() async {
+    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    String temp=image.toString().split(':')[1].trim();
+    print('image:${temp.substring(1,temp.length-1)}');
+    _imagetobase64(temp.substring(1,temp.length-1));
+  }
+  void _imagetobase64(String value) async {
+    String path = await androidplatform.invokeMethod("getFile", {"path": value});
+    File file = new File(path);
+    List bytes = await file.readAsBytes();
+    _uploadimage(base64Encode(bytes));
+  }
+
+  //更新头像数据
+  void _uploadimage(String image){
+    QTuser blog = QTuser();
+    blog.objectId = objectid;
+    blog.imagebase64=image;
+    blog.update().then((BmobUpdated bmobUpdated) {
+      // print("修改一条数据成功：${bmobUpdated.updatedAt}");
+      _showmodel('修改头像成功，正在更新。', Toast.LENGTH_SHORT, Colors.blue);
+      get_image();
+    }).catchError((e) {
+       print('error');
+      //_showmodel(BmobError.convert(e).error, Toast.LENGTH_SHORT, Colors.red);
+    });
+  }
+  //请求头像数据
+  void get_image(){
+    BmobQuery<QTuser> query = BmobQuery();
+    query.addWhereEqualTo("objectId", objectid);
+    query.queryObjects().then((data) {
+      setState(() {
+        List<QTuser>templist = data.map((i) => QTuser.fromJson(i)).toList();
+        now_login_image_base64=templist[0].imagebase64;
+        sharedPreferences.setString('now_login_image_base64', now_login_image_base64);
+      });
+    }).catchError((e) {});
   }
 
   Widget body_component01(String imageurl,String label){
@@ -299,6 +351,7 @@ class my_State extends State<my>{
     sharedPreferences.setString('now_login_image_base64', '');
     sharedPreferences.setString('username', '');
     sharedPreferences.setString('phone', '');
+    sharedPreferences.setString('objectid', '');
     sharedPreferences.setString('login_state', 'false');
 
     now_login_image_base64=default_image;

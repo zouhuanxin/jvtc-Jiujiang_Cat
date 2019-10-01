@@ -12,6 +12,7 @@ String course_class_time="[{\"time\":\"\"},{\"time\":\"\"},{\"time\":\"\"},{\"ti
 String now_login_image_base64=default_image;
 String username='未登陆';
 String phone='未登陆';
+String objectid='未登陆';
 bool login_state=false;
 
 //System color configuration

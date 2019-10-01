@@ -51,12 +51,12 @@ class my_register_State extends State<my_register> {
   void _imagetobase64(File value) async {
     String path =
         await androidplatform.invokeMethod("getFile", {"path": value.path});
-    print('_imagetobase64path:$path');
+   // print('_imagetobase64path:$path');
     File file = new File(path);
     List bytes = await file.readAsBytes();
-    print('_imagetobase64size:${bytes.length}');
+   // print('_imagetobase64size:${bytes.length}');
     bs64 = base64Encode(bytes);
-    print('_imagetobase64size:${bs64.length}');
+   // print('_imagetobase64size:${bs64.length}');
     if (bs64.length > 180000) {
       bs64 = null;
       Fluttertoast.showToast(

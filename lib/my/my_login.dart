@@ -240,11 +240,13 @@ class my_login_State extends State<my_login>{
       now_login_image_base64=sfs[0].imagebase64;
       username=sfs[0].username;
       phone=sfs[0].phone;
+      objectid=sfs[0].objectId;
       login_state=true;
 
       sharedPreferences.setString('now_login_image_base64', now_login_image_base64);
       sharedPreferences.setString('username', username);
       sharedPreferences.setString('phone', phone);
+      sharedPreferences.setString('objectid', objectid);
       sharedPreferences.setString('login_state', 'true');
       
       Fluttertoast.showToast(

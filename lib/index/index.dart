@@ -170,6 +170,7 @@ class IndexState extends State<Index> with TickerProviderStateMixin {
           sharedPreferences.getString('now_login_image_base64');
       phone = sharedPreferences.getString('phone');
       username = sharedPreferences.getString('username');
+      objectid = sharedPreferences.getString('objectid');
     } else {
       login_state = false;
     }

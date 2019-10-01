@@ -31,6 +31,7 @@ import 'package:flutter_app01/common/System_notice.dart';
 import 'JZ_association/Collection.dart';
 import 'Group_ck/group_ck.dart';
 import 'LostandFound/lf_main.dart';
+import 'competition/competition_entrance.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -94,7 +95,7 @@ class _HomePageState extends State<HomePage> {
                         })),
                 // 当 value 改变的时候，触发
                 onChanged: (val) {
-                  print(val);
+                  //print(val);
                   qqnumber = val;
                 }),
           ),
@@ -151,6 +152,10 @@ class _HomePageState extends State<HomePage> {
           _showmodel('请先登陆九职小猫手', Toast.LENGTH_SHORT, Colors.red);
         }
         break;
+      case '社团活动':
+        Navigator.push(context,
+            new MaterialPageRoute(builder: (context) => new competition_entrance()));
+        break;
     }
   }
 
@@ -203,7 +208,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _lunbo_click(index){
-    if(sfs[index].url!=''){
+    if(sfs[index].url!=''&&sfs[index].url!=null){
       Navigator.push(
           context,
           new MaterialPageRoute(
@@ -439,6 +444,7 @@ class _HomePageState extends State<HomePage> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           buildButtonColumn2('images/2.0.x/swzl.png', '失物招领', '公测\n采用AI识别技术及实名认证帮助你尽可能的准确快速找到你的物品'),
+          buildButtonColumn2('images/2.2.x/sthd.png', '社团活动', '社团活动投票，投票需谨慎。'),
           buildButtonColumn(Icons.work, '义务维修', '电脑，平板，手机，系统重装，需要请发表'),
           buildButtonColumn(Icons.timer_10, '倒计时', '帮助你记录重要的事情'),
         ],
