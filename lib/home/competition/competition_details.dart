@@ -196,6 +196,7 @@ class competition_details_State extends State<competition_details> {
             decoration: InputDecoration(
                 border: InputBorder.none,
                 hintText: '输入手机号',
+                hintStyle: TextStyle(color: Color(int.parse(color2))),
                 contentPadding: const EdgeInsets.symmetric(vertical: 0.0)
             ),
             textAlign: TextAlign.start,

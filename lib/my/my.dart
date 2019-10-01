@@ -188,14 +188,20 @@ class my_State extends State<my>{
   _openGallery() async {
     var image = await ImagePicker.pickImage(source: ImageSource.gallery);
     String temp=image.toString().split(':')[1].trim();
-    print('image:${temp.substring(1,temp.length-1)}');
+    //print('image:${temp.substring(1,temp.length-1)}');
     _imagetobase64(temp.substring(1,temp.length-1));
   }
   void _imagetobase64(String value) async {
     String path = await androidplatform.invokeMethod("getFile", {"path": value});
     File file = new File(path);
     List bytes = await file.readAsBytes();
-    _uploadimage(base64Encode(bytes));
+    String bs64=base64Encode(bytes);
+    if (bs64.length > 180000) {
+      bs64 = null;
+      _showmodel('图片过大,请重新选择头像', Toast.LENGTH_SHORT, Colors.blue);
+    }else{
+      _uploadimage(bs64);
+    }
   }
 
   //更新头像数据
