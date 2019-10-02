@@ -247,6 +247,17 @@ class competition_release_State extends State<competition_release> {
           iconTheme: IconThemeData(color: Color(int.parse(color2))),
           backgroundColor: Color(int.parse(color1)),
           centerTitle: true,
+          leading: Builder(
+            builder: (BuildContext context) {
+              return IconButton(
+                icon: const Icon(Icons.clear),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
+              );
+            },
+          ),
           actions: <Widget>[new Container()],
         ),
         body: ModalProgressHUD(

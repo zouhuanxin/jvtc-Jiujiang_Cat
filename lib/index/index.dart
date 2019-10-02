@@ -5,6 +5,7 @@ import 'package:data_plugin/bmob/realtime/client.dart';
 import 'package:data_plugin/bmob/realtime/real_time_data_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_app01/Bean/QTuser.dart';
 import 'package:flutter_app01/Bean/gxinfo.dart';
 import 'package:flutter_app01/Utils/WebViewPage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -166,11 +167,19 @@ class IndexState extends State<Index> with TickerProviderStateMixin {
     //login state setting
     if (sharedPreferences.getString('login_state') == 'true') {
       login_state = true;
-      now_login_image_base64 =
-          sharedPreferences.getString('now_login_image_base64');
       phone = sharedPreferences.getString('phone');
       username = sharedPreferences.getString('username');
       objectid = sharedPreferences.getString('objectid');
+      //如果意见是登陆状态为了保证数据的同步性我们每启动app的时候就进行一次用户数据同步 目前主要同步一下头像数据
+      BmobQuery<QTuser> query = BmobQuery();
+      query.addWhereEqualTo("phone", phone);
+      await query.queryObjects().then((data) {
+        setState(() {
+          List<QTuser>templist = data.map((i) => QTuser.fromJson(i)).toList();
+          now_login_image_base64 = templist[0].imagebase64;
+          sharedPreferences.setString('now_login_image_base64', templist[0].imagebase64);
+        });
+      }).catchError((e) {});
     } else {
       login_state = false;
     }

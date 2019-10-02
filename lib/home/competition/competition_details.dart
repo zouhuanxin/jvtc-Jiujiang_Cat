@@ -13,6 +13,9 @@ import 'dart:ui' as ui;
 
 import 'package:flutter_app01/Utils/WebViewPage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+
+import 'competition_person.dart';
+import 'competition_release.dart';
 class competition_details extends StatefulWidget {
   final competition_type ct;
 
@@ -232,13 +235,13 @@ class competition_details_State extends State<competition_details> {
 
   Widget headImage(){
     return new Container(
-      height: MediaQueryData.fromWindow(ui.window).size.height*0.37,
       width:MediaQueryData.fromWindow(ui.window).size.width,
+      margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
       child: Column(
         children: <Widget>[
           Image.network(ct.imageurl!=null?ct.imageurl:'https://f12.baidu.com/it/u=3326455251,1388799780&fm=72',height: MediaQueryData.fromWindow(ui.window).size.height*0.3,
               width:MediaQueryData.fromWindow(ui.window).size.width),
-          Text(ct.introduce,style: TextStyle(color: Color(int.parse(color2)),fontSize: 15,fontWeight: FontWeight.w400),textAlign: TextAlign.left,maxLines: 2,)
+          Text(ct.introduce,style: TextStyle(color: Color(int.parse(color2)),fontSize: 15,fontWeight: FontWeight.w400),textAlign: TextAlign.left,)
         ],
       ),
     );
@@ -267,6 +270,10 @@ class competition_details_State extends State<competition_details> {
           child: card(sfs[i],qts[i],'0xfff1f1f1'),
         ));
       }
+    }
+    if(templist.length<1){
+      showTaost('没有找到', Toast.LENGTH_SHORT, Colors.red);
+      return;
     }
     _showmodel(templist);
   }
@@ -366,7 +373,34 @@ class competition_details_State extends State<competition_details> {
           iconTheme: IconThemeData(color: Color(int.parse(color2))),
           backgroundColor: Color(int.parse(color1)),
           centerTitle: true,
-          actions: <Widget>[new Container()],
+          actions: <Widget>[
+            PopupMenuButton(
+              itemBuilder: (BuildContext context) =>
+              <PopupMenuItem<String>>[
+                PopupMenuItem<String>(child: Text("报名参赛"), value: "报名参赛",),
+                PopupMenuItem<String>(child: Text("我的作品"), value: "我的作品",),
+              ],
+              onSelected: (String action) {
+                switch (action) {
+                  case "报名参赛":
+                    Navigator.push(
+                        context,
+                        new MaterialPageRoute(
+                            builder: (context) => new competition_release()));
+                    break;
+                  case "我的作品":
+                    Navigator.push(
+                        context,
+                        new MaterialPageRoute(
+                            builder: (context) => new competition_person(type: ct.text,)));
+                    break;
+                }
+              },
+              onCanceled: () {
+                print("onCanceled");
+              },
+            )
+          ],
         ),
         body: new Container(
           decoration: BoxDecoration(color: Color(int.parse(color1))),

@@ -206,22 +206,27 @@ class my_State extends State<my>{
 
   //更新头像数据
   void _uploadimage(String image){
-    QTuser blog = QTuser();
-    blog.objectId = objectid;
-    blog.imagebase64=image;
-    blog.update().then((BmobUpdated bmobUpdated) {
-      // print("修改一条数据成功：${bmobUpdated.updatedAt}");
-      _showmodel('修改头像成功，正在更新。', Toast.LENGTH_SHORT, Colors.blue);
-      get_image();
-    }).catchError((e) {
-       print('error');
-      //_showmodel(BmobError.convert(e).error, Toast.LENGTH_SHORT, Colors.red);
-    });
+    //由于要适配老版本所以这里不能直接使用objectid 应该通过当前登陆手机号码去查询objectid
+    BmobQuery<QTuser> query = BmobQuery();
+    query.addWhereEqualTo("phone", phone);
+    query.queryObjects().then((data) {
+      List<QTuser>templist = data.map((i) => QTuser.fromJson(i)).toList();
+      QTuser blog = QTuser();
+      blog.objectId = templist[0].objectId;
+      blog.imagebase64=image;
+      blog.update().then((BmobUpdated bmobUpdated) {
+        // print("修改一条数据成功：${bmobUpdated.updatedAt}");
+        _showmodel('修改头像成功，正在更新。', Toast.LENGTH_SHORT, Colors.blue);
+        get_image();
+      }).catchError((e) {
+        _showmodel('稍后重试', Toast.LENGTH_SHORT, Colors.red);
+      });
+    }).catchError((e) {});
   }
   //请求头像数据
   void get_image(){
     BmobQuery<QTuser> query = BmobQuery();
-    query.addWhereEqualTo("objectId", objectid);
+    query.addWhereEqualTo("phone", phone);
     query.queryObjects().then((data) {
       setState(() {
         List<QTuser>templist = data.map((i) => QTuser.fromJson(i)).toList();

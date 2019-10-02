@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app01/my/SMS_password.dart';
 
 import 'competition_details.dart';
+import 'competition_person.dart';
 import 'competition_release.dart';
 
 class competition_entrance extends StatefulWidget {
@@ -28,10 +29,14 @@ class competition_entrance_State extends State<competition_entrance> {
 
   void _bmob_get_information() {
     sfs.clear();
-    competition_type ct=competition_type();
-    ct.text='报名参赛';
-    ct.color='0xff000000';
-    allui.add(buildButton01(ct));
+//    competition_type ct=competition_type();
+//    ct.text='报名参赛';
+//    ct.color='0xff000000';
+//    allui.add(buildButton01(ct));
+//    ct=competition_type();
+//    ct.text='个人作品';
+//    ct.color='0xff000000';
+//    allui.add(buildButton01(ct));
     BmobQuery<competition_type> query = BmobQuery();
     query.addWhereEqualTo("vis", "true");
     query.queryObjects().then((data) {
@@ -68,6 +73,11 @@ class competition_entrance_State extends State<competition_entrance> {
                   context,
                   new MaterialPageRoute(
                       builder: (context) => new competition_release()));
+            }else if(ct.text=='个人作品'){
+              Navigator.push(
+                  context,
+                  new MaterialPageRoute(
+                      builder: (context) => new competition_person()));
             }else{
               Navigator.push(
                   context,
