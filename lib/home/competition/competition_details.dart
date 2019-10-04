@@ -95,7 +95,7 @@ class competition_details_State extends State<competition_details> {
             child: Column(
               children: <Widget>[
                 new Container(
-                  child: Image.network(sf.logo,
+                  child: Image.network(sf.logo==null?sf.image2:sf.logo,
                     height: MediaQueryData.fromWindow(ui.window).size.height*0.2,),
                 ),
                 new Container(
@@ -190,6 +190,7 @@ class competition_details_State extends State<competition_details> {
                             title: '活动详情')));
               },
               child: Container(
+                margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
                 child: Align(
                   alignment: Alignment.topRight,
                   child: Text('项目链接  ',style: TextStyle(color: Colors.blue),),

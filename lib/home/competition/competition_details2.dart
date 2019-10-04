@@ -69,48 +69,50 @@ class competition_details2_State extends State<competition_details2> {
         actions: <Widget>[new Container()],
       ),
       body: ListView(
-        padding: EdgeInsets.all(10.0),
         children: <Widget>[
-          Row(
-            children: <Widget>[
-              Container(
-                margin: EdgeInsets.all(10.0),
-                child: new Align(
-                  alignment: FractionalOffset.center,
-                  child: new GestureDetector(
-                    child: new ClipOval(
-                      child: new Image.memory(base64.decode(qt==null?default_image:qt.imagebase64),fit: BoxFit.fill,height: 80,width: 80,),
+          Container(
+            decoration: BoxDecoration(
+                color: Color(int.parse('0xfff1f1f1'))
+            ),
+            child: Row(
+              children: <Widget>[
+                Container(
+                  margin: EdgeInsets.all(10.0),
+                  child: new Align(
+                    alignment: FractionalOffset.center,
+                    child: new GestureDetector(
+                      child: new ClipOval(
+                        child: new Image.memory(base64.decode(qt==null?default_image:qt.imagebase64),fit: BoxFit.fill,height: 80,width: 80,),
+                      ),
                     ),
                   ),
                 ),
-              ),
-              Text(
-                qt==null?'匿名':qt.username,
-                style: TextStyle(
-                    color: Color(int.parse(color2)),
-                    fontWeight: FontWeight.w600,
-                    fontSize: 17),
-              ),
-            ],
+                Text(
+                  qt==null?'匿名':qt.username,
+                  style: TextStyle(
+                      color: Color(int.parse(color2)),
+                      fontWeight: FontWeight.w600,
+                      fontSize: 17),
+                ),
+              ],
+            ),
           ),
           SizedBox(
             height: 10,
           ),
-          Text(
-            cp.introduce,
-            style: TextStyle(
-                color: Color(int.parse(color2)),
-                fontWeight: FontWeight.w100,
-                fontSize: 12),
-            maxLines: 15,
+          Container(
+            padding: EdgeInsets.all(10.0),
+            child: Text(
+              cp.introduce,
+              style: TextStyle(
+                  color: Color(int.parse(color2)),
+                  fontWeight: FontWeight.w100,
+                  fontSize: 12),
+              maxLines: 15,
+            ),
           ),
           SizedBox(
             height: 10,
-          ),
-          Text(
-            '分类：${cp.type}',
-            style: TextStyle(
-                color: Colors.green, fontWeight: FontWeight.w100, fontSize: 12),
           ),
           Container(
             margin: EdgeInsets.all(5.0),
@@ -148,7 +150,25 @@ class competition_details2_State extends State<competition_details2> {
             )
                 : Text(''),
           ),
-          SizedBox(height: 10,),
+          new Container(
+            decoration: BoxDecoration(
+              color: Colors.blue
+            ),
+            child: Row(
+              children: <Widget>[
+                Expanded(child:           Text(
+                  '\n比赛\n${cp.type}\n',
+                  style: TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.w200, fontSize: 14),textAlign: TextAlign.center,
+                ),flex: 1,),
+                Expanded(child:  Text(
+                  '\n票数\n${cp.number}\n',
+                  style: TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.w200, fontSize: 14),textAlign: TextAlign.center,
+                ),flex: 1,)
+              ],
+            ),
+          ),
         ],
       ),
     );

@@ -7,6 +7,8 @@ import 'package:flutter_app01/Bean/competition.dart';
 import 'package:flutter_app01/Utils/Record_Text.dart';
 import 'package:flutter_app01/Utils/WebViewPage.dart';
 
+import 'competition_details2.dart';
+
 class competition_person extends StatefulWidget{
   final String type;
 
@@ -55,15 +57,14 @@ class competition_person_State extends State<competition_person>{
         children: <Widget>[
           GestureDetector(
             onTap:(){
-              if(sf.url==null||sf.url==''){
-                return;
-              }
+              QTuser qTuser=QTuser();
+              qTuser.username=username;
+              qTuser.phone=phone;
+              qTuser.imagebase64=now_login_image_base64;
               Navigator.push(
                   context,
                   new MaterialPageRoute(
-                      builder: (context) => new WebViewPage(
-                          url: sf.url,
-                          title: '活动详情')));
+                      builder: (context) => new competition_details2(cp: sf,qt: qTuser)));
             },
             child: Column(
               children: <Widget>[
@@ -133,6 +134,29 @@ class competition_person_State extends State<competition_person>{
               alignment: Alignment.topLeft,
             ),
           ),
+          new Offstage(
+            offstage: sf.url==null||sf.url==''?true:false,
+            child: new GestureDetector(
+              onTap:(){
+                if(sf.url==null||sf.url==''){
+                  return;
+                }
+                Navigator.push(
+                    context,
+                    new MaterialPageRoute(
+                        builder: (context) => new WebViewPage(
+                            url: sf.url,
+                            title: '活动详情')));
+              },
+              child: Container(
+                margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
+                child: Align(
+                  alignment: Alignment.topRight,
+                  child: Text('项目链接  ',style: TextStyle(color: Colors.blue),),
+                ),
+              ),
+            ),
+          )
         ],
       ),
     );

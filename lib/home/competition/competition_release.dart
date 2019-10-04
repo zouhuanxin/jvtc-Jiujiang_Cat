@@ -31,9 +31,10 @@ class competition_release_State extends State<competition_release> {
   static const androidplatform = const MethodChannel("test");
   bool _loading_frame = false;
 
-  String introduce_str=null, url_str=null, drop_value=null,imageurl=null,imageurl2=null,imageurl3=null;
-  String path1=null,path2=null,path3=null;
+  String introduce_str=null, url_str=null, drop_value=null;
+  List<String> imageurls=[];
   File file1=null,file2=null,file3=null;
+  bool bol2=true,bol3=true;
 
   List<competition_type> droptype = []; //服务器返回到分类数据
 
@@ -291,7 +292,6 @@ class competition_release_State extends State<competition_release> {
           ),
           color: Color(int.parse(color2)),
           onPressed: () {
-            print(imageurl);
             if(drop_value!=null&&introduce_str!=null){
               //先上次三张图
               //再上传资料
@@ -309,19 +309,16 @@ class competition_release_State extends State<competition_release> {
   //上传图片
   void _uploadiamge() async{
     if(file1!=null){
-      path1=await androidplatform.invokeMethod("getFile", {"path": file1.path});
-      imageurl=await FileHttp.uploadFile(path1);
+      imageurls.add(await FileHttp.uploadFile(await androidplatform.invokeMethod("getFile", {"path": file1.path})));
     }
     if(file2!=null){
-      path2=await androidplatform.invokeMethod("getFile", {"path": file2.path});
-      imageurl2=await FileHttp.uploadFile(path2);
+      imageurls.add(await FileHttp.uploadFile(await androidplatform.invokeMethod("getFile", {"path": file2.path})));
     }
     if(file3!=null){
-      path3=await androidplatform.invokeMethod("getFile", {"path": file3.path});
-      imageurl3=await FileHttp.uploadFile(path3);
+      imageurls.add(await FileHttp.uploadFile(await androidplatform.invokeMethod("getFile", {"path": file3.path})));
     }
     if(file1==null&&file2==null&&file3==null){
-      imageurl='https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=3956878071,2257649761&fm=26&gp=0.jpg';
+      imageurls.add('https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=3956878071,2257649761&fm=26&gp=0.jpg');
     }
     await _saveSingle();
   }
@@ -334,9 +331,9 @@ class competition_release_State extends State<competition_release> {
     cp.url=url_str;
     cp.introduce=introduce_str;
     cp.type=drop_value;
-    cp.logo=imageurl;
-    cp.image2=imageurl2;
-    cp.image3=imageurl3;
+    cp.logo=imageurls[0];
+    cp.image2=imageurls.length>1?imageurls[1]:null;
+    cp.image3=imageurls.length>2?imageurls[2]:null;
     cp.save().then((BmobSaved bmobSaved) {
       showTaost('报名成功',Toast.LENGTH_SHORT,Colors.blue);
       Navigator.pop(context);
