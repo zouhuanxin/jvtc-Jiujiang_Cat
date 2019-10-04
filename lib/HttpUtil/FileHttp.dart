@@ -11,6 +11,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 class FileHttp{
   ///上传文件，上传文件涉及到android的文件访问权限，调用此方法前需要开发者们先适配好应用在各个android版本的权限管理。
   static Future<String> uploadFile(String path) async{
+    print('path:$path');
     String url;
     if (path == null) {
       showTaost("请先选择文件",Toast.LENGTH_SHORT,Colors.red);
@@ -20,7 +21,7 @@ class FileHttp{
     File file = new File(path);
     await BmobFileManager.upload(file).then((BmobFile bmobFile) {
       //print("${bmobFile.cdn}\n${bmobFile.url}\n${bmobFile.filename}");
-      showTaost("图片上传成功",Toast.LENGTH_SHORT,Colors.blue);
+      //showTaost("图片上传成功",Toast.LENGTH_SHORT,Colors.blue);
       url = bmobFile.url;
     }).catchError((e) {
       showTaost(BmobError.convert(e).error,Toast.LENGTH_SHORT,Colors.red);

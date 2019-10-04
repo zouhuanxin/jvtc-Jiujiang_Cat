@@ -14,6 +14,7 @@ import 'dart:ui' as ui;
 import 'package:flutter_app01/Utils/WebViewPage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+import 'competition_details2.dart';
 import 'competition_person.dart';
 import 'competition_release.dart';
 class competition_details extends StatefulWidget {
@@ -84,17 +85,12 @@ class competition_details_State extends State<competition_details> {
           borderRadius: BorderRadius.all(Radius.circular(5.0))),
       child: Column(
         children: <Widget>[
-          GestureDetector(
+          new GestureDetector(
             onTap:(){
-              if(sf.url==null||sf.url==''){
-                return;
-              }
               Navigator.push(
                   context,
                   new MaterialPageRoute(
-                      builder: (context) => new WebViewPage(
-                          url: sf.url,
-                          title: '活动详情')));
+                      builder: (context) => new competition_details2(cp: sf,qt: qTuser,)));
             },
             child: Column(
               children: <Widget>[
@@ -135,7 +131,7 @@ class competition_details_State extends State<competition_details> {
                             Text(
                               qTuser!=null?qTuser.username:'匿名',
                               style: TextStyle(
-                                  color: Color(int.parse(color2)),
+                                  color: Colors.black,
                                   fontWeight: FontWeight.w200,
                                   fontSize: 12),textAlign: TextAlign.center,
                             ),
@@ -163,7 +159,7 @@ class competition_details_State extends State<competition_details> {
                     decoration: BoxDecoration(
                       color: Colors.blue,
                     ),
-                    margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                    margin: EdgeInsets.fromLTRB(0, 0, 10, 10),
                     child: GestureDetector(
                       onTap: (){
                         tp(sf);
@@ -179,6 +175,28 @@ class competition_details_State extends State<competition_details> {
               alignment: Alignment.topLeft,
             ),
           ),
+          new Offstage(
+            offstage: sf.url==null||sf.url==''?true:false,
+            child: new GestureDetector(
+              onTap:(){
+                if(sf.url==null||sf.url==''){
+                  return;
+                }
+                Navigator.push(
+                    context,
+                    new MaterialPageRoute(
+                        builder: (context) => new WebViewPage(
+                            url: sf.url,
+                            title: '活动详情')));
+              },
+              child: Container(
+                child: Align(
+                  alignment: Alignment.topRight,
+                  child: Text('项目链接  ',style: TextStyle(color: Colors.blue),),
+                ),
+              ),
+            ),
+          )
         ],
       ),
     );
@@ -417,7 +435,15 @@ class competition_details_State extends State<competition_details> {
                       child: GridView.builder(
                         itemCount: sfs.length,
                         itemBuilder: (BuildContext context, int index) {
-                          return card(sfs[index],qts.length>1?qts[index]:null,'0xfff1f1f1');
+                          if(index==0){
+                            return card(sfs[index],qts.length>1?qts[index]:null,'0xffedeb50');
+                          }else if(index==1){
+                            return card(sfs[index],qts.length>1?qts[index]:null,'0xffc0c0c0');
+                          }else if(index==2){
+                            return card(sfs[index],qts.length>1?qts[index]:null,'0xffEED5B7');
+                          }else{
+                            return card(sfs[index],qts.length>1?qts[index]:null,'0xfff1f1f1');
+                          }
                         },
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           //横轴元素个数

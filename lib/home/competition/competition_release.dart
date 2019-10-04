@@ -27,11 +27,13 @@ class competition_release extends StatefulWidget {
 }
 
 class competition_release_State extends State<competition_release> {
-  var imageFile1;
+  var imageFile1,imageFile2,imageFile3;
   static const androidplatform = const MethodChannel("test");
   bool _loading_frame = false;
 
-  String introduce_str=null, url_str=null, drop_value=null,imageurl=null;
+  String introduce_str=null, url_str=null, drop_value=null,imageurl=null,imageurl2=null,imageurl3=null;
+  String path1=null,path2=null,path3=null;
+  File file1=null,file2=null,file3=null;
 
   List<competition_type> droptype = []; //服务器返回到分类数据
 
@@ -40,8 +42,8 @@ class competition_release_State extends State<competition_release> {
       margin: EdgeInsets.all(5.0),
       padding: EdgeInsets.all(5.0),
       child: TextField(
-        maxLength: 100,
-        maxLines: 5,
+        maxLength: 300,
+        maxLines: 8,
         decoration: InputDecoration(
             border: InputBorder.none,
             contentPadding: const EdgeInsets.symmetric(vertical: 0.0)),
@@ -135,6 +137,24 @@ class competition_release_State extends State<competition_release> {
     );
   }
 
+  void _selectedImage() async {
+    setState(() {
+      imageFile1 = ImagePicker.pickImage(source: ImageSource.gallery);
+    });
+  }
+
+  void _selectedImage2() async {
+    setState(() {
+      imageFile2 = ImagePicker.pickImage(source: ImageSource.gallery);
+    });
+  }
+
+  void _selectedImage3() async {
+    setState(() {
+      imageFile3 = ImagePicker.pickImage(source: ImageSource.gallery);
+    });
+  }
+
   Widget _previewImage1() {
     return new GestureDetector(
       onTap: () {
@@ -145,8 +165,7 @@ class competition_release_State extends State<competition_release> {
           builder: (BuildContext context, AsyncSnapshot<File> snapshot) {
             if (snapshot.connectionState == ConnectionState.done &&
                 snapshot.data != null) {
-              File file = snapshot.data;
-              new Future(() => _uploadimage(file));
+              file1 = snapshot.data;
               return new Container(
                 child: SizedBox(
                     width: 70.0,
@@ -165,15 +184,88 @@ class competition_release_State extends State<competition_release> {
     );
   }
 
-  void _selectedImage() async {
-    setState(() {
-      imageFile1 = ImagePicker.pickImage(source: ImageSource.gallery);
-    });
+  Widget _previewImage2() {
+    return new GestureDetector(
+      onTap: () {
+        _selectedImage2();
+      },
+      child: FutureBuilder<File>(
+          future: imageFile2,
+          builder: (BuildContext context, AsyncSnapshot<File> snapshot) {
+            if (snapshot.connectionState == ConnectionState.done &&
+                snapshot.data != null) {
+              file2 = snapshot.data;
+              return new Container(
+                child: SizedBox(
+                    width: 70.0,
+                    height: 90.0,
+                    child: Image.file(snapshot.data, fit: BoxFit.fill)),
+              );
+            } else {
+              return new Image.asset(
+                "images/2.2.x/addimage.png",
+                height: 70.0,
+                width: 70.0,
+                color: Color(int.parse(color2)),
+              );
+            }
+          }),
+    );
   }
 
-  void _uploadimage(File value) async {
-    String path = await androidplatform.invokeMethod("getFile", {"path": value.path});
-    imageurl=await FileHttp.uploadFile(path);
+  Widget _previewImage3() {
+    return new GestureDetector(
+      onTap: () {
+        _selectedImage3();
+      },
+      child: FutureBuilder<File>(
+          future: imageFile3,
+          builder: (BuildContext context, AsyncSnapshot<File> snapshot) {
+            if (snapshot.connectionState == ConnectionState.done &&
+                snapshot.data != null) {
+              file3 = snapshot.data;
+              return new Container(
+                child: SizedBox(
+                    width: 70.0,
+                    height: 90.0,
+                    child: Image.file(snapshot.data, fit: BoxFit.fill)),
+              );
+            } else {
+              return new Image.asset(
+                "images/2.2.x/addimage.png",
+                height: 70.0,
+                width: 70.0,
+                color: Color(int.parse(color2)),
+              );
+            }
+          }),
+    );
+  }
+
+  Widget three_image() {
+    return new Container(
+      margin: EdgeInsets.all(10.0),
+      child: Column(
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              Expanded(
+                flex: 1,
+                child: _previewImage1(),
+              ),
+              Expanded(
+                flex: 1,
+                child: _previewImage2(),
+              ),
+              Expanded(
+                flex: 1,
+                child: _previewImage3(),
+              )
+            ],
+          )
+        ],
+      ),
+    );
   }
 
   void showTaost(msg, type, color) {
@@ -200,8 +292,10 @@ class competition_release_State extends State<competition_release> {
           color: Color(int.parse(color2)),
           onPressed: () {
             print(imageurl);
-            if(drop_value!=null&&introduce_str!=null&&imageurl!=null){
-              _saveSingle();
+            if(drop_value!=null&&introduce_str!=null){
+              //先上次三张图
+              //再上传资料
+              _uploadiamge();
             }else{
               showTaost("请填写完整信息",Toast.LENGTH_SHORT,Colors.red);
             }
@@ -210,6 +304,26 @@ class competition_release_State extends State<competition_release> {
         ),
       ),
     );
+  }
+
+  //上传图片
+  void _uploadiamge() async{
+    if(file1!=null){
+      path1=await androidplatform.invokeMethod("getFile", {"path": file1.path});
+      imageurl=await FileHttp.uploadFile(path1);
+    }
+    if(file2!=null){
+      path2=await androidplatform.invokeMethod("getFile", {"path": file2.path});
+      imageurl2=await FileHttp.uploadFile(path2);
+    }
+    if(file3!=null){
+      path3=await androidplatform.invokeMethod("getFile", {"path": file3.path});
+      imageurl3=await FileHttp.uploadFile(path3);
+    }
+    if(file1==null&&file2==null&&file3==null){
+      imageurl='https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=3956878071,2257649761&fm=26&gp=0.jpg';
+    }
+    await _saveSingle();
   }
 
   ///保存一条数据
@@ -221,6 +335,8 @@ class competition_release_State extends State<competition_release> {
     cp.introduce=introduce_str;
     cp.type=drop_value;
     cp.logo=imageurl;
+    cp.image2=imageurl2;
+    cp.image3=imageurl3;
     cp.save().then((BmobSaved bmobSaved) {
       showTaost('报名成功',Toast.LENGTH_SHORT,Colors.blue);
       Navigator.pop(context);
@@ -270,15 +386,6 @@ class competition_release_State extends State<competition_release> {
                   height: 10,
                 ),
                 Text(
-                  '   项目介绍(必填)',
-                  style: TextStyle(
-                      color: Color(int.parse(color2)),
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      fontStyle: FontStyle.normal),
-                ),
-                introduce_input(),
-                Text(
                   '   项目连接(选填)',
                   style: TextStyle(
                       color: Color(int.parse(color2)),
@@ -287,6 +394,15 @@ class competition_release_State extends State<competition_release> {
                       fontStyle: FontStyle.normal),
                 ),
                 url_input(),
+                Text(
+                  '   项目介绍(必填)',
+                  style: TextStyle(
+                      color: Color(int.parse(color2)),
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      fontStyle: FontStyle.normal),
+                ),
+                introduce_input(),
                 Text(
                   '   参加活动项目(必选)',
                   style: TextStyle(
@@ -315,13 +431,7 @@ class competition_release_State extends State<competition_release> {
                     ),
                   ],
                 ),
-                Container(
-                  child: Align(
-                    child: _previewImage1(),
-                    alignment: Alignment.bottomLeft,
-                  ),
-                  margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
-                ),
+                three_image(),
                 SizedBox(
                   height: 10,
                 ),
