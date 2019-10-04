@@ -28,6 +28,7 @@ String color2='0xff000000';
 String color3='0xff0000FF';
 String color4='0xffF5F5F5';
 bool dart_model=false;
+bool course_bol=false;
 //The stored value used by the program ps:key
 /**
     1.jwcookie

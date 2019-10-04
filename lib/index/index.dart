@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:data_plugin/bmob/realtime/change.dart';
 import 'package:data_plugin/bmob/realtime/client.dart';
@@ -7,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app01/Bean/QTuser.dart';
 import 'package:flutter_app01/Bean/gxinfo.dart';
+import 'package:flutter_app01/HttpUtil/HttpUtil.dart';
 import 'package:flutter_app01/Utils/WebViewPage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -37,6 +39,8 @@ class Index extends StatefulWidget {
 
 // 要让主页面 Index 支持动效，要在它的定义中附加mixin类型的对象TickerProviderStateMixin
 class IndexState extends State<Index> with TickerProviderStateMixin {
+  static const androidplatform = const MethodChannel("test");
+
   @override
   void dispose() {
     super.dispose();
@@ -158,10 +162,18 @@ class IndexState extends State<Index> with TickerProviderStateMixin {
     color2 = sharedPreferences.getString('color2');
 //    color3=sharedPreferences.getString('color3');
 //    color4=sharedPreferences.getString('color4');
+    //暗黑模式
     if (sharedPreferences.getString('dart_model') == 'true') {
       dart_model = true;
     } else {
       dart_model = false;
+    }
+
+    if (sharedPreferences.getString('course_bol') == 'true') {
+      course_bol = true;
+      _query_course_data(new DateTime.now().toString().split(' ')[0].toString(),context);
+    } else {
+      course_bol = false;
     }
 
     //login state setting
@@ -295,6 +307,42 @@ class IndexState extends State<Index> with TickerProviderStateMixin {
     } else {
       throw 'Could not launch $url';
     }
+  }
+
+  var login_number = 0;
+  //访问课程信息
+  _query_course_data(String date, context) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    if (sharedPreferences.getString('jwcookie') != null) {
+      String str1 = await HttpUtil.query_course(
+          'kcinfo', sharedPreferences.getString('jwcookie'), date);
+      if (int.parse(json.decode(str1)['code'].toString().trim()) == 0) {
+        _string_turn_list(str1);
+      } else if (login_number < 1) {
+        login_number = 1;
+        if (await HttpUtil.Automatic_landing() == '0') {
+          _query_course_data(date, context);
+        } else {
+          //showmodel('请先登录学教平台', Colors.red);
+        }
+      } else {
+        //showmodel('无课程信息,请选择有效日期', Colors.red);
+      }
+    }
+  }
+  //课程数据集合
+  List<String> course_data = [];
+  _string_turn_list(String str) async{
+    print(str);
+    course_data.clear();
+    Map<String, dynamic> maptemp = json.decode(str);
+    String temp = maptemp['data'];
+    var arr = json.decode(temp);
+    for (var i = 0; i < arr.length; i++) {
+      course_data.add(arr[i].toString());
+    }
+    //数据准备完毕开启通知栏
+    await androidplatform.invokeMethod("course_tzl", {"list": course_data});
   }
 
   @override

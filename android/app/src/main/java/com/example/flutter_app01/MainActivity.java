@@ -1,6 +1,13 @@
 package com.example.flutter_app01;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -9,14 +16,20 @@ import android.widget.Toast;
 
 import com.example.flutter_app01.Util.Utils;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Logger;
 
+import androidx.core.app.NotificationCompat;
 import cn.bmob.push.BmobPush;
 import cn.bmob.v3.Bmob;
 import cn.bmob.push.*;
@@ -42,37 +55,39 @@ public class MainActivity extends FlutterActivity {
         Utils.flutteractivity = getFlutterView();
 
         //单向通信
-      new EventChannel(Utils.flutteractivity, "EventChannelPlugin").setStreamHandler(
-              new EventChannel.StreamHandler() {
-                  @Override
-                  public void onListen(Object args, final EventChannel.EventSink events) {
-                      //System.out.println("adding listener");
-                      Utils.eventSink=events;
-                  }
+        new EventChannel(Utils.flutteractivity, "EventChannelPlugin").setStreamHandler(
+                new EventChannel.StreamHandler() {
+                    @Override
+                    public void onListen(Object args, final EventChannel.EventSink events) {
+                        //System.out.println("adding listener");
+                        Utils.eventSink = events;
+                    }
 
-                  @Override
-                  public void onCancel(Object args) {
-                      //System.out.println("cancelling listener");
-                  }
-              }
-      );
-        Bmob.initialize(this, "931aa07205e9 cddf2cd85458d029af79");
-        // 使用推送服务时的初始化操作
-        BmobInstallationManager.getInstance().initialize(new InstallationListener<BmobInstallation>() {
-            @Override
-            public void done(BmobInstallation bmobInstallation, BmobException e) {
-                if (e == null) {
-                    System.out.println(bmobInstallation.getObjectId() + "-" + bmobInstallation.getInstallationId());
-                } else {
-                    System.out.println(e.getMessage());
+                    @Override
+                    public void onCancel(Object args) {
+                        //System.out.println("cancelling listener");
+                    }
                 }
-            }
-        });
-        // 启动推送服务
-        BmobPush.startWork(this);
+        );
+
+
+        //由于push推送在适配高版本安卓系统上还存在问题 所以目前暂时停用bmob push推送
+//        Bmob.initialize(this, "931aa07205e9 cddf2cd85458d029af79");
+//        // 使用推送服务时的初始化操作
+//        BmobInstallationManager.getInstance().initialize(new InstallationListener<BmobInstallation>() {
+//            @Override
+//            public void done(BmobInstallation bmobInstallation, BmobException e) {
+//                if (e == null) {
+//                    System.out.println(bmobInstallation.getObjectId() + "-" + bmobInstallation.getInstallationId());
+//                } else {
+//                    System.out.println(e.getMessage());
+//                }
+//            }
+//        });
+//        // 启动推送服务
+//        BmobPush.startWork(this);
 
         GeneratedPluginRegistrant.registerWith(this);
-
         new MethodChannel(getFlutterView(), CHANNEL).setMethodCallHandler(
                 new MethodChannel.MethodCallHandler() {
                     @Override
@@ -84,6 +99,10 @@ public class MainActivity extends FlutterActivity {
                             res.success(daysBetween(methodCall.argument("str1"), methodCall.argument("str2")));
                         } else if (methodCall.method.equals("daysBetween2")) {
                             res.success(daysBetween2(methodCall.argument("str1"), methodCall.argument("str2")));
+                        } else if (methodCall.method.equals("course_tzl")) {
+                            androidpush(methodCall.argument("list"));
+                        } else if (methodCall.method.equals("cancelNotification")) {
+                            cancelNotification();
                         }
                     }
                 });
@@ -110,7 +129,7 @@ public class MainActivity extends FlutterActivity {
                         System.out.println("压缩成功:" + file.getPath());
                         try {
                             res.success(file.getPath());
-                        }catch (Exception e){
+                        } catch (Exception e) {
                             //showToast("压缩对象错误");
                         }
                     }
@@ -122,7 +141,7 @@ public class MainActivity extends FlutterActivity {
                         e.printStackTrace();
                         try {
                             res.success("压缩失败");
-                        }catch (Exception e2){
+                        } catch (Exception e2) {
                             //showToast("压缩对象错误");
                         }
                     }
@@ -183,4 +202,103 @@ public class MainActivity extends FlutterActivity {
         return Integer.parseInt(String.valueOf(res));
     }
 
+    //开启一个手机通知栏信息
+    public void androidpush(List<String> list){
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy年MM月dd日");// HH:mm:ss
+        //获取当前时间
+        Date date = new Date(System.currentTimeMillis());
+        NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        //8.0 以后需要加上channelId 才能正常显示
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            String channelId = "九职小猫手提醒你课表信息";
+            String channelName = simpleDateFormat.format(date);
+            manager.createNotificationChannel(new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH));
+        }
+        NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
+        int i=getWeek();
+        String str1=list.get(8*0+i)
+                .split("kcname:")[1]
+                .trim();
+        String str2=list.get(8*1+i)
+                .split("kcname:")[1]
+                .trim();
+        String str3=list.get(8*2+i)
+                .split("kcname:")[1]
+                .trim();
+        String str4=list.get(8*3+i)
+                .split("kcname:")[1]
+                .trim();
+        String str5=list.get(8*4+i)
+                .split("kcname:")[1]
+                .trim();
+        String str6=list.get(8*5+i)
+                .split("kcname:")[1]
+                .trim();
+        String str7=list.get(8*6+i)
+                .split("kcname:")[1]
+                .trim();
+        if(str1.equals("}")) str1="    ";
+        if(str2.equals("}")) str2="    ";
+        if(str3.equals("}")) str3="    ";
+        if(str4.equals("}")) str4="    ";
+        if(str5.equals("}")) str5="    ";
+        if(str6.equals("}")) str6="    ";
+        if(str7.equals("}")) str7="    ";
+        str1=str1.substring(0,str1.length()-1);
+        str2=str2.substring(0,str2.length()-1);
+        str3=str3.substring(0,str3.length()-1);
+        str4=str4.substring(0,str4.length()-1);
+        str5=str5.substring(0,str5.length()-1);
+        str6=str6.substring(0,str6.length()-1);
+        str7=str7.substring(0,str7.length()-1);
+        inboxStyle.addLine(str1);
+        inboxStyle.addLine(str2);
+        inboxStyle.addLine(str3);
+        inboxStyle.addLine(str4);
+        inboxStyle.addLine(str5);
+        inboxStyle.addLine(str6);
+        inboxStyle.addLine(str7);
+        inboxStyle.setBigContentTitle("这是你今天的课表哦");
+        Notification notification = new NotificationCompat.Builder(this, "default")
+                .setSmallIcon(this.getResources().getIdentifier("cat1", "drawable",this.getPackageName()))
+                .setContentTitle("九职小猫手提醒你课表信息")
+                .setContentText(simpleDateFormat.format(date))
+                .setOngoing(true)
+                .setDefaults(Notification.DEFAULT_ALL)
+                .setWhen(System.currentTimeMillis())
+                .setStyle(inboxStyle)
+                .build();
+        manager.notify(1, notification);
+    }
+
+    // 取消通知
+    public void cancelNotification() {
+        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        notificationManager.cancel(1);
+    }
+
+    /*获取星期几*/
+    public static int getWeek() {
+        Calendar cal = Calendar.getInstance();
+        int i = cal.get(Calendar.DAY_OF_WEEK);
+        return i;
+//        switch (i) {
+//            case 1:
+//                return "星期日";
+//            case 2:
+//                return "星期一";
+//            case 3:
+//                return "星期二";
+//            case 4:
+//                return "星期三";
+//            case 5:
+//                return "星期四";
+//            case 6:
+//                return "星期五";
+//            case 7:
+//                return "星期六";
+//            default:
+//                return "";
+//        }
+    }
 }

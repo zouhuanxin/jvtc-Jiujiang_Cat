@@ -1,13 +1,17 @@
 package com.example.flutter_app01.Util;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 
 import com.example.flutter_app01.Receiver.NotificationReceiver;
+
+import java.util.Random;
 
 import androidx.core.app.NotificationCompat;
 import io.flutter.app.FlutterActivity;
@@ -30,10 +34,28 @@ public class Utils {
         int id = (int) (System.currentTimeMillis() / 1000);
         PendingIntent contentIntent = PendingIntent.getBroadcast(context.getApplicationContext(), id, clickIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        NotificationManager notificationManager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
-        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context);
-        //设置标题
-        mBuilder.setContentTitle(title)
+        NotificationManager manager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
+        //8.0 以后需要加上channelId 才能正常显示
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            String channelId = title;
+            String channelName = content;
+            manager.createNotificationChannel(new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH));
+        }
+//        NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
+//        String[] events = new String[6];
+//        events[0] = "Hello my one world";
+//        events[1] = "Hello my two world";
+//        events[2] = "Hello my three world";
+//        events[3] = "Hello my four world";
+//        events[4] = "Hello my five world";
+//        events[5] = "Hello my six world";
+//        inboxStyle.setBigContentTitle("Inbox tracker details:");
+//        for (int i = 0; i < events.length; i++) {
+//            inboxStyle.addLine(events[i]);
+//        }
+//        inboxStyle.setBigContentTitle("Thers are six messages");
+//        inboxStyle.setSummaryText("It‘s so easy,right?");
+        Notification notification = new NotificationCompat.Builder(context, "default")
                 //设置内容
                 .setContentText(content)
                 //设置大图标
@@ -47,9 +69,9 @@ public class Utils {
                 //.setAutoCancel(true)//打开程序后图标消失
                 .setContentIntent(contentIntent)
                 //设置通知方式，声音，震动，呼吸灯等效果，这里通知方式为声音
-                .setDefaults(Notification.DEFAULT_ALL);
-        //发送通知请求
-        notificationManager.notify(10, mBuilder.build());
+                .setDefaults(Notification.DEFAULT_ALL)
+                .build();
+        manager.notify(new Random().nextInt(100), notification);
     }
 
 }

@@ -4,6 +4,7 @@ import 'package:data_plugin/bmob/response/bmob_updated.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app01/Bean/QTuser.dart';
+import 'package:flutter_app01/HttpUtil/HttpUtil.dart';
 import 'package:flutter_app01/Utils/Animation_list.dart';
 import 'package:flutter_app01/Utils/WebViewPage.dart';
 import 'package:flutter_app01/course/course.dart';
@@ -35,6 +36,7 @@ class my extends StatefulWidget{
 class my_State extends State<my>{
   SharedPreferences sharedPreferences;
   static const androidplatform = const MethodChannel("test");
+  bool tzl_bol=false;
 
   //Data initialization
   void _load_data() async{
@@ -153,6 +155,7 @@ class my_State extends State<my>{
                 ),
                 SizedBox(height: 30,),
                 body_component01('images/2.0.x/dark_model.png', '暗黑模式'),
+                course_tzl('images/2.2.x/tzl.png', '课表通知栏'),
                 body_component02('images/2.0.x/uploadpassword.png',40, '修改密码'),
                 body_component02('images/2.2.x/ghtx.png',36, '更换头像'),
                 body_component02('images/2.2.x/tz.png',40, '拾取物品'),
@@ -289,6 +292,54 @@ class my_State extends State<my>{
     );
   }
 
+  Widget course_tzl(String imageurl,String label){
+    return new Container(
+      decoration: new BoxDecoration(
+        border: new Border.all(width: 1.0, color: Color(int.parse(color1))),
+        color: Color(int.parse(color1)),
+      ),
+      padding: const EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0),
+      //margin: const EdgeInsets.all(5.0),
+      child:  new GestureDetector(
+        child: new Row(
+          children: <Widget>[
+            Expanded(
+              child: new ImageIcon(AssetImage(imageurl),size: 31,color: Color(int.parse(color2)),),
+              flex: 2,
+            ),
+            Expanded(
+              child: new Text(label,
+                textAlign: TextAlign.left,style: TextStyle(fontSize: 20,color: Color(int.parse(color2)),),),
+              flex: 10,
+            ),
+            Expanded(
+              child: new Switch(
+                value: course_bol,
+                activeTrackColor: Colors.white,
+                inactiveTrackColor: Colors.grey,
+                onChanged: (bool value) {
+                  setState(() {
+                    course_bol=value;
+                    if(course_bol==true){
+                      _query_course_data(new DateTime.now().toString().split(' ')[0].toString(),context);
+                    }else{
+                      cancel_tzl();
+                    }
+                    sharedPreferences.setString('course_bol', course_bol.toString());
+                  });
+                },
+              ),
+              flex: 1,
+            ),
+          ],
+        ),
+        onTap:(){
+
+        },
+      ),
+    );
+  }
+
   Widget body_component02(String imageurl,double imagesize,String label){
     return new Container(
       decoration: new BoxDecoration(
@@ -373,5 +424,51 @@ class my_State extends State<my>{
     setState(() {
 
     });
+  }
+
+  var login_number = 0;
+  //访问课程信息
+  _query_course_data(String date, context) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    if (sharedPreferences.getString('jwcookie') != null) {
+      String str1 = await HttpUtil.query_course(
+          'kcinfo', sharedPreferences.getString('jwcookie'), date);
+      if (int.parse(json.decode(str1)['code'].toString().trim()) == 0) {
+        _string_turn_list(str1);
+      } else if (login_number < 1) {
+        login_number = 1;
+        if (await HttpUtil.Automatic_landing() == '0') {
+          _query_course_data(date, context);
+        } else {
+          //showmodel('请先登录学教平台', Colors.red);
+        }
+      } else {
+        //showmodel('无课程信息,请选择有效日期', Colors.red);
+      }
+    } else {
+      setState(() {
+        tzl_bol=false;
+      });
+      _showmodel('请先登录学教平台', Toast.LENGTH_SHORT,Colors.red);
+    }
+  }
+  //课程数据集合
+  List<String> course_data = [];
+  _string_turn_list(String str) async{
+    print(str);
+    course_data.clear();
+    Map<String, dynamic> maptemp = json.decode(str);
+    String temp = maptemp['data'];
+    var arr = json.decode(temp);
+    for (var i = 0; i < arr.length; i++) {
+      course_data.add(arr[i].toString());
+    }
+    //数据准备完毕开启通知栏
+    await androidplatform.invokeMethod("course_tzl", {"list": course_data});
+    //_showmodel('开启成功', Toast.LENGTH_SHORT,Colors.blue);
+  }
+  //cancelNotification
+  void cancel_tzl() async{
+    await androidplatform.invokeMethod("cancelNotification", {});
   }
 }

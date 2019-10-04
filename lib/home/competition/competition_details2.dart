@@ -70,6 +70,25 @@ class competition_details2_State extends State<competition_details2> {
       ),
       body: ListView(
         children: <Widget>[
+          new Container(
+            decoration: BoxDecoration(
+                color: Colors.blue
+            ),
+            child: Row(
+              children: <Widget>[
+                Expanded(child:           Text(
+                  '\n比赛\n${cp.type}\n',
+                  style: TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.w200, fontSize: 14),textAlign: TextAlign.center,
+                ),flex: 1,),
+                Expanded(child:  Text(
+                  '\n票数\n${cp.number}\n',
+                  style: TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.w200, fontSize: 14),textAlign: TextAlign.center,
+                ),flex: 1,)
+              ],
+            ),
+          ),
           Container(
             decoration: BoxDecoration(
                 color: Color(int.parse('0xfff1f1f1'))
@@ -149,25 +168,6 @@ class competition_details2_State extends State<competition_details2> {
                   : 0,
             )
                 : Text(''),
-          ),
-          new Container(
-            decoration: BoxDecoration(
-              color: Colors.blue
-            ),
-            child: Row(
-              children: <Widget>[
-                Expanded(child:           Text(
-                  '\n比赛\n${cp.type}\n',
-                  style: TextStyle(
-                      color: Colors.white, fontWeight: FontWeight.w200, fontSize: 14),textAlign: TextAlign.center,
-                ),flex: 1,),
-                Expanded(child:  Text(
-                  '\n票数\n${cp.number}\n',
-                  style: TextStyle(
-                      color: Colors.white, fontWeight: FontWeight.w200, fontSize: 14),textAlign: TextAlign.center,
-                ),flex: 1,)
-              ],
-            ),
           ),
         ],
       ),

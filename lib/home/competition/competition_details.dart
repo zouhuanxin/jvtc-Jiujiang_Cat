@@ -454,7 +454,7 @@ class competition_details_State extends State<competition_details> {
                             //横轴间距
                             crossAxisSpacing: 10.0,
                             //子组件宽高长度比例
-                            childAspectRatio: 0.65
+                            childAspectRatio: 0.6
                         ),
                       ),
                     )
