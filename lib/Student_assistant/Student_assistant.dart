@@ -136,21 +136,37 @@ class Student_assistant_State extends State<Student_assistant>{
     );
   }
 
+  //控制是否开启沉浸状态
+  bool appbar_bol=false;
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return new Scaffold(
-        appBar: new AppBar(
-          title: new Text('学习周期                                       ',
-            textAlign:TextAlign.left,style: TextStyle(color: Color(int.parse(color2)),fontWeight: FontWeight.w800,fontSize: 17),),
-          elevation: 0.0,
-          iconTheme: IconThemeData(color: Color(int.parse(color2))),
-          backgroundColor: Color(int.parse(color1)),
-          centerTitle: true,
-          actions: <Widget>[
-            new Container()
-          ],
-        ),
+    return new WillPopScope(child: new Scaffold(
+        appBar: PreferredSize(child: new Offstage(
+          offstage: appbar_bol,
+          child: new AppBar(
+            title: new Text('学习周期                                       ',
+              textAlign:TextAlign.left,style: TextStyle(color: Color(int.parse(color2)),fontWeight: FontWeight.w800,fontSize: 17),),
+            elevation: 0.0,
+            iconTheme: IconThemeData(color: Color(int.parse(color2))),
+            backgroundColor: Color(int.parse(color1)),
+            centerTitle: true,
+            leading: Builder(
+              builder: (BuildContext context) {
+                return IconButton(
+                  icon: const Icon(Icons.arrow_back),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
+                );
+              },
+            ),
+            actions: <Widget>[
+              new Container()
+            ],
+          ),
+        ), preferredSize: Size.fromHeight(MediaQuery.of(context).size.height * 0.08),),
         body: new Container(
           decoration: BoxDecoration(
             color: Color(int.parse(color1)),
@@ -164,7 +180,9 @@ class Student_assistant_State extends State<Student_assistant>{
             ],
           ),
         )
-    );
+    ), onWillPop: (){
+      //print("返回键点击了");
+    });
   }
 
   void button_click(String str){
@@ -216,7 +234,9 @@ class Student_assistant_State extends State<Student_assistant>{
               onPressed: () {
                 Navigator.pop(context);
                 _endtime=DateTime.now().toString().split('.')[0];
+                cancel_tzl();
                 setState(() {
+                  appbar_bol=false;
                   _codeCountdownStr='开始学习';
                   _countdownTimer?.cancel();
                   _countdownTimer = null;
@@ -247,6 +267,8 @@ class Student_assistant_State extends State<Student_assistant>{
               child: new Text("开始",style: TextStyle(color: Colors.red),),
               onPressed: () {
                 Navigator.pop(context);
+                start_noti("0");
+                appbar_bol=true;
                 _starttime=DateTime.now().toString().split('.')[0];
                 _codeCountdownStr='结束学习';
                 reGetCountdown();
@@ -382,6 +404,7 @@ class Student_assistant_State extends State<Student_assistant>{
         setState(() {
           if(_countdownNum==59){
             _countdownMinutes++;
+            start_noti(_countdownMinutes.toString());
             _countdownNum=0;
           }
           _countdownNum++;
@@ -395,6 +418,17 @@ class Student_assistant_State extends State<Student_assistant>{
     _countdownTimer?.cancel();
     _countdownTimer = null;
     super.dispose();
+  }
+
+  //开启时间通知
+  void start_noti(String time) async{
+    List<String>list=[];
+    list.add("此次你已经学习"+time+"分钟");
+    await androidplatform.invokeMethod("androidpush2", {"list": list});
+  }
+  //cancelNotification
+  void cancel_tzl() async{
+    await androidplatform.invokeMethod("cancelNotification", {"id":2});
   }
 
 }

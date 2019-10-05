@@ -468,6 +468,6 @@ class my_State extends State<my>{
   }
   //cancelNotification
   void cancel_tzl() async{
-    await androidplatform.invokeMethod("cancelNotification", {});
+    await androidplatform.invokeMethod("cancelNotification", {"id":1});
   }
 }

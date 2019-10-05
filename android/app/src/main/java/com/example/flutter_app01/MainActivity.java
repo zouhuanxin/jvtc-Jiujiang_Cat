@@ -103,7 +103,9 @@ public class MainActivity extends FlutterActivity {
                         } else if (methodCall.method.equals("course_tzl")) {
                             androidpush(methodCall.argument("list"));
                         } else if (methodCall.method.equals("cancelNotification")) {
-                            cancelNotification();
+                            cancelNotification(methodCall.argument("id"));
+                        } else if (methodCall.method.equals("androidpush2")) {
+                            androidpush2(methodCall.argument("list"));
                         }
                     }
                 });
@@ -206,7 +208,7 @@ public class MainActivity extends FlutterActivity {
     //开启一个手机通知栏信息
     public void androidpush(List<String> list){
         String channelId = "my_channel_01";
-        String channelName="我是渠道名字";
+        String channelName="我是九职小猫手课表通知";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy年MM月dd日");// HH:mm:ss
         //获取当前时间
         Date date = new Date(System.currentTimeMillis());
@@ -312,9 +314,9 @@ public class MainActivity extends FlutterActivity {
     }
 
     // 取消通知
-    public void cancelNotification() {
+    public void cancelNotification(int id) {
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        notificationManager.cancel(1);
+        notificationManager.cancel(id);
     }
 
     /*获取星期几*/
@@ -341,4 +343,32 @@ public class MainActivity extends FlutterActivity {
 //                return "";
 //        }
     }
+
+    //开启一个时间通知
+    public void androidpush2(List<String>list){
+        String channelId = "my_channel_02";
+        String channelName="我是九职小猫手时间通知";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy年MM月dd日");// HH:mm:ss
+        //获取当前时间
+        Date date = new Date(System.currentTimeMillis());
+        NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        //8.0 以后需要加上channelId 才能正常显示
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            NotificationChannel channel = new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH);
+            manager.createNotificationChannel(channel);
+        }
+        //自定义通知信息布局
+        //RemoteViews views = new RemoteViews(getPackageName(),this.getResources().getIdentifier("layout_nitification", "layout",this.getPackageName()));
+        Notification notification = new NotificationCompat.Builder(this, "default")
+                .setChannelId(channelId)
+                //.setContent(views)
+                .setSmallIcon(this.getResources().getIdentifier("cat1", "drawable",this.getPackageName()))
+                .setContentTitle("九职小猫手正在为你进行学习计时")
+                .setContentText(list.get(0))
+                .setOngoing(true)
+                .setShowWhen(false)
+                .build();
+        manager.notify(2, notification);
+    }
+
 }
