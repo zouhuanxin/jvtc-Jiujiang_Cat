@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.RemoteViews;
 import android.widget.Toast;
 
 import com.example.flutter_app01.Util.Utils;
@@ -204,68 +205,107 @@ public class MainActivity extends FlutterActivity {
 
     //开启一个手机通知栏信息
     public void androidpush(List<String> list){
+        String channelId = "my_channel_01";
+        String channelName="我是渠道名字";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy年MM月dd日");// HH:mm:ss
         //获取当前时间
         Date date = new Date(System.currentTimeMillis());
         NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         //8.0 以后需要加上channelId 才能正常显示
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-            String channelId = "九职小猫手提醒你课表信息";
-            String channelName = simpleDateFormat.format(date);
-            manager.createNotificationChannel(new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH));
+            NotificationChannel channel = new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH);
+            manager.createNotificationChannel(channel);
         }
         NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
-        int i=getWeek();
-        String str1=list.get(8*0+i)
-                .split("kcname:")[1]
-                .trim();
-        String str2=list.get(8*1+i)
-                .split("kcname:")[1]
-                .trim();
-        String str3=list.get(8*2+i)
-                .split("kcname:")[1]
-                .trim();
-        String str4=list.get(8*3+i)
-                .split("kcname:")[1]
-                .trim();
-        String str5=list.get(8*4+i)
-                .split("kcname:")[1]
-                .trim();
-        String str6=list.get(8*5+i)
-                .split("kcname:")[1]
-                .trim();
-        String str7=list.get(8*6+i)
-                .split("kcname:")[1]
-                .trim();
-        if(str1.equals("}")) str1="    ";
-        if(str2.equals("}")) str2="    ";
-        if(str3.equals("}")) str3="    ";
-        if(str4.equals("}")) str4="    ";
-        if(str5.equals("}")) str5="    ";
-        if(str6.equals("}")) str6="    ";
-        if(str7.equals("}")) str7="    ";
-        str1=str1.substring(0,str1.length()-1);
-        str2=str2.substring(0,str2.length()-1);
-        str3=str3.substring(0,str3.length()-1);
-        str4=str4.substring(0,str4.length()-1);
-        str5=str5.substring(0,str5.length()-1);
-        str6=str6.substring(0,str6.length()-1);
-        str7=str7.substring(0,str7.length()-1);
-        inboxStyle.addLine(str1);
-        inboxStyle.addLine(str2);
-        inboxStyle.addLine(str3);
-        inboxStyle.addLine(str4);
-        inboxStyle.addLine(str5);
-        inboxStyle.addLine(str6);
-        inboxStyle.addLine(str7);
-        inboxStyle.setBigContentTitle("这是你今天的课表哦");
+        for(int i=0;i<7;i++){
+            String str1=list.get(1+8*i)
+                    .split("kcname:")[1]
+                    .trim();
+            String str2=list.get(2+8*i)
+                    .split("kcname:")[1]
+                    .trim();
+            String str3=list.get(3+8*i)
+                    .split("kcname:")[1]
+                    .trim();
+            String str4=list.get(4+8*i)
+                    .split("kcname:")[1]
+                    .trim();
+            String str5=list.get(5+8*i)
+                    .split("kcname:")[1]
+                    .trim();
+            String str6=list.get(6+8*i)
+                    .split("kcname:")[1]
+                    .trim();
+            String str7=list.get(7+8*i)
+                    .split("kcname:")[1]
+                    .trim();
+            if(str1.equals("}")) str1="    ";
+            if(str2.equals("}")) str2="    ";
+            if(str3.equals("}")) str3="    ";
+            if(str4.equals("}")) str4="    ";
+            if(str5.equals("}")) str5="    ";
+            if(str6.equals("}")) str6="    ";
+            if(str7.equals("}")) str7="    ";
+            str1=str1.substring(0,str1.length()-1);
+            str2=str2.substring(0,str2.length()-1);
+            str3=str3.substring(0,str3.length()-1);
+            str4=str4.substring(0,str4.length()-1);
+            str5=str5.substring(0,str5.length()-1);
+            str6=str6.substring(0,str6.length()-1);
+            str7=str7.substring(0,str7.length()-1);
+            str1=str1.replace("..","");
+            str2=str2.replace("..","");
+            str3=str3.replace("..","");
+            str4=str4.replace("..","");
+            str5=str5.replace("..","");
+            str6=str6.replace("..","");
+            str7=str7.replace("..","");
+            int week=getWeek();
+            if(i==0){
+                //由于限制所以这里采用 昨天 今天 明天 的显示模式
+                if(week==1){
+                    inboxStyle.setBigContentTitle(" 今天     "+" 明天     ");
+                }else if(week==7){
+                    inboxStyle.setBigContentTitle(" 昨天     "+" 今天     ");
+                }else{
+                    inboxStyle.setBigContentTitle(" 昨天     "+" 今天     "+" 明天     ");
+                }
+            }else{
+                if(str1.length()>4) str1=str1.substring(0,4);
+                if(str2.length()>4) str2=str2.substring(0,4);
+                if(str3.length()>4) str3=str3.substring(0,4);
+                if(str4.length()>4) str4=str4.substring(0,4);
+                if(str5.length()>4) str5=str5.substring(0,4);
+                if(str6.length()>4) str6=str4.substring(0,4);
+                if(str7.length()>4) str7=str5.substring(0,4);
+                if(week==1){
+                    inboxStyle.addLine(str1+str2);
+                }else if(week==7){
+                    inboxStyle.addLine(str6+str7);
+                }else if(week==2){
+                    inboxStyle.addLine(str1+str2+str3);
+                }else if(week==3){
+                    inboxStyle.addLine(str2+str3+str4);
+                }else if(week==4){
+                    inboxStyle.addLine(str3+str4+str5);
+                }else if(week==5){
+                    inboxStyle.addLine(str4+str5+str6);
+                }else if(week==6){
+                    inboxStyle.addLine(str5+str6+str7);
+                }
+            }
+        }
+        //自定义通知信息布局
+        //RemoteViews views = new RemoteViews(getPackageName(),this.getResources().getIdentifier("layout_nitification", "layout",this.getPackageName()));
         Notification notification = new NotificationCompat.Builder(this, "default")
+                .setChannelId(channelId)
+                //.setContent(views)
                 .setSmallIcon(this.getResources().getIdentifier("cat1", "drawable",this.getPackageName()))
                 .setContentTitle("九职小猫手提醒你课表信息")
                 .setContentText(simpleDateFormat.format(date))
                 .setOngoing(true)
-                .setDefaults(Notification.DEFAULT_ALL)
-                .setWhen(System.currentTimeMillis())
+                .setShowWhen(false)
+                .setDefaults(Notification.DEFAULT_ALL)  //此属性在安卓高版本上无效
                 .setStyle(inboxStyle)
                 .build();
         manager.notify(1, notification);

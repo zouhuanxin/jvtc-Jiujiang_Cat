@@ -36,7 +36,6 @@ class my extends StatefulWidget{
 class my_State extends State<my>{
   SharedPreferences sharedPreferences;
   static const androidplatform = const MethodChannel("test");
-  bool tzl_bol=false;
 
   //Data initialization
   void _load_data() async{
@@ -446,10 +445,10 @@ class my_State extends State<my>{
         //showmodel('无课程信息,请选择有效日期', Colors.red);
       }
     } else {
-      setState(() {
-        tzl_bol=false;
-      });
       _showmodel('请先登录学教平台', Toast.LENGTH_SHORT,Colors.red);
+      setState(() {
+        course_bol=false;
+      });
     }
   }
   //课程数据集合
