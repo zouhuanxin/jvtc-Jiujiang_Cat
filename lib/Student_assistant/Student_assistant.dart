@@ -173,6 +173,7 @@ class Student_assistant_State extends State<Student_assistant>{
           ),
           child: new ListView(
             children: <Widget>[
+              SizedBox(height: MediaQuery.of(context).size.height*0.06,),
               component1(),
               buildButton01(),
               buildButton02(),

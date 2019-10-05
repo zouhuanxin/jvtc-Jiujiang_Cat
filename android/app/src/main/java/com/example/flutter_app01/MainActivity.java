@@ -307,7 +307,7 @@ public class MainActivity extends FlutterActivity {
                 .setContentText(simpleDateFormat.format(date))
                 .setOngoing(true)
                 .setShowWhen(false)
-                .setDefaults(Notification.DEFAULT_ALL)  //此属性在安卓高版本上无效
+                //.setDefaults(Notification.DEFAULT_ALL)  //此属性在安卓高版本上无效
                 .setStyle(inboxStyle)
                 .build();
         manager.notify(1, notification);
