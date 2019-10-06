@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:math';
 import 'package:data_plugin/bmob/bmob_query.dart';
 import 'package:data_plugin/bmob/response/bmob_error.dart';
 import 'package:data_plugin/bmob/response/bmob_saved.dart';
@@ -33,6 +34,11 @@ class Student_assistant_State extends State<Student_assistant>{
   static const androidplatform = const MethodChannel("test");
   List<learn_assistant>learn_list=[];
   String today_learn_minutes='0';
+  List<String>phraselist=['奋斗是这么个过程，当时不觉累，事后不会悔。走一段再回头，会发现一个更强的自己，宛如新生。',
+  '当狂风在耳边呼啸时，你只当它是微风拂面；当暴雨在头顶倾泻时，你只当它是屋檐滴水；当闪电在眼前肆虐时，你只当它是一丝光亮；人决不能在逆境面前低下头。',
+  '你现在的努力，是为了以后有更多的选择。',
+  '只要是有意义的事，再晚去做还是有意义的。',
+  '读书补天然之不足，经验又补读书之不足。'];
 
   Widget component1(){
     return Align(
@@ -182,6 +188,9 @@ class Student_assistant_State extends State<Student_assistant>{
           ),
         )
     ), onWillPop: (){
+      if(_codeCountdownStr=='开始学习'){
+        Navigator.pop(context);
+      }
       //print("返回键点击了");
     });
   }
@@ -256,7 +265,7 @@ class Student_assistant_State extends State<Student_assistant>{
         context: context,
         builder: (context) => AlertDialog(
           title: Text('系统提示'),
-          content: Text(('开启学习模式以后请不要退出此界面(即不要再玩手机)否则可能会使学习时长无效')),
+          content: Text(phraselist[new Random().nextInt(5)]),
           actions: <Widget>[
             new FlatButton(
               child: new Text("取消"),
@@ -338,6 +347,7 @@ class Student_assistant_State extends State<Student_assistant>{
   }
 
   void _query_all(){
+    learn_list.clear();
     if(login_state==true){
       String str=DateTime.now().toString().split(' ')[0].toString().trim();
       BmobQuery<learn_assistant> query = BmobQuery();
@@ -402,16 +412,27 @@ class Student_assistant_State extends State<Student_assistant>{
       }
       _countdownTimer =
       new Timer.periodic(new Duration(seconds: 1), (timer) {
-        setState(() {
+        setState((){
+          //为了防止熄屏暂停了此线程的计时操作所以每一秒我们这里进行一次矫正时间操作
+          check_minutes();
+          start_noti(_countdownMinutes.toString());
           if(_countdownNum==59){
             _countdownMinutes++;
-            start_noti(_countdownMinutes.toString());
             _countdownNum=0;
           }
           _countdownNum++;
         });
       });
     });
+  }
+
+  void check_minutes() async{
+    int temp=await _Subtracting_date(_starttime, DateTime.now().toString().split('.')[0]);
+    if(_countdownMinutes<temp){
+      setState(() {
+        _countdownMinutes=temp;
+      });
+    }
   }
 
   @override

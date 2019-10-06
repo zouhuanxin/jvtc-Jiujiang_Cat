@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.logging.Logger;
 
 import androidx.core.app.NotificationCompat;
@@ -216,6 +217,10 @@ public class MainActivity extends FlutterActivity {
         //8.0 以后需要加上channelId 才能正常显示
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
             NotificationChannel channel = new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH);
+            channel.enableLights(false);
+            channel.enableVibration(false);
+            channel.setVibrationPattern(new long[]{0});
+            channel.setSound(null, null);
             manager.createNotificationChannel(channel);
         }
         NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
@@ -263,11 +268,12 @@ public class MainActivity extends FlutterActivity {
             str6=str6.replace("..","");
             str7=str7.replace("..","");
             int week=getWeek();
+            //System.out.println("wekk:"+week);
             if(i==0){
                 //由于限制所以这里采用 昨天 今天 明天 的显示模式
-                if(week==1){
+                if(week==2){
                     inboxStyle.setBigContentTitle(" 今天     "+" 明天     ");
-                }else if(week==7){
+                }else if(week==1){
                     inboxStyle.setBigContentTitle(" 昨天     "+" 今天     ");
                 }else{
                     inboxStyle.setBigContentTitle(" 昨天     "+" 今天     "+" 明天     ");
@@ -280,19 +286,19 @@ public class MainActivity extends FlutterActivity {
                 if(str5.length()>4) str5=str5.substring(0,4);
                 if(str6.length()>4) str6=str4.substring(0,4);
                 if(str7.length()>4) str7=str5.substring(0,4);
-                if(week==1){
+                if(week==2){
                     inboxStyle.addLine(str1+str2);
-                }else if(week==7){
+                }else if(week==1){
                     inboxStyle.addLine(str6+str7);
-                }else if(week==2){
-                    inboxStyle.addLine(str1+str2+str3);
                 }else if(week==3){
-                    inboxStyle.addLine(str2+str3+str4);
+                    inboxStyle.addLine(str1+str2+str3);
                 }else if(week==4){
-                    inboxStyle.addLine(str3+str4+str5);
+                    inboxStyle.addLine(str2+str3+str4);
                 }else if(week==5){
-                    inboxStyle.addLine(str4+str5+str6);
+                    inboxStyle.addLine(str3+str4+str5);
                 }else if(week==6){
+                    inboxStyle.addLine(str4+str5+str6);
+                }else if(week==7){
                     inboxStyle.addLine(str5+str6+str7);
                 }
             }
@@ -309,6 +315,9 @@ public class MainActivity extends FlutterActivity {
                 .setShowWhen(false)
                 //.setDefaults(Notification.DEFAULT_ALL)  //此属性在安卓高版本上无效
                 .setStyle(inboxStyle)
+                .setDefaults(NotificationCompat.FLAG_ONLY_ALERT_ONCE)
+                .setVibrate(new long[]{0})
+                .setSound(null)
                 .build();
         manager.notify(1, notification);
     }
@@ -321,7 +330,8 @@ public class MainActivity extends FlutterActivity {
 
     /*获取星期几*/
     public static int getWeek() {
-        Calendar cal = Calendar.getInstance();
+        final Calendar cal = Calendar.getInstance();
+        cal.setTimeZone(TimeZone.getTimeZone("GMT+8:00"));
         int i = cal.get(Calendar.DAY_OF_WEEK);
         return i;
 //        switch (i) {
@@ -355,6 +365,10 @@ public class MainActivity extends FlutterActivity {
         //8.0 以后需要加上channelId 才能正常显示
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
             NotificationChannel channel = new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH);
+            channel.enableLights(false);
+            channel.enableVibration(false);
+            channel.setVibrationPattern(new long[]{0});
+            channel.setSound(null, null);
             manager.createNotificationChannel(channel);
         }
         //自定义通知信息布局
@@ -367,6 +381,9 @@ public class MainActivity extends FlutterActivity {
                 .setContentText(list.get(0))
                 .setOngoing(true)
                 .setShowWhen(false)
+                .setDefaults(NotificationCompat.FLAG_ONLY_ALERT_ONCE)
+                .setVibrate(new long[]{0})
+                .setSound(null)
                 .build();
         manager.notify(2, notification);
     }
