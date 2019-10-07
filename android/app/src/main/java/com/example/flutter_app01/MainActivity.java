@@ -246,20 +246,14 @@ public class MainActivity extends FlutterActivity {
             String str7=list.get(7+8*i)
                     .split("kcname:")[1]
                     .trim();
-            if(str1.equals("}")) str1="    ";
-            if(str2.equals("}")) str2="    ";
-            if(str3.equals("}")) str3="    ";
-            if(str4.equals("}")) str4="    ";
-            if(str5.equals("}")) str5="    ";
-            if(str6.equals("}")) str6="    ";
-            if(str7.equals("}")) str7="    ";
-            str1=str1.substring(0,str1.length()-1);
-            str2=str2.substring(0,str2.length()-1);
-            str3=str3.substring(0,str3.length()-1);
-            str4=str4.substring(0,str4.length()-1);
-            str5=str5.substring(0,str5.length()-1);
-            str6=str6.substring(0,str6.length()-1);
-            str7=str7.substring(0,str7.length()-1);
+            str1=str1.replace("}","没课          ");
+            str2=str2.replace("}","没课          ");
+            str3=str3.replace("}","没课          ");
+            str4=str4.replace("}","没课          ");
+            str5=str5.replace("}","没课          ");
+            str6=str6.replace("}","没课          ");
+            str7=str7.replace("}","没课          ");
+
             str1=str1.replace("..","");
             str2=str2.replace("..","");
             str3=str3.replace("..","");
