@@ -1,5 +1,7 @@
 
-String app_version='2.2.6'; // Current app version number
+import 'package:flutter_app01/Bean/QTuser.dart';
+
+String app_version='2.3.1'; // Current app version number
 String app_describe=''; // Current app version describe
 
 //Currently logged in user avatar
@@ -14,6 +16,7 @@ String username='未登陆';
 String phone='未登陆';
 String objectid='未登陆';
 bool login_state=false;
+QTuser now_qTuser=QTuser();
 
 //System color configuration
 /**

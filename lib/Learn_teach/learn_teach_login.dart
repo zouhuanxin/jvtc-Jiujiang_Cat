@@ -166,11 +166,11 @@ class learn_teach_login_State extends State<learn_teach_login>{
         filled: dart_model,
       ),
       validator: (String value) {
-        var emailReg = RegExp(
-            r"(([0-9])){9}$");
-        if (!emailReg.hasMatch(value)) {
-          return '请输入正确的学号';
-        }
+//        var emailReg = RegExp(
+//            r"(([0-9])){9}$");
+//        if (!emailReg.hasMatch(value)) {
+//          return '请输入正确的学号';
+//        }
       },
       onSaved: (String value) => _studeng_id = value,
     );

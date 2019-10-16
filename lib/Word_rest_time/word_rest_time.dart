@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app01/Bean/config.dart';
 import 'package:flutter_app01/HttpUtil/HttpUtil.dart';
 import 'package:flutter_app01/component/LoadingDialog.dart';
 import 'dart:convert';
@@ -21,7 +22,7 @@ class word_rest_time extends StatefulWidget{
 
 class word_rest_time_State extends State<word_rest_time>{
   String imageurl='https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=4010497054,3899149768&fm=26&gp=0.jpg';
-  String title='夏季作息时间表';
+  String title='作息时间表';
   Widget component1(){
     return new Container(
       child: new Column(
@@ -34,13 +35,13 @@ class word_rest_time_State extends State<word_rest_time>{
   }
 
   void _bmob_get_information(){
-    BmobQuery<zxtime> query = BmobQuery();
-    query.addWhereNotEqualTo("imageurl", "12%%%3");
+    BmobQuery<config> query = BmobQuery();
+    query.addWhereEqualTo("key", "course_time");
     query.queryObjects().then((data) {
-      List<zxtime> sfs = data.map((i) => zxtime.fromJson(i)).toList();
+      List<config> sfs = data.map((i) => config.fromJson(i)).toList();
       setState(() {
-        title=sfs[0].name+"\n"+sfs[0].text;
-        imageurl=sfs[0].url;
+        title=sfs[0].value;
+        imageurl=sfs[0].value2;
       });
     }).catchError((e) {
       Fluttertoast.showToast(

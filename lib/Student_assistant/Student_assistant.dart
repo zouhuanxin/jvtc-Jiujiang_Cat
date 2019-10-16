@@ -12,6 +12,7 @@ import 'package:flutter_app01/Bean/learn_assistant02.dart';
 import 'package:flutter_app01/Bean/learn_assistant03.dart';
 import 'package:flutter_app01/Utils/Record_Text.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'Student_analysis.dart';
 
 class Student_assistant extends StatefulWidget{
@@ -39,6 +40,25 @@ class Student_assistant_State extends State<Student_assistant>{
   '你现在的努力，是为了以后有更多的选择。',
   '只要是有意义的事，再晚去做还是有意义的。',
   '读书补天然之不足，经验又补读书之不足。'];
+
+  SharedPreferences sharedPreferences ;
+
+  void _load_shape() async{
+    sharedPreferences = await SharedPreferences.getInstance();
+    setState(() {
+      if(sharedPreferences.getBool('appbar_bol')==null){
+        return;
+      }
+      appbar_bol=sharedPreferences.getBool('appbar_bol');
+      if(appbar_bol){
+        _starttime=sharedPreferences.getString('starttime');
+        print('_starttime:$_starttime');
+        _codeCountdownStr='结束学习';
+        check_minutes();
+        reGetCountdown();
+      }
+    });
+  }
 
   Widget component1(){
     return Align(
@@ -219,6 +239,7 @@ class Student_assistant_State extends State<Student_assistant>{
     // TODO: implement initState
     super.initState();
     _query_all();
+    _load_shape();
   }
 
   _Subtracting_date(String str1,String str2) async{
@@ -247,6 +268,7 @@ class Student_assistant_State extends State<Student_assistant>{
                 cancel_tzl();
                 setState(() {
                   appbar_bol=false;
+                  sharedPreferences.setBool('appbar_bol',appbar_bol);
                   _codeCountdownStr='开始学习';
                   _countdownTimer?.cancel();
                   _countdownTimer = null;
@@ -279,7 +301,9 @@ class Student_assistant_State extends State<Student_assistant>{
                 Navigator.pop(context);
                 start_noti("0");
                 appbar_bol=true;
+                sharedPreferences.setBool('appbar_bol',appbar_bol);
                 _starttime=DateTime.now().toString().split('.')[0];
+                sharedPreferences.setString('starttime',_starttime);
                 _codeCountdownStr='结束学习';
                 reGetCountdown();
               },

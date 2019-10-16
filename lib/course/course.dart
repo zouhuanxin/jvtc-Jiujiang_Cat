@@ -1,6 +1,7 @@
 import 'package:data_plugin/bmob/bmob_query.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app01/Bean/Have_class_time.dart';
+import 'package:flutter_app01/Bean/config.dart';
 import 'package:flutter_app01/HttpUtil/HttpUtil.dart';
 import 'package:flutter_app01/Utils/Animation_list.dart';
 import 'package:flutter_app01/index/index.dart';
@@ -12,7 +13,7 @@ import 'package:flutter_app01/my/my_login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter_app01/Learn_teach/learn_teach_login.dart';
-
+import 'dart:ui' as ui;
 import 'Ui_course2.dart';
 
 class CoursPage extends StatefulWidget {
@@ -86,13 +87,27 @@ class CoursePageState extends State<CoursPage> {
 
   //访问上课时间信息
   void _bmob_get_class_time_information() {
-    BmobQuery<Have_class_time> query = BmobQuery();
-    query.addWhereEqualTo("isstart", "true");
+    BmobQuery<config> query = BmobQuery();
+    query.addWhereEqualTo("key", "work_rest_time");
     query.queryObjects().then((data) {
-      List<Have_class_time> sfs = data.map((i) => Have_class_time.fromJson(i)).toList();
-      course_class_time = sfs[0].content;
+      List<config> sfs = data.map((i) => config.fromJson(i)).toList();
+      course_class_time = sfs[0].value2;
     }).catchError((e) {
       showmodel('访问数据失败,使用默认夏季作息时间', Colors.red);
+    });
+  }
+
+  //访问配置信息
+  List<config> config_list=[];
+  void _bmob_get_config_information() {
+    BmobQuery<config> query = BmobQuery();
+    query.addWhereEqualTo("key", "course_text1");
+    query.queryObjects().then((data) {
+      setState(() {
+        config_list = data.map((i) => config.fromJson(i)).toList();
+      });
+    }).catchError((e) {
+      showmodel('访问配置信息失败', Colors.red);
     });
   }
 
@@ -104,15 +119,17 @@ class CoursePageState extends State<CoursPage> {
           'kcinfo', sharedPreferences.getString('jwcookie'), date);
       if (int.parse(json.decode(str1)['code'].toString().trim()) == 0) {
         _string_turn_list(str1);
-      } else if (login_number < 1) {
-        login_number = 1;
+      } else if (login_number < 2) {
+        //这里改为连续自动登陆俩次
+       // login_number = 1;
+        login_number++;
         if (await HttpUtil.Automatic_landing() == '0') {
           _query_course_data(date, context);
         } else {
           //showmodel('请先登录学教平台', Colors.red);
         }
       } else {
-        showmodel('无课程信息,请选择有效日期', Colors.red);
+        showmodel('无课程信息,可以尝试重新登陆', Colors.red);
       }
     } else {
       if (resh_state == 1) {
@@ -334,10 +351,28 @@ class CoursePageState extends State<CoursPage> {
   @override
   void initState() {
     super.initState();
-    //print('initstate');
     load_data();
     _query_course_data(now_choose_date, context);
+    _bmob_get_config_information();
     xia=int.parse(DateTime.parse(now_choose_date).weekday.toString());
+  }
+
+  //头部滚动公告文字
+  Widget top_text(){
+    return new Container(
+      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+      height: config_list.length==0?0:(config_list[0].value.length<1?0:MediaQueryData.fromWindow(ui.window).size.height*0.024),
+      child: new ListView(
+        scrollDirection: Axis.horizontal,
+        children: <Widget>[
+          Align(
+            child: Text(config_list.length==0?'':(config_list[0].value.length<1?'':config_list[0].value),textAlign: TextAlign.center,maxLines: 1,style:
+            TextStyle(fontSize:  MediaQueryData.fromWindow(ui.window).size.height*0.018,fontWeight: FontWeight.w100,color: Color(int.parse(color2))),),
+            alignment: Alignment.center,
+          )
+        ],
+      ),
+    );
   }
 
   @override
@@ -528,6 +563,7 @@ class CoursePageState extends State<CoursPage> {
           ),
           child: new ListView(
             children: <Widget>[
+              top_text(),
               new Container(
                   //color:Color(int.parse('0xffF1F1F1')),
                   padding: EdgeInsets.only(top: 5.0, left: 10.0, right: 10.0,bottom: 5.0),

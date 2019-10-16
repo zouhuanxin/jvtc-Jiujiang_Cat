@@ -48,11 +48,20 @@ class competition_details_State extends State<competition_details> {
     sfs.clear();
     BmobQuery<competition> query = BmobQuery();
     query.addWhereEqualTo("type", ct.text);
-    query.setOrder("-number");
+   // query.setOrder("-number");
     query.queryObjects().then((data) async {
       setState(() {
         sfs = data.map((i) => competition.fromJson(i)).toList();
       });
+      for (int i = 0; i < sfs.length - 1; i++) {
+        for (int j = i + 1; j > 0; j--) {
+          if(int.parse(sfs[j].number.toString())>int.parse(sfs[j-1].number.toString())){
+            competition temp = sfs[j];
+            sfs[j] = sfs[j - 1];
+            sfs[j - 1] = temp;
+          }
+        }
+      }
       for(competition sf in sfs){
         QTuser qTuser=null;
         if(sf.phone!=null&&sf.phone.length>5){

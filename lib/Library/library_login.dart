@@ -125,7 +125,7 @@ class library_login_State extends State<library_login>{
         }
       },
       decoration: InputDecoration(
-          labelText: '图书馆密码',
+          labelText: '图书馆密码(默认为身份证后六位)',
           fillColor: Colors.white,
           filled: dart_model,
           suffixIcon: IconButton(

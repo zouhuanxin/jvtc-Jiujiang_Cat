@@ -24,6 +24,7 @@ import 'package:flutter_app01/my/my_login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_app01/index/index.dart';
 import 'package:flutter_app01/Utils/EventCallback.dart';
+import 'BindStudentid/View/bind_stu_view.dart';
 import 'my_password.dart';
 import 'upload_password.dart';
 
@@ -93,7 +94,15 @@ class my_State extends State<my>{
         _showmodel_cancel_login_stystem('退出登陆','你确定退出登陆吗?');
         break;
       case '更换头像':
-        _openGallery();
+        _showmodel2();
+        break;
+      case '绑定学号':
+        if(login_state==true){
+          Navigator.push(context,
+              new MaterialPageRoute(builder: (context) => new bind_stu_view()));
+        }else{
+          _showmodel('请先登陆',Toast.LENGTH_SHORT,Colors.red);
+        }
         break;
     }
   }
@@ -153,16 +162,17 @@ class my_State extends State<my>{
                   child: new Text(username,textAlign: TextAlign.center,style: TextStyle(color:Color(int.parse(color2)),fontWeight: FontWeight.w800,fontSize: 30),),
                 ),
                 SizedBox(height: 30,),
-                body_component01('images/2.0.x/dark_model.png', '暗黑模式'),
-                course_tzl('images/2.2.x/tzl.png', '课表通知栏'),
-                body_component02('images/2.0.x/uploadpassword.png',40, '修改密码'),
-                body_component02('images/2.2.x/ghtx.png',36, '更换头像'),
-                body_component02('images/2.2.x/tz.png',40, '拾取物品'),
-                body_component02('images/2.2.x/swtz2.png',40, '遗失物品'),
+                body_component01('images/2.2.1.x/ahms.png', '暗黑模式'),
+                course_tzl('images/2.2.1.x/kbtzl.png', '课表通知栏'),
+                body_component02('images/2.2.1.x/sdxh.png',40, '绑定学号'),
+                body_component02('images/2.2.1.x/xgmm.png',40, '修改密码'),
+                body_component02('images/2.2.1.x/ghtx.png',35, '更换头像'),
+                body_component02('images/2.2.1.x/sqwp.png',40, '拾取物品'),
+                body_component02('images/2.2.1.x/yswp.png',40, '遗失物品'),
                // body_component02('images/2.0.x/myzlxg.png',40, '资料修改'),
-                body_component02('images/2.0.x/app_update.png',45, '检查更新'),
-                body_component02('images/2.0.x/mzsm.png',45, '免责声明'),
-                body_component02('images/2.0.x/cancel_stystem.png',35, '退出登陆'),
+                body_component02('images/2.2.1.x/jcgx.png',45, '检查更新'),
+                body_component02('images/2.2.1.x/mzsm.png',45, '免责声明'),
+                body_component02('images/2.2.1.x/tcdl.png',35, '退出登陆'),
                 SizedBox(height: 10,)
               ],
             ),
@@ -244,14 +254,17 @@ class my_State extends State<my>{
         border: new Border.all(width: 1.0, color: Color(int.parse(color1))),
         color: Color(int.parse(color1)),
       ),
-      padding: const EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0),
+      padding: const EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0),
       //margin: const EdgeInsets.all(5.0),
       child:  new GestureDetector(
         child: new Row(
           children: <Widget>[
-            Expanded(
-              child: new ImageIcon(AssetImage(imageurl),size: 45,color: Color(int.parse(color2)),),
-              flex: 2,
+            new ClipOval(
+              child: new Image(
+                image: new AssetImage(imageurl),
+                height: 50,
+                width: 50,
+              ),
             ),
             Expanded(
               child: new Text(label,
@@ -297,14 +310,17 @@ class my_State extends State<my>{
         border: new Border.all(width: 1.0, color: Color(int.parse(color1))),
         color: Color(int.parse(color1)),
       ),
-      padding: const EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0),
+      padding: const EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0),
       //margin: const EdgeInsets.all(5.0),
       child:  new GestureDetector(
         child: new Row(
           children: <Widget>[
-            Expanded(
-              child: new ImageIcon(AssetImage(imageurl),size: 31,color: Color(int.parse(color2)),),
-              flex: 2,
+            new ClipOval(
+              child: new Image(
+                image: new AssetImage(imageurl),
+                height: 50,
+                width: 50,
+              ),
             ),
             Expanded(
               child: new Text(label,
@@ -345,14 +361,17 @@ class my_State extends State<my>{
         border: new Border.all(width: 1.0, color: Color(int.parse(color1))),
         color: Color(int.parse(color1)),
       ),
-      padding: const EdgeInsets.all(10.0),
+      padding: const EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0),
      // margin: const EdgeInsets.all(5.0),
       child:  new GestureDetector(
         child: new Row(
           children: <Widget>[
-            Expanded(
-              child: new ImageIcon(AssetImage(imageurl),size: imagesize,color: Color(int.parse(color2)),),
-              flex: 2,
+            new ClipOval(
+              child: new Image(
+                image: new AssetImage(imageurl),
+                height: 50,
+                width: 50,
+              ),
             ),
             Expanded(
               child: new Text(label,
@@ -387,9 +406,34 @@ class my_State extends State<my>{
               },
             ),
             new FlatButton(
-              child: new Text("确定"),
+              child: new Text("确定",style: TextStyle(color: Colors.red),),
               onPressed: () {
                 _cancel_login_stystem();
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        ));
+  }
+
+  //弹窗
+  _showmodel2(){
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text('系统提示'),
+          content: Text(('确定更换头像嘛')),
+          actions: <Widget>[
+            new FlatButton(
+              child: new Text("取消"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            new FlatButton(
+              child: new Text("确定",style: TextStyle(color: Colors.red),),
+              onPressed: () {
+                _openGallery();
                 Navigator.of(context).pop();
               },
             ),

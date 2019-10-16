@@ -126,7 +126,7 @@ class activity_evaluation_State extends State<activity_evaluation>{
                     child: new Text(tempmap==null?'':
                     (tempmap['stat']=='未评价，点击评价'||tempmap['stat']=='未评价,点击评价'?'点击评价':''),textAlign: TextAlign.center,
                       style: TextStyle(color: tempmap==null?Colors.black26:
-                      (tempmap['stat']=='未评价，点击评价'||tempmap['stat']=='未评价,点击评价'?Colors.blue:Colors.black26)),)
+                      (tempmap['stat']=='未评价，点击评价'||tempmap['stat']=='未评价,点击评价'?Colors.red:Colors.black26)),)
                   ),
                 )
               ],
@@ -139,7 +139,8 @@ class activity_evaluation_State extends State<activity_evaluation>{
 
   void _activity_evaluation(id) async{
     SharedPreferences sharedPreferences=await SharedPreferences.getInstance();
-    String str1=await HttpUtil.xg_query_activity_evaluation('AppAction',id, sharedPreferences.getStringList('xgtoken'));
+    String str1=await HttpUtil.xg_query_activity_evaluation('AppAction',id, sharedPreferences.getString('xgtoken'));
+    print('str1:$str1');
     if(int.parse(json.decode(str1)['code'].toString())==0){
       Fluttertoast.showToast(
           msg: "评价成功",
@@ -246,6 +247,7 @@ class activity_evaluation_State extends State<activity_evaluation>{
     }else{
       Navigator.pop(context);
     }
+    print('activity_evaluation_list:$activity_evaluation_list');
     setState(() {
       _loading_activity_evaluation_ui();
     });

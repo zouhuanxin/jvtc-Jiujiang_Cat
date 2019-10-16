@@ -2,10 +2,13 @@ import 'dart:convert';
 
 import 'package:data_plugin/bmob/bmob_query.dart';
 import 'package:data_plugin/bmob/response/bmob_error.dart';
+import 'package:data_plugin/bmob/response/bmob_updated.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app01/Bean/QTuser.dart';
 import 'package:flutter_app01/Bean/System_Notice.dart';
 import 'package:flutter_app01/Bean/lunbo.dart';
 import 'package:flutter_app01/Utils/Record_Text.dart';
+import 'package:flutter_app01/Utils/Util.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter_app01/Utils/WebViewPage.dart';
 
@@ -18,6 +21,8 @@ class System_notice extends StatefulWidget{
 
 class System_notice_State extends State<System_notice>{
   List<System_Notice>_list=[];
+
+  //更新通知信息
 
   void _showmodel(String mes, var type,var color) {
     Fluttertoast.showToast(
@@ -47,7 +52,7 @@ class System_notice_State extends State<System_notice>{
     for(var i=0;i<_list.length;i++){
       Map<String,Object> tempmap=json.decode(json.encode(_list[i]));
       listtemp.add(tempmap['createdAt'].toString().split(' ')[0]);
-      print(listtemp);
+    //  print(listtemp);
       System_Notice_ui_list.add(Container(
         child: new Column(
           children: <Widget>[
@@ -63,8 +68,10 @@ class System_notice_State extends State<System_notice>{
               margin: EdgeInsets.all(10.0),
               child: new GestureDetector(
                 onTap: (){
-                  Navigator.push(context,
-                      new MaterialPageRoute(builder: (context) => new WebViewPage(url:tempmap['url'],title:tempmap['title'])));
+                  if(tempmap['url'].toString().length>5){
+                    Navigator.push(context,
+                        new MaterialPageRoute(builder: (context) => new WebViewPage(url:tempmap['url'],title:tempmap['title'])));
+                  }
                 },
                 child: new Column(
                   children: <Widget>[

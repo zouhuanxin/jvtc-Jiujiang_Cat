@@ -72,9 +72,10 @@ class HttpUtil {
   //Activity in the evaluation
   static Future<String> xg_query_activity_evaluation(url,id,token) async {
     String dataURL = teach_baseUrl+url;
-    var headmap={'Authorization':'Bearer ' + token};
+    var headmap={'Authorization':'Bearer ' + token,'Content-Type':'application/json'};
     var temp='[{"id":' + id + '}]';
-    http.Response response = await http.post(dataURL,headers:headmap,body: id);
+    print('temp:$temp');
+    http.Response response = await http.post(dataURL,headers:headmap,body: temp);
     return response.body.toString();
   }
 

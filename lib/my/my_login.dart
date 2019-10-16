@@ -237,6 +237,10 @@ class my_login_State extends State<my_login>{
     query.addWhereEqualTo("password", password.toString().trim());
     query.queryObjects().then((data) {
       List<QTuser> sfs = data.map((i) => QTuser.fromJson(i)).toList();
+
+      //2.3.0
+      now_qTuser=sfs[0];
+
       now_login_image_base64=sfs[0].imagebase64;
       username=sfs[0].username;
       phone=sfs[0].phone;

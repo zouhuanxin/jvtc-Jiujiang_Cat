@@ -111,7 +111,7 @@ class Search extends StatelessWidget {
                 ),
               );
             } else {
-              return new Image.asset("images/2.0.x/xz.png", height: 70.0, width: 70.0,color: Color(int.parse(color2)),);
+              return new Image.asset("images/2.2.x/addimage.png", height: 50.0, width: 50.0,color: Color(int.parse(color2)),);
             }
           }),
     );

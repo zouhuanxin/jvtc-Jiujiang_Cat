@@ -224,6 +224,13 @@ public class MainActivity extends FlutterActivity {
             manager.createNotificationChannel(channel);
         }
         NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
+        List <String>arrlist=new ArrayList<>();
+        arrlist.add("第一大节");
+        arrlist.add("第二大节");
+        arrlist.add("第三大节");
+        arrlist.add("第四大节");
+        arrlist.add("第五大节");
+        arrlist.add("第六大节");
         for(int i=0;i<7;i++){
             String str1=list.get(1+8*i)
                     .split("kcname:")[1]
@@ -246,13 +253,13 @@ public class MainActivity extends FlutterActivity {
             String str7=list.get(7+8*i)
                     .split("kcname:")[1]
                     .trim();
-            str1=str1.replace("}","没课          ");
-            str2=str2.replace("}","没课          ");
-            str3=str3.replace("}","没课          ");
-            str4=str4.replace("}","没课          ");
-            str5=str5.replace("}","没课          ");
-            str6=str6.replace("}","没课          ");
-            str7=str7.replace("}","没课          ");
+            str1=str1.equals("}")==true?str1.replace("}"," "):str1.replace("}"," ");
+            str2=str2.equals("}")==true?str2.replace("}"," "):str2.replace("}"," ");
+            str3=str3.equals("}")==true?str3.replace("}"," "):str3.replace("}"," ");
+            str4=str4.equals("}")==true?str4.replace("}"," "):str4.replace("}"," ");
+            str5=str5.equals("}")==true?str5.replace("}"," "):str5.replace("}"," ");
+            str6=str6.equals("}")==true?str6.replace("}"," "):str6.replace("}"," ");
+            str7=str7.equals("}")==true?str7.replace("}"," "):str7.replace("}"," ");
 
             str1=str1.replace("..","");
             str2=str2.replace("..","");
@@ -265,35 +272,45 @@ public class MainActivity extends FlutterActivity {
             //System.out.println("wekk:"+week);
             if(i==0){
                 //由于限制所以这里采用 昨天 今天 明天 的显示模式
-                if(week==2){
-                    inboxStyle.setBigContentTitle(" 今天     "+" 明天     ");
-                }else if(week==1){
-                    inboxStyle.setBigContentTitle(" 昨天     "+" 今天     ");
-                }else{
-                    inboxStyle.setBigContentTitle(" 昨天     "+" 今天     "+" 明天     ");
-                }
+//                if(week==2){
+//                    inboxStyle.setBigContentTitle(" 今天     "+" 明天     ");
+//                }else if(week==1){
+//                    inboxStyle.setBigContentTitle(" 昨天     "+" 今天     ");
+//                }else{
+//                    inboxStyle.setBigContentTitle(" 昨天     "+" 今天     "+" 明天     ");
+//                }
+                //改版
+                inboxStyle.setBigContentTitle("                   今天    ");
             }else{
-                if(str1.length()>4) str1=str1.substring(0,4);
-                if(str2.length()>4) str2=str2.substring(0,4);
-                if(str3.length()>4) str3=str3.substring(0,4);
-                if(str4.length()>4) str4=str4.substring(0,4);
-                if(str5.length()>4) str5=str5.substring(0,4);
-                if(str6.length()>4) str6=str4.substring(0,4);
-                if(str7.length()>4) str7=str5.substring(0,4);
+//                if(str1.length()>4) str1=str1.substring(0,4);
+//                if(str2.length()>4) str2=str2.substring(0,4);
+//                if(str3.length()>4) str3=str3.substring(0,4);
+//                if(str4.length()>4) str4=str4.substring(0,4);
+//                if(str5.length()>4) str5=str5.substring(0,4);
+//                if(str6.length()>4) str6=str6.substring(0,4);
+//                if(str7.length()>4) str7=str7.substring(0,4);
+                //改版
                 if(week==2){
-                    inboxStyle.addLine(str1+str2);
+                    //inboxStyle.addLine(str1+" "+str2);
+                    if(str1.length()>1) inboxStyle.addLine(arrlist.get(i-1)+"   "+str1);
                 }else if(week==1){
-                    inboxStyle.addLine(str6+str7);
+                    //inboxStyle.addLine(str6+" "+str7);
+                    if(str7.length()>1) inboxStyle.addLine(arrlist.get(i-1)+"   "+str7);
                 }else if(week==3){
-                    inboxStyle.addLine(str1+str2+str3);
+                    //inboxStyle.addLine(str1+" "+str2+" "+str3);
+                    if(str2.length()>1) inboxStyle.addLine(arrlist.get(i-1)+"   "+str2);
                 }else if(week==4){
-                    inboxStyle.addLine(str2+str3+str4);
+                    //inboxStyle.addLine(str2+" "+str3+" "+str4);
+                    if(str3.length()>1) inboxStyle.addLine(arrlist.get(i-1)+"   "+str3);
                 }else if(week==5){
-                    inboxStyle.addLine(str3+str4+str5);
+                    //inboxStyle.addLine(str3+" "+str4+" "+str5);
+                    if(str4.length()>1) inboxStyle.addLine(arrlist.get(i-1)+"   "+str4);
                 }else if(week==6){
-                    inboxStyle.addLine(str4+str5+str6);
+                    //inboxStyle.addLine(str4+" "+str5+" "+str6);
+                    if(str5.length()>1) inboxStyle.addLine(arrlist.get(i-1)+"   "+str5);
                 }else if(week==7){
-                    inboxStyle.addLine(str5+str6+str7);
+                    //inboxStyle.addLine(str5+" "+str6+" "+str7);
+                    if(str6.length()>1) inboxStyle.addLine(arrlist.get(i-1)+"   "+str6);
                 }
             }
         }

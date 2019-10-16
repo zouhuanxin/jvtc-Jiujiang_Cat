@@ -10,7 +10,9 @@ class QTuser extends BmobObject{
    String imagebase64;
    File image;
    var objectId;
-   QTuser({this.username,this.phone,this.password,this.imagebase64,this.image});
+   String studentid;
+   String notice;
+   QTuser({this.username,this.phone,this.password,this.imagebase64,this.image,this.studentid,this.notice});
 
    QTuser.fromJson(Map<String, dynamic> json)
        : username = json['username'],
@@ -18,7 +20,9 @@ class QTuser extends BmobObject{
          password = json['password'],
          imagebase64 = json['imagebase64'],
          objectId = json['objectId'],
-         image = json['image'];
+         image = json['image'],
+         studentid = json['studentid'],
+         notice = json['notice'];
 
    Map<String, dynamic> toJson() =>
        {
@@ -28,6 +32,8 @@ class QTuser extends BmobObject{
          'imagebase64': imagebase64,
          'objectId': objectId,
          'image': image,
+         'studentid': studentid,
+         'notice': notice,
        };
 
   @override

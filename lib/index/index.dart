@@ -4,11 +4,15 @@ import 'dart:convert';
 import 'package:data_plugin/bmob/realtime/change.dart';
 import 'package:data_plugin/bmob/realtime/client.dart';
 import 'package:data_plugin/bmob/realtime/real_time_data_manager.dart';
+import 'package:data_plugin/bmob/response/bmob_saved.dart';
+import 'package:data_plugin/bmob/response/bmob_updated.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_app01/Bean/Daily_activity.dart';
 import 'package:flutter_app01/Bean/QTuser.dart';
 import 'package:flutter_app01/Bean/gxinfo.dart';
 import 'package:flutter_app01/HttpUtil/HttpUtil.dart';
+import 'package:flutter_app01/Utils/Util.dart';
 import 'package:flutter_app01/Utils/WebViewPage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -68,7 +72,7 @@ class IndexState extends State<Index> with TickerProviderStateMixin {
 
   //通知栏点击启动打开浏览器监听
   void _onToDart(message) {
-    print(message);
+    //print(message);
     Navigator.push(
         context,
         new MaterialPageRoute(
@@ -96,7 +100,6 @@ class IndexState extends State<Index> with TickerProviderStateMixin {
         _load_bottom();
       });
     });
-
 
     _streamSubscription = _eventChannelPlugin
         .receiveBroadcastStream()
@@ -144,10 +147,13 @@ class IndexState extends State<Index> with TickerProviderStateMixin {
     _currentPage = _pageList[currentIndex];
   }
 
+  SharedPreferences sharedPreferences;
   //Load default color
   void _load_default_color() async {
     // print('_load_default_color');
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    sharedPreferences = await SharedPreferences.getInstance();
+    //添加活跃度信息
+    bmob_add_Daily_activity();
 
     //dart model and light model setting
     if (sharedPreferences.getString('startnumber') == null) {
@@ -169,6 +175,7 @@ class IndexState extends State<Index> with TickerProviderStateMixin {
       dart_model = false;
     }
 
+    //课程表通知是否开启
     if (sharedPreferences.getString('course_bol') == 'true') {
       course_bol = true;
       _query_course_data(new DateTime.now().toString().split(' ')[0].toString(),context);
@@ -228,6 +235,35 @@ class IndexState extends State<Index> with TickerProviderStateMixin {
               fontSize: 16.0);
         }
       }
+    }).catchError((e) {});
+  }
+
+  //增加活跃度
+  bmob_add_Daily_activity() async{
+    String date=new DateTime.now().toString().split(' ')[0].toString();
+    if(sharedPreferences.getString('date')!=null){
+      String sharedate=await sharedPreferences.getString('date');
+      if(sharedate==date){
+        return;
+      }
+    }
+    BmobQuery<Daily_activity> query = BmobQuery();
+    query.addWhereEqualTo("date", date);
+    query.queryObjects().then((data) {
+      List<Daily_activity> templist = data.map((i) => Daily_activity.fromJson(i)).toList();
+      Daily_activity blog = Daily_activity();
+      if(templist.length==0){
+        //添加
+        blog.date=date;
+        blog.number='1';
+        blog.save().then((BmobSaved bmobSaved) {}).catchError((e) {});
+      }else{
+        //修改
+        blog.objectId=templist[0].objectId;
+        blog.number=(int.parse(templist[0].number)+1).toString();
+        blog.update().then((BmobUpdated bmobUpdated) {}).catchError((e) {});
+      }
+      sharedPreferences.setString('date',date);
     }).catchError((e) {});
   }
 
