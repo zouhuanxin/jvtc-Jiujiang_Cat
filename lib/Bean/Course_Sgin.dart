@@ -11,9 +11,10 @@ class Course_Sgin extends BmobObject{
    String s_sgin;
    String studata;
    String course_name;
+   String sgin_status;
    var createdAt;
    var objectId;
-   Course_Sgin({this.teachid,this.teachname,this.teachtel,this.status,this.sginpass,this.f_sgin,this.s_sgin,this.studata,this.course_name});
+   Course_Sgin({this.teachid,this.teachname,this.teachtel,this.status,this.sginpass,this.f_sgin,this.s_sgin,this.studata,this.course_name,this.sgin_status});
 
    Course_Sgin.fromJson(Map<String, dynamic> json)
        : teachid = json['teachid'],
@@ -25,6 +26,7 @@ class Course_Sgin extends BmobObject{
          s_sgin = json['s_sgin'],
          studata = json['studata'],
          course_name = json['course_name'],
+         sgin_status = json['sgin_status'],
          createdAt = json['createdAt'],
          objectId = json['objectId'];
 
@@ -39,6 +41,7 @@ class Course_Sgin extends BmobObject{
          's_sgin': s_sgin,
          'studata': studata,
          'course_name': course_name,
+         'sgin_status': sgin_status,
          'createdAt': createdAt,
          'objectId': objectId,
        };

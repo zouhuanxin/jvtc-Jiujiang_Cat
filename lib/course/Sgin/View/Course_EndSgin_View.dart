@@ -117,10 +117,20 @@ class Course_EndSgin_View_State extends State<Course_EndSgin_View>{
                   ),
                 ),flex: 1,),
                 Expanded(child: new ListView(children: [table()],),flex: 4,),
+                Expanded(child: new ListView(children: [
+                  Provide<Course_EndSgin_ViewModel>(builder: (context,child,value){
+                    return Row(
+                      children: <Widget>[
+                        Expanded(child: course_ui.head_text('已签到人数:'+value.finish_number.toString()),flex: 1,),
+                        Expanded(child: course_ui.head_text('未签到人数:'+value.unfinish_number.toString()),flex: 1,),
+                      ],
+                    );
+                  })
+                ],),flex: 1,),
                 Expanded(child: new Column(children: [
                   SizedBox(height: ScreenUtil().setHeight(80),),
                   buildButton1()
-                ],),flex: 4,),
+                ],),flex: 3,),
               ],
             )),
       ),

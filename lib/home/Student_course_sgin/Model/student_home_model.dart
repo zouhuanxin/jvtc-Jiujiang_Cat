@@ -51,4 +51,19 @@ class student_home_model{
     return type;
   }
 
+  //修改当前签到状态
+  Future<int>updateSingle2(String str,String currentObjectId) async{
+    int type=0;
+    Course_Sgin blog = Course_Sgin();
+    blog.objectId = currentObjectId;
+    blog.sgin_status = str;
+    await blog.update().then((BmobUpdated bmobUpdated) {
+      type=0;
+    }).catchError((e) {
+      type=-1;
+      print(BmobError.convert(e).error);
+    });
+    return type;
+  }
+
 }

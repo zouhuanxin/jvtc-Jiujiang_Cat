@@ -22,6 +22,7 @@ class Course_EndSgin_ViewModel with ChangeNotifier{
   String value;
   List<Widget>list_ui=[];
   static Timer time;
+  int finish_number=0,unfinish_number=0;
 
   Course_EndSgin_ViewModel(Course_EndSgin_Model cem,BuildContext context,String value){
     this.cem=cem;
@@ -52,6 +53,9 @@ class Course_EndSgin_ViewModel with ChangeNotifier{
       }
     }
     List arr=cs.s_sgin.replaceAll('[', '').replaceAll(']', '').replaceAll('"', '').split(',');
+    List sumarr=cs.studata.replaceAll('[', '').replaceAll(']', '').replaceAll('"', '').split(',');
+    finish_number=arr.length;
+    unfinish_number=sumarr.length-arr.length;
     list_ui.clear();
     for(String str in arr){
       list_ui.add(course_ui.s_sgin_ui(str.split('&')[0], str.split('&')[1]));

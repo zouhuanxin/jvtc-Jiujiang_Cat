@@ -157,23 +157,41 @@ class student_home_viewmodel with ChangeNotifier{
     if(name!=null){
       //取出原来的数据
       //为尽可能保证数据的同步性这里再发送一次查询请求
+
+      //先检查当前有无人进行签到如果没有人则先修改签到状态 当签到完毕以后再把状态改回  最后的状态应该为false
+      //如果当前状态为false则表示有人正在进行签到 这里我们应该等待其他人签到完毕以后再进行自己的签到请求
+      //false 或者 为空 则表示无人签到状态 true表示签到状态
       List<Course_Sgin> cs2=await this.shm.queryWhereEqual2(cs.objectId);
-      List reslist=[];
-      List arr1=cs2[0].s_sgin.replaceAll('[', '').replaceAll(']', '').replaceAll('"', '').split(',');
-      for(String str in arr1){
-        if(str.length>1&&str.split('&')[0].trim()==now_studentid.trim()){
-          reslist=[];
-          Util.showTaost('你已经签到!', Toast.LENGTH_SHORT, Colors.green);
-          return;
+      if(cs2[0].sgin_status==''||cs2[0].sgin_status==null||cs2[0].sgin_status=='false'){
+        //表示当前为空时可以进行签到操作
+        //先修改状态
+        int res=await this.shm.updateSingle2('true', cs2[0].objectId);
+        if(res==0){
+          //修改签到状态成功
+          List reslist=[];
+          List arr1=cs2[0].s_sgin.replaceAll('[', '').replaceAll(']', '').replaceAll('"', '').split(',');
+          for(String str in arr1){
+            if(str.length>1&&str.split('&')[0].trim()==now_studentid.trim()){
+              reslist=[];
+              Util.showTaost('你已经签到!', Toast.LENGTH_SHORT, Colors.green);
+              return;
+            }
+            if(str.length>1) reslist.add(str);
+          }
+          String temp=now_studentid+'&'+name;
+          reslist.add(temp);
+          int i=await this.shm.updateSingle(reslist.toString(), cs.objectId);
+          if(i==0){
+            int res2=await this.shm.updateSingle2('false', cs2[0].objectId);
+            Navigator.of(context).pop();
+            search1();
+          }
+        }else{
+          Util.showTaost('同学，你前面有人签到卡了。', Toast.LENGTH_SHORT, Colors.blueAccent);
         }
-        if(str.length>1) reslist.add(str);
-      }
-      String temp=now_studentid+'&'+name;
-      reslist.add(temp);
-      int i=await this.shm.updateSingle(reslist.toString(), cs.objectId);
-      if(i==0){
-        Navigator.of(context).pop();
-        search1();
+      }else{
+        //有人在进行签到操作 请等待
+        Util.showTaost('同学，等会，你前面有人在签到。', Toast.LENGTH_SHORT, Colors.blueAccent);
       }
     }else{
       Util.showTaost('你不是本班学生', Toast.LENGTH_SHORT, Colors.red);
