@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app01/Bean/QTuser.dart';
 import 'package:flutter_app01/HttpUtil/HttpUtil.dart';
+import 'package:flutter_app01/Utils/Record_Text.dart';
 import 'package:flutter_app01/Utils/Util.dart';
 import 'package:flutter_app01/my/BindStudentid/Model/bind_stu_model.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -25,15 +26,15 @@ class bind_stu_viewmodel with ChangeNotifier{
   //获取是否登陆学教平台如果当前有学号记录则取出
   void loading() async{
     sharedPreferences=await SharedPreferences.getInstance();
-    if(sharedPreferences.getString('learn_teach_student_id')!=null){
-      studentid=sharedPreferences.getString('learn_teach_student_id');
-    }
-    QTuser qTuser=await bsm.search_stu();
-    if(qTuser.studentid==null){
-      prompt_message='你暂未绑定过学号';
-    }else{
-      prompt_message='你绑定的学号为：${qTuser.studentid}';
-    }
+    try{
+      studentid=now_studentid;
+      QTuser qTuser=await bsm.search_stu();
+      if(qTuser.studentid==null){
+        prompt_message='你暂未绑定过学号';
+      }else{
+        prompt_message='你绑定的学号为：${qTuser.studentid}';
+      }
+    }catch(e){}
     notifyListeners();
   }
 

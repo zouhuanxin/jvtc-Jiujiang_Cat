@@ -12,9 +12,10 @@ String course_default_str="[{\"kcdescribe\": \"\", 	\"kcname\": \"周/节次\" }
 String course_class_time="[{\"time\":\"\"},{\"time\":\"\"},{\"time\":\"\"},{\"time\":\"\"},{\"time\":\"\"},{\"time\":\"\"}]";
 
 String now_login_image_base64=default_image;
-String username='未登陆';
+String username='点击左上角登陆';
 String phone='未登陆';
 String objectid='未登陆';
+String now_studentid='未登陆';
 bool login_state=false;
 QTuser now_qTuser=QTuser();
 
@@ -32,6 +33,8 @@ String color3='0xff0000FF';
 String color4='0xffF5F5F5';
 bool dart_model=false;
 bool course_bol=false;
+//当前版本模式
+String ui_model='学生版';
 //The stored value used by the program ps:key
 /**
     1.jwcookie

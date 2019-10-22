@@ -4,6 +4,7 @@ import 'package:flutter_app01/Bean/Have_class_time.dart';
 import 'package:flutter_app01/Bean/config.dart';
 import 'package:flutter_app01/HttpUtil/HttpUtil.dart';
 import 'package:flutter_app01/Utils/Animation_list.dart';
+import 'package:flutter_app01/Utils/Util.dart';
 import 'package:flutter_app01/index/index.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:http/http.dart' as http;
@@ -14,6 +15,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter_app01/Learn_teach/learn_teach_login.dart';
 import 'dart:ui' as ui;
+import 'Sgin/View/Course_Sgin_View.dart';
 import 'Ui_course2.dart';
 
 class CoursPage extends StatefulWidget {
@@ -93,7 +95,7 @@ class CoursePageState extends State<CoursPage> {
       List<config> sfs = data.map((i) => config.fromJson(i)).toList();
       course_class_time = sfs[0].value2;
     }).catchError((e) {
-      showmodel('访问数据失败,使用默认夏季作息时间', Colors.red);
+      //showmodel('访问数据失败,使用默认夏季作息时间', Colors.red);
     });
   }
 
@@ -107,23 +109,22 @@ class CoursePageState extends State<CoursPage> {
         config_list = data.map((i) => config.fromJson(i)).toList();
       });
     }).catchError((e) {
-      showmodel('访问配置信息失败', Colors.red);
+      //showmodel('访问配置信息失败', Colors.red);
     });
   }
 
   _query_course_data(String date, context) async {
-    _bmob_get_class_time_information();
+    //_bmob_get_class_time_information();
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     if (sharedPreferences.getString('jwcookie') != null) {
-      String str1 = await HttpUtil.query_course(
-          'kcinfo', sharedPreferences.getString('jwcookie'), date);
+      String str1 = await HttpUtil.query_course('kcinfo', sharedPreferences.getString('jwcookie'), date);
       if (int.parse(json.decode(str1)['code'].toString().trim()) == 0) {
         _string_turn_list(str1);
       } else if (login_number < 2) {
         //这里改为连续自动登陆俩次
        // login_number = 1;
         login_number++;
-        if (await HttpUtil.Automatic_landing() == '0') {
+        if (await Util.auto_login3()==0) {
           _query_course_data(date, context);
         } else {
           //showmodel('请先登录学教平台', Colors.red);
@@ -175,6 +176,20 @@ class CoursePageState extends State<CoursPage> {
               title: Text(title),
               content: Text((content)),
               actions: <Widget>[
+                new FlatButton(
+                  child: now_studentid!=null?new GestureDetector(
+                    onTap: (){
+                      String str1=content.split('课程名称')[1].split('上课班级')[0];
+                      String str2=content.split('上课班级')[1].split('上课时间')[0];
+                      String str=str1.substring(1,str1.length)+':'+str2.substring(1,str2.length);
+                      Util.jump(context, new Course_Sgin_View(str: str,));
+                    },
+                    child: now_studentid!=null&&now_studentid.length==5?new Text("创建签到",style: TextStyle(color: Colors.red)):new Text(''),
+                  ):new Text(""),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
                 new FlatButton(
                   child: new Text("关闭"),
                   onPressed: () {

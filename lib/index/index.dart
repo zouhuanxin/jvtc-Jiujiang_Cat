@@ -14,6 +14,7 @@ import 'package:flutter_app01/Bean/gxinfo.dart';
 import 'package:flutter_app01/HttpUtil/HttpUtil.dart';
 import 'package:flutter_app01/Utils/Util.dart';
 import 'package:flutter_app01/Utils/WebViewPage.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'navigation_icon_view.dart';
@@ -186,21 +187,14 @@ class IndexState extends State<Index> with TickerProviderStateMixin {
     //login state setting
     if (sharedPreferences.getString('login_state') == 'true') {
       login_state = true;
-      phone = sharedPreferences.getString('phone');
-      username = sharedPreferences.getString('username');
-      objectid = sharedPreferences.getString('objectid');
-      //如果意见是登陆状态为了保证数据的同步性我们每启动app的时候就进行一次用户数据同步 目前主要同步一下头像数据
-      BmobQuery<QTuser> query = BmobQuery();
-      query.addWhereEqualTo("phone", phone);
-      await query.queryObjects().then((data) {
-        setState(() {
-          List<QTuser>templist = data.map((i) => QTuser.fromJson(i)).toList();
-          now_login_image_base64 = templist[0].imagebase64;
-          sharedPreferences.setString('now_login_image_base64', templist[0].imagebase64);
-        });
-      }).catchError((e) {});
+      heduishefen();
     } else {
       login_state = false;
+    }
+
+    //ui版本模式检测
+    if(sharedPreferences.getString('ui_model')!=null){
+      ui_model=sharedPreferences.getString('ui_model');
     }
 
     setState(() {
@@ -264,6 +258,28 @@ class IndexState extends State<Index> with TickerProviderStateMixin {
         blog.update().then((BmobUpdated bmobUpdated) {}).catchError((e) {});
       }
       sharedPreferences.setString('date',date);
+    }).catchError((e) {});
+
+  }
+
+  void heduishefen() async{
+    BmobQuery<QTuser> query = BmobQuery();
+    query.addWhereEqualTo("phone",await sharedPreferences.getString('phone'));
+    query.queryObjects().then((data) {
+      List<QTuser> templist = data.map((i) => QTuser.fromJson(i)).toList();
+      setState(() {
+        username=templist[0].username;
+        phone=templist[0].phone;
+        objectid=templist[0].objectId;
+        now_studentid=templist[0].studentid;
+        now_login_image_base64 = templist[0].imagebase64;
+        _load_bottom();
+      });
+      sharedPreferences.setString('username', username);
+      sharedPreferences.setString('phone', phone);
+      sharedPreferences.setString('objectid', objectid);
+      sharedPreferences.setString('now_studentid', now_studentid);
+      sharedPreferences.setString('now_login_image_base64', templist[0].imagebase64);
     }).catchError((e) {});
   }
 
@@ -356,7 +372,7 @@ class IndexState extends State<Index> with TickerProviderStateMixin {
         _string_turn_list(str1);
       } else if (login_number < 1) {
         login_number = 1;
-        if (await HttpUtil.Automatic_landing() == '0') {
+        if (await Util.auto_login3() == 0) {
           _query_course_data(date, context);
         } else {
           //showmodel('请先登录学教平台', Colors.red);
@@ -369,7 +385,7 @@ class IndexState extends State<Index> with TickerProviderStateMixin {
   //课程数据集合
   List<String> course_data = [];
   _string_turn_list(String str) async{
-    print(str);
+    //print(str);
     course_data.clear();
     Map<String, dynamic> maptemp = json.decode(str);
     String temp = maptemp['data'];
@@ -383,6 +399,9 @@ class IndexState extends State<Index> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    // 方式一：默认设置宽度1080px，高度1920px
+    ScreenUtil.instance = ScreenUtil.getInstance()..init(context);
+
     // 声明定义一个 底部导航的工具栏
     final BottomNavigationBar bottomNavigationBar = new BottomNavigationBar(
       backgroundColor: Color(int.parse(color1)),

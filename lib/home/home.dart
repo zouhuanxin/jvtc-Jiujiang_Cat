@@ -9,6 +9,9 @@ import 'package:flutter_app01/Utils/Animation_list.dart';
 import 'package:flutter_app01/Utils/EventCallback.dart';
 import 'package:flutter_app01/Utils/Util.dart';
 import 'package:flutter_app01/course/course.dart';
+import 'package:flutter_app01/home/Student_course_sgin/View/student_home_view.dart';
+import 'package:flutter_app01/home/Teach_Course_Sgin/View/teach_home_view.dart';
+import 'package:flutter_app01/home/Teach_XG/View/teach_xg_main_view.dart';
 import 'package:flutter_app01/index/index.dart';
 import 'package:meta/meta.dart';
 import 'package:flutter_app01/Learn_teach/learn_teach.dart';
@@ -38,8 +41,8 @@ import 'package:flutter_app01/common/System_notice.dart';
 import 'JZ_association/Collection.dart';
 import 'Group_ck/group_ck.dart';
 import 'LostandFound/lf_main.dart';
-import 'Teach_course_sgin/View/teach_home_view.dart';
-import 'Teach_course_sgin/View/teach_view_main.dart';
+import 'Teach_JW/View/teach_jw_main_view.dart';
+import 'Teach_Student_UploadPass/View/teach_student_uploadpass_view.dart';
 import 'competition/competition_entrance.dart';
 import 'dart:ui' as ui;
 
@@ -119,6 +122,10 @@ class _HomePageState extends State<HomePage> {
   void _model_click(String str) {
     if(login_state==false){
       Util.showTaost('请先登陆小猫手', Toast.LENGTH_SHORT, Colors.red);
+      return;
+    }
+    if(now_studentid==null||now_studentid.length<2){
+      Util.showTaost('请先绑定学号', Toast.LENGTH_SHORT, Colors.red);
       return;
     }
     //print(str);
@@ -234,11 +241,35 @@ class _HomePageState extends State<HomePage> {
             new MaterialPageRoute(
                 builder: (context) => new competition_entrance()));
         break;
-      case '教师上课签到':
+      case '教师上课签到记录':
         Navigator.push(
             context,
             new MaterialPageRoute(
                 builder: (context) => new teach_home_view()));
+        break;
+      case '教师教务系统':
+        Navigator.push(
+            context,
+            new MaterialPageRoute(
+                builder: (context) => new teach_jw_main_view()));
+        break;
+      case '教师学工平台':
+        Navigator.push(
+            context,
+            new MaterialPageRoute(
+                builder: (context) => new teach_xg_main_view()));
+        break;
+      case '学生上课签到':
+        Navigator.push(
+            context,
+            new MaterialPageRoute(
+                builder: (context) => new student_home_view()));
+        break;
+      case '教师学教密码修改':
+        Navigator.push(
+            context,
+            new MaterialPageRoute(
+                builder: (context) => new teach_student_uploadpass_view()));
         break;
     }
   }
@@ -587,12 +618,38 @@ class _HomePageState extends State<HomePage> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               buildButtonColumn2(
-                  'images/2.2.1.x/xjpt.png', '学教平台', '学生信息，成绩查询，活动评价，素拓分查询，寝室情况查询'),
-              buildButtonColumn2(
                   'images/2.2.1.x/tug.png', '图书馆', '包含图书馆个人信息查看，书籍查询，预约书籍，取消预约，书籍续借，缴费信息等功能'),
-              //buildButtonColumn2('images/2.2.1.x/xsqd.png', '学生上课签到', '学生可以在此签到!'),
-              buildButtonColumn2('images/2.2.1.x/cjfx.png', '成绩分析', '数据分析仅供参考,邀测中。'),
               buildButtonColumn2('images/2.2.1.x/zxsj.png', '作息时间', '可以查看作息时间表'),
+            ],
+          ),
+        ],
+      ),
+    );
+
+    //校园功能模块
+    Widget campus_student_text = new Container(
+      padding: const EdgeInsets.fromLTRB(32, 10, 32, 15),
+      child: new Text(
+        '学生功能',
+        softWrap: true,
+        style: new TextStyle(
+          color: Color(int.parse(color2)),
+          fontSize: 20.0,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+    );
+    Widget campus_student_button = new Container(
+      child: new Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          new Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              buildButtonColumn2(
+                  'images/2.2.1.x/xjpt.png', '学教平台', '学生信息，成绩查询，活动评价，素拓分查询，寝室情况查询'),
+              buildButtonColumn2('images/2.2.1.x/xsqd.png', '学生上课签到', '学生可以在此签到!'),
+              buildButtonColumn2('images/2.2.1.x/cjfx.png', '成绩分析', '数据分析仅供参考。'),
             ],
           ),
         ],
@@ -745,10 +802,53 @@ class _HomePageState extends State<HomePage> {
         children: [
           buildButtonColumn2('images/2.2.1.x/jsxg.png', '教师教务系统', '课表查看需登陆此平台!'),
           buildButtonColumn2('images/2.2.1.x/jsjw.png', '教师学工平台', '请假审批，困难学生认证，销假，学生密码修改等!'),
-          buildButtonColumn2('images/2.2.1.x/jsqd.png', '教师上课签到', '教师可以在此发起签到!'),
+          buildButtonColumn2('images/2.2.1.x/jsqd.png', '教师上课签到记录', '教师可以在此查看签到记录!'),
+          buildButtonColumn2('images/2.2.1.x/jsxjmmxg.png', '教师学教密码修改', '教师在这里进行教务系统，学工平台的密码统一修改!'),
         ],
       ),
     );
+
+    Widget student_ui(){
+      return new ListView(
+        children: [
+          SwiperView(),
+          campus_student_text,
+          campus_student_button,
+          campus_funcation_text,
+          campus_funcation_button,
+          campus_life_text,
+          campus_life_button,
+          campus_toolkit_text,
+          campus_toolkit_button,
+          blog_text,
+          blog_button,
+          entertainment_text,
+          entertainment_button,
+          campus_xh_text,
+          campus_xh_button,
+          SizedBox(
+            height: 30,
+          ),
+        ],
+      );
+    }
+
+    Widget teach_ui(){
+      return new ListView(
+        children: [
+          SwiperView(),
+          teach_text,
+          teach_button,
+          campus_funcation_text,
+          campus_funcation_button,
+          blog_text,
+          blog_button,
+          SizedBox(
+            height: 30,
+          ),
+        ],
+      );
+    }
 
     return new MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -833,28 +933,7 @@ class _HomePageState extends State<HomePage> {
         ),
         body: new Container(
           decoration: BoxDecoration(color: Color(int.parse(color1))),
-          child: new ListView(
-            children: [
-              SwiperView(),
-              campus_funcation_text,
-              campus_funcation_button,
-//              teach_text,
-//              teach_button,
-              campus_life_text,
-              campus_life_button,
-              campus_toolkit_text,
-              campus_toolkit_button,
-              blog_text,
-              blog_button,
-              entertainment_text,
-              entertainment_button,
-              campus_xh_text,
-              campus_xh_button,
-              SizedBox(
-                height: 30,
-              ),
-            ],
-          ),
+          child: ui_model=='学生版'?student_ui():teach_ui(),
         ),
       ),
     );

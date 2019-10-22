@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:data_plugin/bmob/response/bmob_updated.dart';
@@ -6,10 +7,13 @@ import 'package:flutter/services.dart';
 import 'package:flutter_app01/Bean/QTuser.dart';
 import 'package:flutter_app01/HttpUtil/HttpUtil.dart';
 import 'package:flutter_app01/Utils/Animation_list.dart';
+import 'package:flutter_app01/Utils/Util.dart';
 import 'package:flutter_app01/Utils/WebViewPage.dart';
+import 'package:flutter_app01/common/Loading_Toast.dart';
 import 'package:flutter_app01/course/course.dart';
 import 'package:flutter_app01/home/LostandFound/lf_my.dart';
 import 'package:flutter_app01/home/LostandFound/lf_mylose.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:meta/meta.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
@@ -145,6 +149,51 @@ class my_State extends State<my>{
                 //Navigator.push(context, CustomRouteJianBian(HomePage()));
               },
             ),
+            PopupMenuButton(
+              icon: Icon(Icons.add,color: Color(int.parse(color2))),
+              itemBuilder: (BuildContext context) =>
+              <PopupMenuItem<String>>[
+                PopupMenuItem<String>(child: Container(
+                  width:ScreenUtil().setWidth(245),
+                  child: Row(
+                    children: <Widget>[
+                      Image.asset('images/2.2.1.x/xuesheng.png',height: ScreenUtil().setHeight(100),),
+                      Text("学生版")
+                    ],
+                  ),
+                ), value: "学生版",),
+                PopupMenuItem<String>(child: Container(
+                  width:ScreenUtil().setWidth(245),
+                  child: Row(
+                    children: <Widget>[
+                      Image.asset('images/2.2.1.x/jiaoshijie.png',height: ScreenUtil().setHeight(100),),
+                      Text("教师版")
+                    ],
+                  ),
+                ), value: "教师版",),
+              ],
+              onSelected: (String action) {
+                switch (action) {
+                  case "学生版":
+                    setState(() {
+                      ui_model='学生版';
+                      Util.open_zbui(context);
+                    });
+                    sharedPreferences.setString('ui_model', ui_model);
+                    break;
+                  case "教师版":
+                    setState(() {
+                      ui_model='教师版';
+                      Util.open_zbui(context);
+                    });
+                    sharedPreferences.setString('ui_model', ui_model);
+                    break;
+                }
+              },
+              onCanceled: () {
+                print("onCanceled");
+              },
+            )
           ],
           backgroundColor: Color(int.parse(color1)),
           centerTitle: true,
@@ -153,31 +202,59 @@ class my_State extends State<my>{
             decoration: BoxDecoration(
               color: Color(int.parse(color1)),
             ),
-            child: new ListView(
-              children: <Widget>[
-                topimage(),
-                SizedBox(height: 30,),
-                new Align(
-                  alignment: FractionalOffset.center,
-                  child: new Text(username,textAlign: TextAlign.center,style: TextStyle(color:Color(int.parse(color2)),fontWeight: FontWeight.w800,fontSize: 30),),
-                ),
-                SizedBox(height: 30,),
-                body_component01('images/2.2.1.x/ahms.png', '暗黑模式'),
-                course_tzl('images/2.2.1.x/kbtzl.png', '课表通知栏'),
-                body_component02('images/2.2.1.x/sdxh.png',40, '绑定学号'),
-                body_component02('images/2.2.1.x/xgmm.png',40, '修改密码'),
-                body_component02('images/2.2.1.x/ghtx.png',35, '更换头像'),
-                body_component02('images/2.2.1.x/sqwp.png',40, '拾取物品'),
-                body_component02('images/2.2.1.x/yswp.png',40, '遗失物品'),
-               // body_component02('images/2.0.x/myzlxg.png',40, '资料修改'),
-                body_component02('images/2.2.1.x/jcgx.png',45, '检查更新'),
-                body_component02('images/2.2.1.x/mzsm.png',45, '免责声明'),
-                body_component02('images/2.2.1.x/tcdl.png',35, '退出登陆'),
-                SizedBox(height: 10,)
-              ],
-            ),
+            child: ui_model=='学生版'?lb1():lb2(),
           ),
       ),
+    );
+  }
+
+  Widget lb1(){
+    return new ListView(
+      children: <Widget>[
+        topimage(),
+        SizedBox(height: 30,),
+        new Align(
+          alignment: FractionalOffset.center,
+          child: new Text(username,textAlign: TextAlign.center,style: TextStyle(color:Color(int.parse(color2)),fontWeight: FontWeight.w800,fontSize: 30),),
+        ),
+        SizedBox(height: 30,),
+        body_component01('images/2.2.1.x/ahms.png', '暗黑模式'),
+        course_tzl('images/2.2.1.x/kbtzl.png', '课表通知栏'),
+        body_component02('images/2.2.1.x/sdxh.png',40, '绑定学号'),
+        body_component02('images/2.2.1.x/xgmm.png',40, '修改密码'),
+        body_component02('images/2.2.1.x/ghtx.png',35, '更换头像'),
+        body_component02('images/2.2.1.x/sqwp.png',40, '拾取物品'),
+        body_component02('images/2.2.1.x/yswp.png',40, '遗失物品'),
+        // body_component02('images/2.0.x/myzlxg.png',40, '资料修改'),
+        body_component02('images/2.2.1.x/jcgx.png',45, '检查更新'),
+        body_component02('images/2.2.1.x/mzsm.png',45, '免责声明'),
+        body_component02('images/2.2.1.x/tcdl.png',35, '退出登陆'),
+        SizedBox(height: 10,)
+      ],
+    );
+  }
+
+  Widget lb2(){
+    return new ListView(
+      children: <Widget>[
+        topimage(),
+        SizedBox(height: 30,),
+        new Align(
+          alignment: FractionalOffset.center,
+          child: new Text(username,textAlign: TextAlign.center,style: TextStyle(color:Color(int.parse(color2)),fontWeight: FontWeight.w800,fontSize: 30),),
+        ),
+        SizedBox(height: 30,),
+        body_component01('images/2.2.1.x/ahms.png', '暗黑模式'),
+        course_tzl('images/2.2.1.x/kbtzl.png', '课表通知栏'),
+        body_component02('images/2.2.1.x/sdxh.png',40, '绑定学号'),
+        body_component02('images/2.2.1.x/xgmm.png',40, '修改密码'),
+        body_component02('images/2.2.1.x/ghtx.png',35, '更换头像'),
+        // body_component02('images/2.0.x/myzlxg.png',40, '资料修改'),
+        body_component02('images/2.2.1.x/jcgx.png',45, '检查更新'),
+        body_component02('images/2.2.1.x/mzsm.png',45, '免责声明'),
+        body_component02('images/2.2.1.x/tcdl.png',35, '退出登陆'),
+        SizedBox(height: 10,)
+      ],
     );
   }
 
@@ -460,7 +537,7 @@ class my_State extends State<my>{
     sharedPreferences.setString('login_state', 'false');
 
     now_login_image_base64=default_image;
-    username='未登陆';
+    username='点击左上角登陆';
     phone='未登陆';
     login_state=false;
 

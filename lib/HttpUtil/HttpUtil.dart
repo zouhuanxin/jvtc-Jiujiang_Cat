@@ -50,6 +50,7 @@ class HttpUtil {
     String dataURL = teach_baseUrl+url;
     var temp={'loginName': xgstudeng_id, 'loginPwd': xg_password};
     http.Response response = await http.post(dataURL,body: json.encode(temp));;
+    print(response.body.toString());
     return response.body.toString();
   }
 

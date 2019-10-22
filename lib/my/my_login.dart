@@ -238,19 +238,18 @@ class my_login_State extends State<my_login>{
     query.queryObjects().then((data) {
       List<QTuser> sfs = data.map((i) => QTuser.fromJson(i)).toList();
 
-      //2.3.0
-      now_qTuser=sfs[0];
-
       now_login_image_base64=sfs[0].imagebase64;
       username=sfs[0].username;
       phone=sfs[0].phone;
       objectid=sfs[0].objectId;
+      now_studentid=sfs[0].studentid;
       login_state=true;
 
       sharedPreferences.setString('now_login_image_base64', now_login_image_base64);
       sharedPreferences.setString('username', username);
       sharedPreferences.setString('phone', phone);
       sharedPreferences.setString('objectid', objectid);
+      sharedPreferences.setString('now_studentid', now_studentid);
       sharedPreferences.setString('login_state', 'true');
       
       Fluttertoast.showToast(
