@@ -85,55 +85,64 @@ class Course_EndSgin_View_State extends State<Course_EndSgin_View>{
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return ProviderNode(
-      providers: providers,
-      child: Scaffold(
-        appBar: new AppBar(
-          title: new Text(
-            '结束签到                                       ',
-            textAlign: TextAlign.left,
-            style: TextStyle(
-                color: Color(int.parse(color2)),
-                fontWeight: FontWeight.w800,
-                fontSize: 17),
-          ),
-          elevation: 0.0,
-          iconTheme: IconThemeData(color: Color(int.parse(color2))),
-          backgroundColor: Color(int.parse(color1)),
-          centerTitle: true,
-          actions: <Widget>[],
-        ),
-        body: new Container(
-            decoration: BoxDecoration(color: Color(int.parse(color1))),
-            child: Column(
-              children: <Widget>[
-                Expanded(child: new Container(
-                  child: Row(
-                    children: <Widget>[
-                      Expanded(child: course_ui.head_text('学号'),flex: 1,),
-                      Expanded(child: course_ui.head_text('姓名'),flex: 1,),
-                      //Expanded(child: course_ui.head_text('地址'),flex: 1,),
-                    ],
-                  ),
-                ),flex: 1,),
-                Expanded(child: new ListView(children: [table()],),flex: 4,),
-                Expanded(child: new ListView(children: [
-                  Provide<Course_EndSgin_ViewModel>(builder: (context,child,value){
-                    return Row(
-                      children: <Widget>[
-                        Expanded(child: course_ui.head_text('已签到人数:'+value.finish_number.toString()),flex: 1,),
-                        Expanded(child: course_ui.head_text('未签到人数:'+value.unfinish_number.toString()),flex: 1,),
-                      ],
-                    );
-                  })
-                ],),flex: 1,),
-                Expanded(child: new Column(children: [
-                  SizedBox(height: ScreenUtil().setHeight(80),),
-                  buildButton1()
-                ],),flex: 3,),
+    return new WillPopScope(
+      child: ProviderNode(
+        providers: providers,
+        child: Scaffold(
+          appBar: PreferredSize(child: new Offstage(
+            offstage: true,
+            child: new AppBar(
+              title: new Text('结束签到                                       ',
+                textAlign:TextAlign.left,style: TextStyle(color: Color(int.parse(color2)),fontWeight: FontWeight.w800,fontSize: 17),),
+              elevation: 0.0,
+              iconTheme: IconThemeData(color: Color(int.parse(color2))),
+              backgroundColor: Color(int.parse(color1)),
+              centerTitle: true,
+              leading: Builder(
+                builder: (BuildContext context) {
+                  return Text('');
+                },
+              ),
+              actions: <Widget>[
+                new Container()
               ],
-            )),
-      ),
+            ),
+          ), preferredSize: Size.fromHeight(MediaQuery.of(context).size.height * 0.08),),
+          body: new Container(
+              decoration: BoxDecoration(color: Color(int.parse(color1))),
+              child: Column(
+                children: <Widget>[
+                  SizedBox(height: ScreenUtil().setHeight(50),),
+                  Expanded(child: new Container(
+                    child: Row(
+                      children: <Widget>[
+                        Expanded(child: course_ui.head_text('学号'),flex: 1,),
+                        Expanded(child: course_ui.head_text('姓名'),flex: 1,),
+                        //Expanded(child: course_ui.head_text('地址'),flex: 1,),
+                      ],
+                    ),
+                  ),flex: 1,),
+                  Expanded(child: new ListView(children: [table()],),flex: 4,),
+                  Expanded(child: new ListView(children: [
+                    Provide<Course_EndSgin_ViewModel>(builder: (context,child,value){
+                      return Row(
+                        children: <Widget>[
+                          Expanded(child: course_ui.head_text('已签到人数:'+value.finish_number.toString()),flex: 1,),
+                          Expanded(child: course_ui.head_text('未签到人数:'+value.unfinish_number.toString()),flex: 1,),
+                        ],
+                      );
+                    })
+                  ],),flex: 1,),
+                  Expanded(child: new Column(children: [
+                    SizedBox(height: ScreenUtil().setHeight(80),),
+                    buildButton1()
+                  ],),flex: 3,),
+                ],
+              )),
+        ),
+      ), onWillPop: (){
+
+    }
     );
   }
 
