@@ -40,17 +40,17 @@ class teach_home_viewmodel with ChangeNotifier{
     }
     list_ui.clear();
     List<Course_Sgin>list = await this.thm.queryWhereEqual();
-    for(Course_Sgin cs in list){
-      List list1=cs.studata.replaceAll('[', '').replaceAll(']', '').replaceAll('"', '').split(',');
+    for(int i=list.length-1;i>=0;i--){
+      List list1=list[i].studata.replaceAll('[', '').replaceAll(']', '').replaceAll('"', '').split(',');
       List list2=[];
-      if(cs.s_sgin.length>5){
-        list2=cs.s_sgin.replaceAll('[', '').replaceAll(']', '').replaceAll('"', '').split(',');
+      if(list[i].s_sgin.length>5){
+        list2=list[i].s_sgin.replaceAll('[', '').replaceAll(']', '').replaceAll('"', '').split(',');
       }
       List list3=[];
-      if(cs.f_sgin.length>5){
-        list3=cs.f_sgin.replaceAll('[', '').replaceAll(']', '').replaceAll('"', '').split(',');
+      if(list[i].f_sgin.length>5){
+        list3=list[i].f_sgin.replaceAll('[', '').replaceAll(']', '').replaceAll('"', '').split(',');
       }
-      list_ui.add(teach_sgin_ui.card1(cs,this,list1.length.toString(),list2.length.toString(),list3.length.toString(),context));
+      list_ui.add(teach_sgin_ui.card1(list[i],this,list1.length.toString(),list2.length.toString(),list3.length.toString(),context));
     }
     notifyListeners();
   }

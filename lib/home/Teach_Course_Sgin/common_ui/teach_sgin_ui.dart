@@ -27,7 +27,7 @@ class teach_sgin_ui{
                 Align(child: Text(cs.course_name,style: TextStyle(fontWeight: FontWeight.w600,fontSize: ScreenUtil().setSp(70)),),alignment: Alignment.topLeft,),
                 Align(child: Text('教师:'+cs.teachname,style: TextStyle(fontWeight: FontWeight.w300,fontSize: ScreenUtil().setSp(40),color: Colors.black38),),alignment: Alignment.topLeft,),
                 Align(child: Text('学工号:'+cs.teachid,style: TextStyle(fontWeight: FontWeight.w300,fontSize: ScreenUtil().setSp(40),color: Colors.black38),),alignment: Alignment.topLeft,),
-                Align(child: Text('时间:'+cs.createdAt,style: TextStyle(fontWeight: FontWeight.w300,fontSize: ScreenUtil().setSp(40),color: Colors.black38),),alignment: Alignment.topLeft,),
+                Align(child: Text('创建时间:'+cs.createdAt,style: TextStyle(fontWeight: FontWeight.w500,fontSize: ScreenUtil().setSp(40),color: Colors.green,),),alignment: Alignment.topLeft,),
                 Row(
                   children: <Widget>[
                     Expanded(child: Align(child: Text('班级总人数:'+text1,style: TextStyle(fontWeight: FontWeight.w300,fontSize: ScreenUtil().setSp(40),color: Colors.black38),),alignment: Alignment.center,),flex: 1,),

@@ -3,6 +3,7 @@ import 'package:data_plugin/bmob/response/bmob_error.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app01/Bean/QTuser.dart';
 import 'package:flutter_app01/HttpUtil/HttpUtil.dart';
+import 'package:flutter_app01/Utils/Util.dart';
 import 'package:flutter_app01/component/LoadingDialog.dart';
 import 'package:flutter_luban/flutter_luban.dart';
 import 'dart:convert';
@@ -104,7 +105,6 @@ class my_login_State extends State<my_login>{
   }
 
   TextFormField buildPasswordTextField(BuildContext context) {
-    print(dart_model);
     return TextFormField(
       onSaved: (String value) => _password = value,
       obscureText: _isObscure,
@@ -131,7 +131,6 @@ class my_login_State extends State<my_login>{
   }
 
   TextFormField buildEmailTextField() {
-    if(prefs.getString('QTphone')!=null)  _phone=prefs.getString('QTphone');
     return TextFormField(
       initialValue: _phone,
       decoration: InputDecoration(
@@ -166,7 +165,7 @@ class my_login_State extends State<my_login>{
             if (_formKey.currentState.validate()) {
               ///只有输入的内容符合要求通过才会到达此处
               _formKey.currentState.save();
-              //print('email:$_studeng_id , assword:$_jw_password');
+             // print('email:$_phone , assword:$_password');
               showDialog(
                   context: context,
                   barrierDismissible: true,
@@ -215,66 +214,45 @@ class my_login_State extends State<my_login>{
     BmobQuery<QTuser> query = BmobQuery();
     query.addWhereEqualTo("phone", phone.toString().trim());
     query.queryObjects().then((data) {
-      _bmob_get_QTuser_password_information(_password);
+      List<QTuser> sfs = data.map((i) => QTuser.fromJson(i)).toList();
+      if(sfs.length==1){
+        if(sfs[0].password==_password){
+          _loading_login_data(sfs[0]);
+        }else{
+          Navigator.pop(showcon);
+          Util.showTaost('密码错误', Toast.LENGTH_SHORT, Colors.red);
+        }
+      }else{
+        Navigator.pop(showcon);
+        Util.showTaost('账号不存在', Toast.LENGTH_SHORT, Colors.red);
+      }
     }).catchError((e) {
       Navigator.pop(showcon);
       print(BmobError.convert(e).error);
-      Fluttertoast.showToast(
-          msg: "账号不存在",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.TOP,
-          timeInSecForIos: 1,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          fontSize: 16.0
-      );
+      Util.showTaost('账号不存在', Toast.LENGTH_SHORT, Colors.red);
     });
   }
 
-  void _bmob_get_QTuser_password_information(String password) async{
+  void _loading_login_data(QTuser qtuser) async{
     SharedPreferences sharedPreferences=await SharedPreferences.getInstance();
-    BmobQuery<QTuser> query = BmobQuery();
-    query.addWhereEqualTo("password", password.toString().trim());
-    query.queryObjects().then((data) {
-      List<QTuser> sfs = data.map((i) => QTuser.fromJson(i)).toList();
+    now_login_image_base64=qtuser.imagebase64;
+    username=qtuser.username;
+    phone=qtuser.phone;
+    objectid=qtuser.objectId;
+    now_studentid=qtuser.studentid;
+    login_state=true;
 
-      now_login_image_base64=sfs[0].imagebase64;
-      username=sfs[0].username;
-      phone=sfs[0].phone;
-      objectid=sfs[0].objectId;
-      now_studentid=sfs[0].studentid;
-      login_state=true;
+    sharedPreferences.setString('now_login_image_base64', now_login_image_base64);
+    sharedPreferences.setString('username', username);
+    sharedPreferences.setString('phone', phone);
+    sharedPreferences.setString('objectid', objectid);
+    sharedPreferences.setString('now_studentid', now_studentid);
+    sharedPreferences.setString('login_state', 'true');
 
-      sharedPreferences.setString('now_login_image_base64', now_login_image_base64);
-      sharedPreferences.setString('username', username);
-      sharedPreferences.setString('phone', phone);
-      sharedPreferences.setString('objectid', objectid);
-      sharedPreferences.setString('now_studentid', now_studentid);
-      sharedPreferences.setString('login_state', 'true');
-      
-      Fluttertoast.showToast(
-          msg: "登陆成功",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.TOP,
-          timeInSecForIos: 1,
-          backgroundColor: Colors.blue,
-          textColor: Colors.white,
-          fontSize: 16.0
-      );
-      Navigator.pop(showcon);
-      Navigator.pop(context);
-    }).catchError((e) {
-      Navigator.pop(showcon);
-      Fluttertoast.showToast(
-          msg: "密码错误",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.TOP,
-          timeInSecForIos: 1,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          fontSize: 16.0
-      );
-    });
+    Util.showTaost('登陆成功', Toast.LENGTH_SHORT, Colors.blue);
+
+    Navigator.pop(showcon);
+    Navigator.pop(context);
   }
 
 }
