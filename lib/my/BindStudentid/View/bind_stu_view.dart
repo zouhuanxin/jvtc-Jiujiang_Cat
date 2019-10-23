@@ -22,7 +22,7 @@ class bind_stu_view_State extends State<bind_stu_view>{
   void initState() {
     super.initState();
     bind_stu_model bsm=bind_stu_model();
-    var bsv= bind_stu_viewmodel(bsm);
+    var bsv= bind_stu_viewmodel(bsm,context);
     providers.provide(Provider<bind_stu_viewmodel>.value(bsv));
   }
 

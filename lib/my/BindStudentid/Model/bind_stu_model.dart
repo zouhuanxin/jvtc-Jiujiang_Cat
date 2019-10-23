@@ -11,7 +11,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 class bind_stu_model{
 
   //添加学号字段到用户表中
-  updateSingle(stu) async{
+  Future<int> updateSingle(stu) async{
+    int type=0;
     BmobQuery<QTuser> query = BmobQuery();
     query.addWhereEqualTo("phone", phone);
     await query.queryObjects().then((data) {
@@ -20,11 +21,14 @@ class bind_stu_model{
       blog.objectId = templist[0].objectId;
       blog.studentid=stu;
       blog.update().then((BmobUpdated bmobUpdated) {
+        type=0;
         Util.showTaost('绑定成功', Toast.LENGTH_SHORT, Colors.blue);
       }).catchError((e) {
+        type=-1;
         Util.showTaost('稍后重试', Toast.LENGTH_SHORT, Colors.red);
       });
     }).catchError((e) {});
+    return type;
   }
 
   //检查此账号是否以及绑定过学号

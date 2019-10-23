@@ -28,6 +28,7 @@ class teach_details_view_State extends State<teach_details_view>{
   teach_details_view_State(Course_Sgin cs){
     this.cs=cs;
     load_data();
+    print('cs:$cs');
   }
 
   List<Widget>list_ui=[];
@@ -63,18 +64,20 @@ class teach_details_view_State extends State<teach_details_view>{
         ],
       ),
     ));
-    for(int i=0;i<list1.length;i++){
-      list_ui.add(new Container(
-        margin: EdgeInsets.all(5),
-        child: new Row(
-          children: <Widget>[
+    try{
+      for(int i=0;i<list1.length;i++){
+        list_ui.add(new Container(
+          margin: EdgeInsets.all(5),
+          child: new Row(
+            children: <Widget>[
               Expanded(child: Text(list1[i].toString().split('&')[0],style: TextStyle(color: Colors.grey),textAlign: TextAlign.center,),flex: 1,),
               Expanded(child: Text(list1[i].toString().split('&')[1],style: TextStyle(color: Colors.grey),textAlign: TextAlign.center,),flex: 1,),
               Expanded(child: Text(list1[i].toString().split('&')[2],style: TextStyle(color: Colors.grey),textAlign: TextAlign.center,),flex: 1,),
-          ],
-        ),
-      ));
-    }
+            ],
+          ),
+        ));
+      }
+    }catch(e){}
     list_ui2.add(new Container(
       child: Align(
         alignment: Alignment.topLeft,
@@ -189,11 +192,16 @@ class teach_details_view_State extends State<teach_details_view>{
     //取出原来的数据
     //为尽可能保证数据的同步性这里再发送一次查询请求
     List<Course_Sgin> cs2=await this.queryWhereEqual2(cs.objectId);
-    List arr1=cs2[0].s_sgin.replaceAll('[', '').replaceAll(']', '').replaceAll('"', '').split(',');
-    List arr2=cs2[0].f_sgin.replaceAll('[', '').replaceAll(']', '').replaceAll('"', '').split(',');
-    for(int i=0;i<arr2.length;i++){
-      if(arr2[i].split('&')[0].toString().trim()==id.trim()){
-        arr2.removeAt(i);
+    List arr1=[],arr2=[];
+    if(cs2[0].s_sgin.length>5){
+      arr1=cs2[0].s_sgin.replaceAll('[', '').replaceAll(']', '').replaceAll('"', '').split(',');
+    }
+    if(cs2[0].f_sgin.length>5){
+      arr2=cs2[0].f_sgin.replaceAll('[', '').replaceAll(']', '').replaceAll('"', '').split(',');
+      for(int i=0;i<arr2.length;i++){
+        if(arr2[i].split('&')[0].toString().trim()==id.trim()){
+          arr2.removeAt(i);
+        }
       }
     }
     String temp=id+'&'+blname+'&'+remrak;

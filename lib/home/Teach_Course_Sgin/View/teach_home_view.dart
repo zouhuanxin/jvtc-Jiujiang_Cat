@@ -40,25 +40,28 @@ class teach_home_view_State extends State<teach_home_view> {
 
   Widget drop(){
     return Provide<teach_home_viewmodel>(builder: (context,child,value){
-      return new Align(
-        alignment: Alignment.center,
-        child: DropdownButton(
-          items: value.drop_items,
-          hint: new Text('请选择', textAlign: TextAlign.center),
-          //当没有默认值的时候可以设置的提示
-          value: value.course_name,
-          //下拉菜单选择完之后显示给用户的值
-          onChanged: (T) {
-            value.set_coursename(T);
-          },
-          elevation: 20,
-          underline: Container(),
-          //设置阴影的高度
-          style: new TextStyle(
-            //设置文本框里面文字的样式
-              color: Colors.black),
-          isDense: false,
-          iconSize: 20.0, //设置三角标icon的大小
+      return new Container(
+        padding: EdgeInsets.fromLTRB(0, 0, 0, ScreenUtil().setHeight(25)),
+        child: new Align(
+          alignment: Alignment.topCenter,
+          child: DropdownButton(
+            items: value.drop_items,
+            hint: new Text('请选择', textAlign: TextAlign.center),
+            //当没有默认值的时候可以设置的提示
+            value: value.course_name,
+            //下拉菜单选择完之后显示给用户的值
+            onChanged: (T) {
+              value.set_coursename(T);
+            },
+            elevation: 20,
+            underline: Container(),
+            //设置阴影的高度
+            style: new TextStyle(
+              //设置文本框里面文字的样式
+                color: Colors.black),
+            isDense: false,
+            iconSize: 20.0, //设置三角标icon的大小
+          ),
         ),
       );
     });

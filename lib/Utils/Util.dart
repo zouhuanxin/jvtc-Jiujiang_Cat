@@ -2,7 +2,9 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:data_plugin/bmob/bmob_query.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app01/Bean/QTuser.dart';
 import 'package:flutter_app01/HttpUtil/HttpUtil.dart';
 import 'package:flutter_app01/Utils/Record_Text.dart';
 import 'package:flutter_app01/common/Loading_Toast.dart';
