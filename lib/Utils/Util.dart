@@ -96,20 +96,14 @@ class Util{
     lt=Loading_Toast(context,'安全检查中...');
     lt.Open_Loading();
     time=new Timer.periodic(new Duration(seconds: 1), (timer) {
-      lt.Close_Loading();
       time.cancel();
-      lt=Loading_Toast(context,'检查通过...');
-      lt.Open_Loading();
+      lt.Upload_data('检查通过...');
       time=new Timer.periodic(new Duration(milliseconds: 500), (timer) {
-        lt.Close_Loading();
         time.cancel();
-        lt=Loading_Toast(context,'系统模式启动...');
-        lt.Open_Loading();
+        lt.Upload_data('系统模式启动...');
         time=new Timer.periodic(new Duration(milliseconds: 500), (timer) {
-          lt.Close_Loading();
           time.cancel();
-          lt=Loading_Toast(context,'启动完毕，欢迎使用。');
-          lt.Open_Loading();
+          lt.Upload_data('启动完毕，欢迎使用。');
           time=new Timer.periodic(new Duration(milliseconds: 500), (timer) {
             lt.Close_Loading();
             time.cancel();

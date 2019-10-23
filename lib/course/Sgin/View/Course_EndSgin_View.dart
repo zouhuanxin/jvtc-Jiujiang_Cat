@@ -118,7 +118,7 @@ class Course_EndSgin_View_State extends State<Course_EndSgin_View>{
                       children: <Widget>[
                         Expanded(child: course_ui.head_text('学号'),flex: 1,),
                         Expanded(child: course_ui.head_text('姓名'),flex: 1,),
-                        //Expanded(child: course_ui.head_text('地址'),flex: 1,),
+                        Expanded(child: course_ui.head_text('状态'),flex: 1,),
                       ],
                     ),
                   ),flex: 1,),

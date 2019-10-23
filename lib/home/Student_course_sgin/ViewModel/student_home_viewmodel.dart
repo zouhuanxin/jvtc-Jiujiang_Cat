@@ -178,7 +178,7 @@ class student_home_viewmodel with ChangeNotifier{
             }
             if(str.length>1) reslist.add(str);
           }
-          String temp=now_studentid+'&'+name;
+          String temp=now_studentid+'&'+name+'&正常';
           reslist.add(temp);
           int i=await this.shm.updateSingle(reslist.toString(), cs.objectId);
           if(i==0){

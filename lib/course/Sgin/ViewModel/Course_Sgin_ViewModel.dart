@@ -3,7 +3,10 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app01/Bean/Course_Sgin.dart';
+import 'package:flutter_app01/Utils/Record_Text.dart';
 import 'package:flutter_app01/Utils/Util.dart';
+import 'package:flutter_app01/common/Loading_Toast.dart';
 import 'package:flutter_app01/course/Sgin/Model/Course_Sgin_Model.dart';
 import 'package:flutter_app01/course/Sgin/common_ui/course_ui.dart';
 import 'package:flutter_app01/home/Teach_JW/Utils/Teach_JW_Util.dart';
@@ -89,9 +92,33 @@ class Course_Sgin_ViewModel with ChangeNotifier{
         List list2=json.decode(json.encode(list[i]));
         templist.add(list2[5].toString().split(':')[1].replaceAll('}', '').trim()+'&'+list2[6].toString().split(':')[1].replaceAll('}', '').trim());
       }
-      this.csm.create_sgin(templist, sgin_pass,course_name,context);
+      //开启一个等待提示ui
+      Loading_Toast lt;
+      lt=Loading_Toast(context,'正在检查当前账号签到记录状态');
+      lt.Open_Loading();
+      //创建签到前先检查此账号有无未结束签到 如果有未结束签到则先把未结束签到结束后再创建此次签到
+      List<Course_Sgin>list1=await this.csm.queryWhereEqual();
+      for(int i=0;i<list1.length;i++){
+        //则表示当前账号有未关闭状态的签到
+        //这里一定要有账号判断
+        //以保证不改变其他人的签到记录状态
+        if(list1[i].teachid.trim()==now_studentid.trim()){
+          //结束此次未关闭状态的签到
+          lt.Upload_data('检查到异常，正在修复');
+          int type=await this.csm.End_Sign(list1[i].objectId);
+          if(type==0){
+            lt.Upload_data('修复完成');
+          }else{
+            Util.showTaost('请重新创建签到', Toast.LENGTH_SHORT, Colors.green);
+            return;
+          }
+        }
+        lt.Upload_data('正在检查当前账号签到记录状态');
+      }
+      await this.csm.create_sgin(templist, sgin_pass,course_name,context);
+      lt.Close_Loading();
     }else{
-      buttontext='创建签到';
+      //buttontext='创建签到';
     }
     notifyListeners();
   }

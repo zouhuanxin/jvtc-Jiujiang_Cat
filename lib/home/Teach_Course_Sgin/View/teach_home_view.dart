@@ -8,23 +8,23 @@ import 'package:flutter_app01/home/Teach_Course_Sgin/ViewModel/teach_home_viewmo
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provide/provide.dart';
 
-class teach_home_view extends StatefulWidget{
+class teach_home_view extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
     return teach_home_view_State();
   }
-
 }
 
-class teach_home_view_State extends State<teach_home_view>{
+class teach_home_view_State extends State<teach_home_view> {
   var providers = Providers();
 
   void _loading() {
     var thm = teach_home_model();
-    var thv = teach_home_viewmodel(thm,context);
+    var thv = teach_home_viewmodel(thm, context);
     providers.provide(Provider<teach_home_viewmodel>.value(thv));
   }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -36,6 +36,66 @@ class teach_home_view_State extends State<teach_home_view>{
   void dispose() {
     super.dispose();
     bus.off("teach_details_view"); //移除广播机制
+  }
+
+  Widget drop(){
+    return Provide<teach_home_viewmodel>(builder: (context,child,value){
+      return new Align(
+        alignment: Alignment.center,
+        child: DropdownButton(
+          items: value.drop_items,
+          hint: new Text('请选择', textAlign: TextAlign.center),
+          //当没有默认值的时候可以设置的提示
+          value: value.course_name,
+          //下拉菜单选择完之后显示给用户的值
+          onChanged: (T) {
+            value.set_coursename(T);
+          },
+          elevation: 20,
+          underline: Container(),
+          //设置阴影的高度
+          style: new TextStyle(
+            //设置文本框里面文字的样式
+              color: Colors.black),
+          isDense: false,
+          iconSize: 20.0, //设置三角标icon的大小
+        ),
+      );
+    });
+  }
+
+  //搜索框
+  Widget search_input() {
+    return Container(
+      margin: EdgeInsets.fromLTRB(0, 0, 0, ScreenUtil().setHeight(30)),
+      height: ScreenUtil().setHeight(130),
+      child: Provide<teach_home_viewmodel>(builder: (context, child, value) {
+        return TextField(
+          maxLines: 1,
+          keyboardType: TextInputType.number,
+          decoration: InputDecoration(
+            hintText: '学生学号',
+            border: OutlineInputBorder(),
+            fillColor: Colors.white,
+            filled: dart_model,
+            contentPadding: EdgeInsets.all(10.0),
+            suffixIcon: IconButton(
+                icon: Icon(
+                  Icons.search,
+                  color: Colors.blue,
+                ),
+                onPressed: () {
+                  value.search_table();
+                }),
+          ),
+          textAlign: TextAlign.start,
+          onChanged: (T) {
+            value.set_input1(T);
+          },
+          autofocus: false,
+        );
+      }),
+    );
   }
 
   @override
@@ -61,11 +121,18 @@ class teach_home_view_State extends State<teach_home_view>{
         ),
         body: new Container(
             decoration: BoxDecoration(color: Color(int.parse(color1))),
-            child: Provide<teach_home_viewmodel>(builder: (context,child,value){
+            child:
+                Provide<teach_home_viewmodel>(builder: (context, child, value) {
               return ListView(
-                padding:
-                EdgeInsets.symmetric(horizontal: ScreenUtil().setHeight(50)),
+                padding: EdgeInsets.symmetric(
+                    horizontal: ScreenUtil().setHeight(50)),
                 children: [
+                  Row(
+                    children: <Widget>[
+                      Expanded(child: drop(),flex: 1,),
+                      Expanded(child: search_input(),flex: 3,),
+                    ],
+                  ),
                   Column(
                     children: value.list_ui,
                   )
@@ -75,5 +142,4 @@ class teach_home_view_State extends State<teach_home_view>{
       ),
     );
   }
-
 }

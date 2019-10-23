@@ -58,7 +58,7 @@ class Course_EndSgin_ViewModel with ChangeNotifier{
     unfinish_number=sumarr.length-arr.length;
     list_ui.clear();
     for(String str in arr){
-      list_ui.add(course_ui.s_sgin_ui(str.split('&')[0], str.split('&')[1]));
+      list_ui.add(course_ui.s_sgin_ui(str.split('&')[0], str.split('&')[1],str.split('&')[2]));
     }
     notifyListeners();
   }

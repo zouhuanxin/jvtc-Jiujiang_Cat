@@ -66,7 +66,7 @@ class course_ui{
     );
   }
 
-  static Widget s_sgin_ui(text1,text2){
+  static Widget s_sgin_ui(text1,text2,text3){
     return new GestureDetector(
       onTap: (){
 
@@ -76,7 +76,8 @@ class course_ui{
         child: Row(
           children: <Widget>[
             Expanded(child: Text(text1,style: TextStyle(fontSize: ScreenUtil().setSp(30)),textAlign: TextAlign.center,),flex: 1,),
-            Expanded(child: Text(text2,style: TextStyle(fontSize: ScreenUtil().setSp(30)),textAlign: TextAlign.center,),flex: 1,)
+            Expanded(child: Text(text2,style: TextStyle(fontSize: ScreenUtil().setSp(30)),textAlign: TextAlign.center,),flex: 1,),
+            Expanded(child: Text(text3,style: TextStyle(fontSize: ScreenUtil().setSp(30)),textAlign: TextAlign.center,),flex: 1,)
           ],
         ),
       ),

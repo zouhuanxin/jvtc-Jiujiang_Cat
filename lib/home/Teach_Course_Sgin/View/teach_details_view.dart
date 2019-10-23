@@ -22,6 +22,8 @@ class teach_details_view extends StatefulWidget{
 }
 
 class teach_details_view_State extends State<teach_details_view>{
+  List<DropdownMenuItem> dropitems=[];
+
   Course_Sgin cs;
   teach_details_view_State(Course_Sgin cs){
     this.cs=cs;
@@ -57,7 +59,7 @@ class teach_details_view_State extends State<teach_details_view>{
         children: <Widget>[
           Expanded(child: Text('学号',style: TextStyle(color: Colors.green),textAlign: TextAlign.center,),flex: 1,),
           Expanded(child: Text('姓名',style: TextStyle(color: Colors.green),textAlign: TextAlign.center,),flex: 1,),
-          //Expanded(child: Text('地址',style: TextStyle(color: Colors.green),textAlign: TextAlign.center,),flex: 1,),
+          Expanded(child: Text('状态',style: TextStyle(color: Colors.green),textAlign: TextAlign.center,),flex: 1,),
         ],
       ),
     ));
@@ -68,7 +70,7 @@ class teach_details_view_State extends State<teach_details_view>{
           children: <Widget>[
               Expanded(child: Text(list1[i].toString().split('&')[0],style: TextStyle(color: Colors.grey),textAlign: TextAlign.center,),flex: 1,),
               Expanded(child: Text(list1[i].toString().split('&')[1],style: TextStyle(color: Colors.grey),textAlign: TextAlign.center,),flex: 1,),
-             // Expanded(child: Text(list1[i].toString().split('&')[2].split(':')[1].replaceAll('}', ''),style: TextStyle(color: Colors.grey),textAlign: TextAlign.center,),flex: 1,),
+              Expanded(child: Text(list1[i].toString().split('&')[2],style: TextStyle(color: Colors.grey),textAlign: TextAlign.center,),flex: 1,),
           ],
         ),
       ));
@@ -115,27 +117,70 @@ class teach_details_view_State extends State<teach_details_view>{
   }
 
   //补录弹窗
+  String remrak='其他';
   _showmodel(String id,String name) {
     showDialog(
         context: context,
-        builder: (context) => AlertDialog(
-          title: Text('补录提示'),
-          content: Text(('学号:${id.trim()}\n姓名:${name.trim()}')),
-          actions: <Widget>[
-            new FlatButton(
-              child: new Text("关闭"),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            new FlatButton(
-              child: new Text("补录",style: TextStyle(color: Colors.red),),
-              onPressed: () {
-                bulu(id, name);
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
+        builder: (context) => new StatefulBuilder(
+          builder: (context, state){
+            return AlertDialog(
+              title: Text('补录提示'),
+              content: Container(
+                height: ScreenUtil().setHeight(300),
+                child: Column(
+                  children: <Widget>[
+                    Text(('学号:${id.trim()}\n姓名:${name.trim()}')),
+                    Align(
+                      alignment: Alignment.center,
+                      child: Row(
+                        children: <Widget>[
+                          Text('            请假事由:'),
+                          new Align(
+                            alignment: Alignment.center,
+                            child: DropdownButton(
+                              items: dropitems,
+                              hint: new Text('请选择', textAlign: TextAlign.center),
+                              //当没有默认值的时候可以设置的提示
+                              value: remrak,
+                              //下拉菜单选择完之后显示给用户的值
+                              onChanged: (T) {
+                                state(() {
+                                  remrak=T;
+                                });
+                              },
+                              elevation: 20,
+                              underline: Container(),
+                              //设置阴影的高度
+                              style: new TextStyle(
+                                //设置文本框里面文字的样式
+                                  color: Colors.black),
+                              isDense: false,
+                              iconSize: 20.0, //设置三角标icon的大小
+                            ),
+                          )
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              actions: <Widget>[
+                new FlatButton(
+                  child: new Text("关闭"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                new FlatButton(
+                  child: new Text("补录",style: TextStyle(color: Colors.red),),
+                  onPressed: () {
+                    bulu(id, name);
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          },
         ));
   }
 
@@ -151,7 +196,7 @@ class teach_details_view_State extends State<teach_details_view>{
         arr2.removeAt(i);
       }
     }
-    String temp=id+'&'+blname;
+    String temp=id+'&'+blname+'&'+remrak;
     arr1.add(temp);
     int i=await this.updateSingle(arr1.toString(),arr2.toString(), cs.objectId);
     if(i==0){
@@ -209,7 +254,7 @@ class teach_details_view_State extends State<teach_details_view>{
     });
     return type;
   }
-  
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -239,6 +284,66 @@ class teach_details_view_State extends State<teach_details_view>{
             ],
           )),
     );
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getListData();
+  }
+
+
+  //签到状态数据
+  void getListData() {
+    List<DropdownMenuItem> items = new List();
+    DropdownMenuItem dropdownMenuItem;
+    dropdownMenuItem = new DropdownMenuItem(
+      child: new Text('正常'),
+      value: '正常',
+    );
+    items.add(dropdownMenuItem);
+    dropdownMenuItem = new DropdownMenuItem(
+      child: new Text('求职'),
+      value: '求职',
+    );
+    items.add(dropdownMenuItem);
+    dropdownMenuItem = new DropdownMenuItem(
+      child: new Text('实习'),
+      value: '实习',
+    );
+    items.add(dropdownMenuItem);
+    dropdownMenuItem = new DropdownMenuItem(
+      child: new Text('返家'),
+      value: '返家',
+    );
+    items.add(dropdownMenuItem);
+    dropdownMenuItem = new DropdownMenuItem(
+      child: new Text('培训'),
+      value: '培训',
+    );
+    items.add(dropdownMenuItem);
+    dropdownMenuItem = new DropdownMenuItem(
+      child: new Text('旅游'),
+      value: '旅游',
+    );
+    items.add(dropdownMenuItem);
+    dropdownMenuItem = new DropdownMenuItem(
+      child: new Text('病假'),
+      value: '病假',
+    );
+    items.add(dropdownMenuItem);
+    dropdownMenuItem = new DropdownMenuItem(
+      child: new Text('事假'),
+      value: '事假',
+    );
+    items.add(dropdownMenuItem);
+    dropdownMenuItem = new DropdownMenuItem(
+      child: new Text('其他'),
+      value: '其他',
+    );
+    items.add(dropdownMenuItem);
+    dropitems=items;
   }
 
 }
