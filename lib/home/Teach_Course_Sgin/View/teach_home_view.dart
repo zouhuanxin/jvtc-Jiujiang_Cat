@@ -126,20 +126,26 @@ class teach_home_view_State extends State<teach_home_view> {
             decoration: BoxDecoration(color: Color(int.parse(color1))),
             child:
                 Provide<teach_home_viewmodel>(builder: (context, child, value) {
-              return ListView(
+              return Container(
                 padding: EdgeInsets.symmetric(
                     horizontal: ScreenUtil().setHeight(50)),
-                children: [
-                  Row(
-                    children: <Widget>[
-                      Expanded(child: drop(),flex: 1,),
-                      Expanded(child: search_input(),flex: 3,),
-                    ],
-                  ),
-                  Column(
-                    children: value.list_ui,
-                  )
-                ],
+                child: Column(
+                  children: <Widget>[
+                    Expanded(child: Row(
+                      children: <Widget>[
+                        Expanded(child: drop(),flex: 1,),
+                        Expanded(child: search_input(),flex: 3,),
+                      ],
+                    ),flex: 1,),
+                    Expanded(child: ListView(
+                      children: [
+                        Column(
+                          children: value.list_ui,
+                        )
+                      ],
+                    ),flex: 11,)
+                  ],
+                ),
               );
             })),
       ),

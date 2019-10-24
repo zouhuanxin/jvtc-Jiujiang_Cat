@@ -80,7 +80,7 @@ class Util{
       Util.showTaost('自动登陆成功', Toast.LENGTH_SHORT, Colors.blue);
       return 0;
     }else{
-      Util.showTaost('自动登陆失败', Toast.LENGTH_SHORT, Colors.black38);
+      //Util.showTaost('自动登陆失败', Toast.LENGTH_SHORT, Colors.black38);
       return -1;
     }
   }

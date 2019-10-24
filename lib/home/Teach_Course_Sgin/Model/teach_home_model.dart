@@ -1,6 +1,7 @@
 
 import 'package:data_plugin/bmob/bmob_query.dart';
 import 'package:data_plugin/bmob/response/bmob_error.dart';
+import 'package:data_plugin/bmob/response/bmob_handled.dart';
 import 'package:data_plugin/bmob/response/bmob_updated.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app01/Bean/Course_Sgin.dart';
@@ -16,6 +17,9 @@ class teach_home_model{
     List<Course_Sgin>blogs=[];
     BmobQuery<Course_Sgin> query = BmobQuery();
     query.addWhereEqualTo("teachid", now_studentid);
+    query.setOrder('-createdAt');
+    query.setLimit(100);
+    //query.setSkip(1);
     await query.queryObjects().then((data) {
       blogs = data.map((i) => Course_Sgin.fromJson(i)).toList();
     }).catchError((e) {
@@ -24,4 +28,20 @@ class teach_home_model{
     return blogs;
   }
 
+  ///删除一条数据
+  Future<int>deleteSingle(String currentObjectId) async{
+    int type=0;
+    Course_Sgin blog = Course_Sgin();
+    blog.objectId = currentObjectId;
+    await blog.delete().then((BmobHandled bmobHandled) {
+      currentObjectId = null;
+      type=0;
+      Util.showTaost('删除成功', Toast.LENGTH_SHORT, Colors.blue);
+    }).catchError((e) {
+      type=-1;
+      Util.showTaost('删除失败', Toast.LENGTH_SHORT, Colors.red);
+      print(BmobError.convert(e).error);
+    });
+    return type;
+  }
 }

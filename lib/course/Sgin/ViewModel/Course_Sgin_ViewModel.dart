@@ -41,7 +41,10 @@ class Course_Sgin_ViewModel with ChangeNotifier{
         Map<Object,dynamic>map2=json.decode(json.encode(list[i]));
         if(value.split(':')[0].toString().trim()==map2['kc'].toString().split('(')[0].trim()
         &&value.split(':')[1].toString().trim()==map2['bj'].toString().split('：')[1].trim()){
-          course_name=value.split(':')[0].toString().trim();
+          //这里course_name改为 课程名+班级名 以防止重复
+          //因为可能会出现老师 授予俩个班同一门课程  这种情况如果仅保存课程名就会出现重复的情况
+          //这里为了配合网页端的使用符号使用 - 号链接
+          course_name=value.split(':')[0].toString().trim()+'-'+value.split(':')[1].toString().trim();
           String temp=map2['hmc'].toString().split('(')[1].split(',')[0].trim();
           await teach_hmc_info1(temp.substring(1,temp.length-1));
         }

@@ -45,7 +45,7 @@ class teach_home_viewmodel with ChangeNotifier{
     }
     list_ui.clear();
     List<Course_Sgin>list = await this.thm.queryWhereEqual();
-    for(int i=list.length-1;i>=0;i--){
+    for(int i=0;i<list.length;i++){
       List list1=list[i].studata.replaceAll('[', '').replaceAll(']', '').replaceAll('"', '').split(',');
       List list2=[];
       if(list[i].s_sgin.length>5){
@@ -101,12 +101,14 @@ class teach_home_viewmodel with ChangeNotifier{
     Set set = new Set();
     List<dynamic>str_list=new List();
     for(int i=0;i<list.length;i++){
-      set.add(list[i].course_name);
+      set.add(list[i].course_name.toString().split('-')[0].trim());
     }
     str_list=set.toList();
     for(int i=0;i<str_list.length;i++){
+      String temp=str_list[i].toString().split('-')[0].trim();
       dropdownMenuItem = new DropdownMenuItem(
-        child: Text(str_list[i].toString().trim().length>5?str_list[i].toString().trim().substring(0,5)+'\n'+str_list[i].toString().trim().substring(5,str_list[i].toString().trim().length):str_list[i].toString().trim(),style: TextStyle(fontSize: ScreenUtil().setSp(35)),overflow: TextOverflow.ellipsis,),
+        child: Text(temp.length>5?temp.substring(0,5)+'\n'+temp.substring(5,
+            temp.toString().trim().length>10?11:temp.toString().trim().length):temp,style: TextStyle(fontSize: ScreenUtil().setSp(35)),overflow: TextOverflow.ellipsis,),
         value: str_list[i].toString().trim(),
       );
       items.add(dropdownMenuItem);
@@ -116,4 +118,36 @@ class teach_home_viewmodel with ChangeNotifier{
     notifyListeners();
   }
 
+
+  void deleteSingle(String currentObjectId) async{
+    int res=await this.thm.deleteSingle(currentObjectId);
+    if(res==0){
+      search1();
+    }
+  }
+
+  //弹窗
+  deleteSingle_showmodel(String currentObjectId) {
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text('系统提示'),
+          content: Text(('确定删除此条签到记录吗？')),
+          actions: <Widget>[
+            new FlatButton(
+              child: new Text("取消"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            new FlatButton(
+              child: new Text("删除",style: TextStyle(color: Colors.red),),
+              onPressed: () {
+                deleteSingle(currentObjectId);
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        ));
+  }
 }
