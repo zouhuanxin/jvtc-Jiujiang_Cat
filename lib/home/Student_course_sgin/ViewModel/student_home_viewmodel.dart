@@ -29,6 +29,9 @@ class student_home_viewmodel with ChangeNotifier{
     }
     list_ui.clear();
     List<Course_Sgin>list = await this.shm.queryWhereEqual();
+    if(list.length==0){
+      Util.showTaost('暂 无 签 到', Toast.LENGTH_SHORT, Colors.red);
+    }
     for(Course_Sgin cs in list){
       //判断是否是这个班级的学生从而进行签到
       //检查是否是此班级学生

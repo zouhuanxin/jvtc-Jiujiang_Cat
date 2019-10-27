@@ -12,6 +12,7 @@ import 'package:flutter_app01/HttpUtil/FileHttp.dart';
 import 'package:flutter_app01/HttpUtil/HttpUtil.dart';
 import 'package:flutter_app01/Utils/EventCallback.dart';
 import 'package:flutter_app01/Utils/Record_Text.dart';
+import 'package:flutter_app01/common/Loading_Toast.dart';
 import 'package:flutter_app01/index/navigation_icon_view.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -280,6 +281,8 @@ class competition_release_State extends State<competition_release> {
         fontSize: 16.0);
   }
 
+  //加载提示ui
+  Loading_Toast lt;
   Align buildSubmitButton() {
     return Align(
       child: SizedBox(
@@ -295,6 +298,8 @@ class competition_release_State extends State<competition_release> {
             if(drop_value!=null&&introduce_str!=null){
               //先上次三张图
               //再上传资料
+              lt=Loading_Toast(context,'提交照片中...');
+              lt.Open_Loading();
               _uploadiamge();
             }else{
               showTaost("请填写完整信息",Toast.LENGTH_SHORT,Colors.red);
@@ -320,6 +325,7 @@ class competition_release_State extends State<competition_release> {
     if(file1==null&&file2==null&&file3==null){
       imageurls.add('https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=3956878071,2257649761&fm=26&gp=0.jpg');
     }
+    lt.Upload_data('照片提交完毕，开始上传资料信息。');
     await _saveSingle();
   }
 
@@ -335,6 +341,8 @@ class competition_release_State extends State<competition_release> {
     cp.image2=imageurls.length>1?imageurls[1]:null;
     cp.image3=imageurls.length>2?imageurls[2]:null;
     cp.save().then((BmobSaved bmobSaved) {
+      lt.Upload_data('报名成功');
+      lt.Close_Loading();
       showTaost('报名成功',Toast.LENGTH_SHORT,Colors.blue);
       Navigator.pop(context);
     }).catchError((e) {

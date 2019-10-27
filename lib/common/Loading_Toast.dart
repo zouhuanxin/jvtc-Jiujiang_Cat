@@ -11,6 +11,7 @@ class Loading_Toast {
   Loading_Toast(BuildContext context,String text) {
     this.context=context;
     this.text = text;
+    bus.off("Loading_Toast_meg"); //移除广播机制
   }
 
   //更新数据

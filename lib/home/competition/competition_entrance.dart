@@ -4,6 +4,7 @@ import 'package:flutter_app01/Bean/competition_type.dart';
 import 'package:flutter_app01/Utils/Record_Text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app01/my/SMS_password.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'competition_details.dart';
 import 'competition_person.dart';
@@ -56,8 +57,7 @@ class competition_entrance_State extends State<competition_entrance> {
       alignment: Alignment.center,
       child: new Container(
         margin: EdgeInsets.fromLTRB(0, 25, 0, 0),
-        width: 300,
-        height: 50,
+        width: ScreenUtil().setWidth(1000),
         child: RaisedButton(
           textTheme: ButtonTextTheme.accent,
           color: Color(int.parse(ct.color)),
@@ -87,9 +87,20 @@ class competition_entrance_State extends State<competition_entrance> {
                       )));
             }
           },
-          child: Text(
-            ct.text,
-            style: TextStyle(color: Colors.white, fontSize: 30),
+          child: Column(
+            children: <Widget>[
+              SizedBox(height: ScreenUtil().setHeight(20),),
+              Text(
+                ct.text,
+                style: TextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(60),fontWeight: FontWeight.w500),
+              ),
+              Text(
+                ct.introduce,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 7,
+                style: TextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(30)),
+              ),
+            ],
           ),
         ),
       ),

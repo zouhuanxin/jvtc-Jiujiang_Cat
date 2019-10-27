@@ -69,6 +69,7 @@ class bind_stu_viewmodel with ChangeNotifier{
         loading();
         lt.Close_Loading();
       }else{
+        lt.Close_Loading();
         Util.showTaost('密码错误', Toast.LENGTH_SHORT, Colors.red);
       }
     }else{

@@ -131,6 +131,10 @@ class _HomePageState extends State<HomePage> {
     //print(str);
     switch (str) {
       case '学教平台':
+        if(now_studentid.length!=9){
+          Util.showTaost('你不是学生，暂无权限。', Toast.LENGTH_SHORT, Colors.grey);
+          return;
+        }
         Navigator.push(context,
             new MaterialPageRoute(builder: (context) => new learn_tach()));
         break;
@@ -242,30 +246,50 @@ class _HomePageState extends State<HomePage> {
                 builder: (context) => new competition_entrance()));
         break;
       case '教师上课签到记录':
+        if(now_studentid.length!=5){
+          Util.showTaost('你不是教师，暂无权限。', Toast.LENGTH_SHORT, Colors.grey);
+          return;
+        }
         Navigator.push(
             context,
             new MaterialPageRoute(
                 builder: (context) => new teach_home_view()));
         break;
       case '教师教务系统':
+        if(now_studentid.length!=5){
+          Util.showTaost('你不是教师，暂无权限。', Toast.LENGTH_SHORT, Colors.grey);
+          return;
+        }
         Navigator.push(
             context,
             new MaterialPageRoute(
                 builder: (context) => new teach_jw_main_view()));
         break;
       case '教师学工平台':
+        if(now_studentid.length!=5){
+          Util.showTaost('你不是教师，暂无权限。', Toast.LENGTH_SHORT, Colors.grey);
+          return;
+        }
         Navigator.push(
             context,
             new MaterialPageRoute(
                 builder: (context) => new teach_xg_main_view()));
         break;
       case '学生上课签到':
+        if(now_studentid.length!=9){
+          Util.showTaost('你不是学生，暂无权限。', Toast.LENGTH_SHORT, Colors.grey);
+          return;
+        }
         Navigator.push(
             context,
             new MaterialPageRoute(
                 builder: (context) => new student_home_view()));
         break;
       case '教师学教密码修改':
+        if(now_studentid.length!=5){
+          Util.showTaost('你不是教师，暂无权限。', Toast.LENGTH_SHORT, Colors.grey);
+          return;
+        }
         Navigator.push(
             context,
             new MaterialPageRoute(

@@ -158,7 +158,7 @@ class my_State extends State<my>{
                   child: Row(
                     children: <Widget>[
                       Image.asset('images/2.2.1.x/xuesheng.png',height: ScreenUtil().setHeight(100),),
-                      Text("学生版")
+                      Text("学生版",style: TextStyle(color: ui_model=='学生版'?Colors.blue:Colors.black26),)
                     ],
                   ),
                 ), value: "学生版",),
@@ -167,7 +167,7 @@ class my_State extends State<my>{
                   child: Row(
                     children: <Widget>[
                       Image.asset('images/2.2.1.x/jiaoshijie.png',height: ScreenUtil().setHeight(100),),
-                      Text("教师版")
+                      Text("教师版",style: TextStyle(color: ui_model=='教师版'?Colors.blue:Colors.black26))
                     ],
                   ),
                 ), value: "教师版",),

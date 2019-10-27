@@ -1,10 +1,13 @@
 
+import 'dart:convert';
+
 import 'package:data_plugin/bmob/bmob_query.dart';
 import 'package:data_plugin/bmob/response/bmob_error.dart';
 import 'package:data_plugin/bmob/response/bmob_handled.dart';
 import 'package:data_plugin/bmob/response/bmob_updated.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app01/Bean/Course_Sgin.dart';
+import 'package:flutter_app01/HttpUtil/HttpUtil.dart';
 import 'package:flutter_app01/Utils/Record_Text.dart';
 import 'package:flutter_app01/Utils/Util.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -43,5 +46,12 @@ class teach_home_model{
       print(BmobError.convert(e).error);
     });
     return type;
+  }
+
+  ///教务系统密码验证
+  Future<int>yzjw(String pass) async{
+    String jw_res=await HttpUtil.jwlogin('jwlogin', now_studentid.trim(), pass);
+    Map<String, dynamic> jw_maptemp = json.decode(jw_res);
+    return int.parse(jw_maptemp['code'].toString().trim());
   }
 }
