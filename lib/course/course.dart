@@ -5,6 +5,8 @@ import 'package:flutter_app01/Bean/config.dart';
 import 'package:flutter_app01/HttpUtil/HttpUtil.dart';
 import 'package:flutter_app01/Utils/Animation_list.dart';
 import 'package:flutter_app01/Utils/Util.dart';
+import 'package:flutter_app01/home/Teach_JW/View/teach_jw_login_view.dart';
+import 'package:flutter_app01/home/Teach_JW/View/teach_jw_main_view.dart';
 import 'package:flutter_app01/index/index.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:http/http.dart' as http;
@@ -134,11 +136,17 @@ class CoursePageState extends State<CoursPage> {
       }
     } else {
       if (resh_state == 1) {
-        Navigator.push(
-            context,
-            new MaterialPageRoute(
-                builder: (context) => new learn_teach_login()));
-        //showmodel('请先登录学教平台', Colors.red);
+        if(ui_model=='学生版'){
+          Navigator.push(
+              context,
+              new MaterialPageRoute(
+                  builder: (context) => new learn_teach_login()));
+        }else{
+          Navigator.push(
+              context,
+              new MaterialPageRoute(
+                  builder: (context) => new teach_jw_main_view()));
+        }
       }
     }
   }

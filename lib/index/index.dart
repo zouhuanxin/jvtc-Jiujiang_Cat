@@ -259,7 +259,6 @@ class IndexState extends State<Index> with TickerProviderStateMixin {
       }
       sharedPreferences.setString('date',date);
     }).catchError((e) {});
-
   }
 
   void heduishefen() async{

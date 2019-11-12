@@ -150,7 +150,7 @@ class teach_xg_login_view_State extends State<teach_xg_login_view> {
               new Container(
                 padding: EdgeInsets.all(8.0),
                 child: new Text(
-                  '教师教务LOGIN',
+                  '教师学工LOGIN',
                   style: TextStyle(
                       fontSize: 30.0, color: Color(int.parse(color2))),
                 ),

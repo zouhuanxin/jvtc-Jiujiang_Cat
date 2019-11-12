@@ -71,22 +71,17 @@ class _HomePageState extends State<HomePage> {
       query.addWhereEqualTo("phone", phone.toString().trim());
       query.queryObjects().then((data) {
         List<QTuser> list2 = data.map((i) => QTuser.fromJson(i)).toList();
-
-        if(list2[0].notice!=null&&list2[0].notice.length!=0){
-          if(int.parse(list2[0].notice.toString())<list1.length){
-            setState(() {
+        setState(() {
+          if(list2[0].notice!=null&&list2[0].notice.length!=0){
+            if(int.parse(list2[0].notice.toString())<list1.length){
               unread=(list1.length-int.parse(list2[0].notice.toString())).toString();
-            });
-          }else{
-            setState(() {
+            }else{
               unread='';
-            });
-          }
-        }else{
-          setState(() {
+            }
+          }else{
             unread=list1.length.toString();
-          });
-        }
+          }
+        });
 
       }).catchError((e) {});
     }).catchError((e) {
