@@ -68,7 +68,7 @@ class learn_teach_State extends State<learn_tach>{
           child: new Row(
             children: <Widget>[
               Expanded(
-                child: new Image(image: new NetworkImage('http://xz.jvtc.jx.cn/JVTC_XG/DownLoad/Student/'+learn_teach_student_id+'.jpg')),
+                child: new Image(image: new NetworkImage('http://xz.jvtc.jx.cn/JVTC_XG/DownLoad/Student/'+learn_teach_student_id.toString().trim()+'.jpg')),
                 flex: 1,
               ),
               Expanded(

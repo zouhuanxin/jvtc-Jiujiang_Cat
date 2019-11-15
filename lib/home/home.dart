@@ -203,7 +203,7 @@ class _HomePageState extends State<HomePage> {
             context,
             new MaterialPageRoute(
                 builder: (context) => new WebViewPage(
-                    url: 'http://47.94.255.154:8080/software2.0/index.html',
+                    url: 'http://dyzuis.cn:8080/software2.0/index.html',
                     title: '软件协会官方网站')));
         break;
       case '协会收款':
@@ -223,7 +223,7 @@ class _HomePageState extends State<HomePage> {
             context,
             new MaterialPageRoute(
                 builder: (context) => new WebViewPage(
-                    url: 'http://47.94.255.154:8080/PPball/index.html',
+                    url: 'http://dyzuis.cn:8080/PPball/index.html',
                     title: '碰碰球')));
         break;
       case '失物招领':

@@ -49,7 +49,7 @@ class _SplashPageState extends State<SplashPage> {
       children: [
         new ConstrainedBox(
           constraints: BoxConstraints.expand(),
-          child: Image(image: NetworkImage('http://47.94.255.154:8080/zhximage/qidong02.png'), fit: BoxFit.fill,),
+          child: Image(image: NetworkImage('http://dyzuis.cn:8080/zhximage/qidong02.png'), fit: BoxFit.fill,),
         ),
         new Padding(
           padding: new EdgeInsets.fromLTRB(0.0, 30.0, 10.0, 0.0),

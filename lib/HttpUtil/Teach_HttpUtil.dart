@@ -5,7 +5,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter/material.dart';
 
 class Teach_HttpUtil{
-  static final host = 'http://47.94.255.154:8080';
+  static final host = 'http://dyzuis.cn:8080';
   static final baseUrl = host + '/test/';
 
   static Future<String> teach_teach_info(url,cookie) async {

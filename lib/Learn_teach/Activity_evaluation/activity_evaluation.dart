@@ -25,115 +25,119 @@ class activity_evaluation_State extends State<activity_evaluation>{
   //paging value
   num now_page=1;
   num sum_page=0;
-  num page_nmber=10;
-  num now_loading_entry_sum=10;
+  num page_nmber=5;
+  num now_loading_entry_sum=5;
 
   Widget activity_eevaluation_Card(){
-    return new Container(
-      child: new Column(
-        children: activity_evaluation_ui_list,
-      ),
-    );
+    try{
+      return new Container(
+        child: new Column(
+          children: activity_evaluation_ui_list,
+        ),
+      );
+    }catch(e){}
   }
 
   List<Widget>activity_evaluation_ui_list=[];
   List<Map<String,Object>>activity_evaluation_map_list=[];
   void _loading_activity_evaluation_ui(){
     activity_evaluation_ui_list.clear();
-    if(activity_evaluation_list.length>10){
-      sum_page=(activity_evaluation_list.length/10);
+    if(activity_evaluation_list.length>page_nmber){
+      sum_page=(activity_evaluation_list.length/page_nmber);
       sum_page=int.parse(sum_page.toString().split('.')[0]);
-      if(activity_evaluation_list.length%10!=0){
+      if(activity_evaluation_list.length%page_nmber!=0){
         sum_page++;
       }
     }else{
       sum_page=1;
     }
-    var i=(now_page-1)*10;
+    var i=(now_page-1)*page_nmber;
     if(now_page==sum_page){
       now_loading_entry_sum=activity_evaluation_list.length;
     }else{
-      now_loading_entry_sum=10*now_page;
+      now_loading_entry_sum=page_nmber*now_page;
     }
     for(i;i<now_loading_entry_sum;i++){
       Map<String,Object> tempmap=json.decode(json.encode(activity_evaluation_list[i]));
       activity_evaluation_map_list.add(tempmap);
-      activity_evaluation_ui_list.add(Container(
-        padding: EdgeInsets.all(10.0),
-        decoration: BoxDecoration(
-            color: Color(int.parse(color4)),
-            borderRadius: BorderRadius.all(Radius.circular(10.0))
-        ),
-        margin: EdgeInsets.all(10.0),
-        child: new Column(
-          children: <Widget>[
-            new Row(
-              children: <Widget>[
-                new Text('活动名称',textAlign: TextAlign.center),
-                Expanded(
-                  flex: 1,
-                  child: new Text(tempmap==null?'':tempmap['name'],textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,),
-                ),
-              ],
-            ),
-            new Row(
-              children: <Widget>[
-                new Text('活动时间',textAlign: TextAlign.center),
-                Expanded(
-                  flex: 1,
-                  child: new Text(tempmap==null?'':tempmap['date'],textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,),
-                ),
-              ],
-            ),
-            new Row(
-              children: <Widget>[
-                new Text('活动类型',textAlign: TextAlign.center),
-                Expanded(
-                  flex: 1,
-                  child: new Text(tempmap==null?'':tempmap['type'],textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,),
-                ),
-              ],
-            ),
-            new Row(
-              children: <Widget>[
-                new Text('素拓分',textAlign: TextAlign.center),
-                Expanded(
-                  flex: 1,
-                  child: new Text(tempmap==null?'':tempmap['score'],textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,),
-                ),
-              ],
-            ),
-            new Row(
-              children: <Widget>[
-                new Text('申请单位',textAlign: TextAlign.center),
-                Expanded(
-                  flex: 1,
-                  child: new Text(tempmap==null?'':tempmap['unit'],textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,),
-                ),
-                new Text('状态',textAlign: TextAlign.center),
-                Expanded(
-                  flex: 1,
-                  child: new Text(tempmap==null?'':tempmap['stat'],textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,),
-                ),
-              ],
-            ),
-            new Row(
-              children: <Widget>[
-                new Container(
-                  margin: EdgeInsets.fromLTRB(10, 5, 0, 0),
-                  child: new GestureDetector(
-                    onTap: (){_activity_evaluation(tempmap['id']);},
-                    child: new Text(tempmap==null?'':
-                    (tempmap['stat']=='未评价，点击评价'||tempmap['stat']=='未评价,点击评价'?'点击评价':''),textAlign: TextAlign.center,
-                      style: TextStyle(color: tempmap==null?Colors.black26:
-                      (tempmap['stat']=='未评价，点击评价'||tempmap['stat']=='未评价,点击评价'?Colors.red:Colors.black26)),)
+      try{
+        activity_evaluation_ui_list.add(Container(
+          padding: EdgeInsets.all(10.0),
+          decoration: BoxDecoration(
+              color: Color(int.parse(color4)),
+              borderRadius: BorderRadius.all(Radius.circular(10.0))
+          ),
+          margin: EdgeInsets.all(10.0),
+          child: new Column(
+            children: <Widget>[
+              new Row(
+                children: <Widget>[
+                  new Text('活动名称',textAlign: TextAlign.center),
+                  Expanded(
+                    flex: 1,
+                    child: new Text(tempmap['name']==null?'':tempmap['name'],textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,),
                   ),
-                )
-              ],
-            )
-          ],
-        ),
-      ));
+                ],
+              ),
+              new Row(
+                children: <Widget>[
+                  new Text('活动时间',textAlign: TextAlign.center),
+                  Expanded(
+                    flex: 1,
+                    child: new Text(tempmap['date']==null?'':tempmap['date'],textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,),
+                  ),
+                ],
+              ),
+              new Row(
+                children: <Widget>[
+                  new Text('活动类型',textAlign: TextAlign.center),
+                  Expanded(
+                    flex: 1,
+                    child: new Text(tempmap['type']==null?'':tempmap['type'],textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,),
+                  ),
+                ],
+              ),
+              new Row(
+                children: <Widget>[
+                  new Text('素拓分',textAlign: TextAlign.center),
+                  Expanded(
+                    flex: 1,
+                    child: new Text(tempmap['score']==null?'':tempmap['score'],textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,),
+                  ),
+                ],
+              ),
+              new Row(
+                children: <Widget>[
+                  new Text('申请单位',textAlign: TextAlign.center),
+                  Expanded(
+                    flex: 1,
+                    child: new Text(tempmap['unit']==null?'':tempmap['unit'],textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,),
+                  ),
+                  new Text('状态',textAlign: TextAlign.center),
+                  Expanded(
+                    flex: 1,
+                    child: new Text(tempmap['stat']==null?'':tempmap['stat'],textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,),
+                  ),
+                ],
+              ),
+              new Row(
+                children: <Widget>[
+                  new Container(
+                    margin: EdgeInsets.fromLTRB(10, 5, 0, 0),
+                    child: new GestureDetector(
+                        onTap: (){_activity_evaluation(tempmap['id']);},
+                        child: new Text(tempmap['stat']==null?'':
+                        (tempmap['stat']=='未评价，点击评价'||tempmap['stat']=='未评价,点击评价'?'点击评价':'你已经评价完了哦'),textAlign: TextAlign.center,
+                          style: TextStyle(color: tempmap==null?Colors.black26:
+                          (tempmap['stat']=='未评价，点击评价'||tempmap['stat']=='未评价,点击评价'?Colors.red:Colors.black26)),)
+                    ),
+                  )
+                ],
+              )
+            ],
+          ),
+        ));
+      }catch(e){}
     }
   }
 
@@ -247,7 +251,6 @@ class activity_evaluation_State extends State<activity_evaluation>{
     }else{
       Navigator.pop(context);
     }
-    print('activity_evaluation_list:$activity_evaluation_list');
     setState(() {
       _loading_activity_evaluation_ui();
     });

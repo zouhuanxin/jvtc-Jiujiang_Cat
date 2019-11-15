@@ -221,7 +221,7 @@ class learn_teach_login_State extends State<learn_teach_login>{
 
     if(jw_maptemp['code'].toString().trim()!='0'){
       Fluttertoast.showToast(
-          msg: "学工系统登陆失败",
+          msg: "教务系统登陆失败",
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.TOP,
           timeInSecForIos: 1,

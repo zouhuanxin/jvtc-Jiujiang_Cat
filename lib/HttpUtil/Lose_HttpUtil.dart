@@ -6,7 +6,7 @@ class Lose_HttpUtil {
   static String token;
 
   //node Server //192.168.0.104
-  static final node_host = 'http://47.94.255.154:3000';
+  static final node_host = 'http://dyzuis.cn:3000';
   static final node_baseUrl = node_host + '/rjxhmange/';
 
   //losea表增删改查

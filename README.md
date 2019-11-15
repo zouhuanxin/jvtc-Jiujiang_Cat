@@ -7,7 +7,7 @@
 
 ### 并为技术交流的同学提供部分教务系统以及图书馆接口 (接口如有设计不合理之处望多指教) 不可用于不正当用途
 
-### apk文件下载连接 http://47.94.255.154:8080/test/downloadfile 你也可以在build\app\outputs\apk\release目录中提取  （文件大小在20M左右,下载可能较慢请耐心等待）
+### apk文件下载连接 http://dyzuis.cn:8080/test/downloadfile 你也可以在build\app\outputs\apk\release目录中提取  （文件大小在20M左右,下载可能较慢请耐心等待）
 
 #### 目前程序全部功能仅支持九江技术学院学生使用非本校学生支持处学工平台，教务系统，图书馆系统外的功能使用。
 
@@ -17,36 +17,36 @@
 以下接口无特别说明均为post请求
 
 * 教务系统接口
-  ##### [获取课表接口]http://47.94.255.154:8080/test/kcinfo
+  ##### [获取课表接口]http://dyzuis.cn:8080/test/kcinfo
   {"rq":"2018-05-02","cookie":"登陆接口获取到的cookie"}
-  ##### [教务系统登陆接口] http://47.94.255.154:8080/test/jwlogin
+  ##### [教务系统登陆接口] http://dyzuis.cn:8080/test/jwlogin
   {"jwusername": "账号","jwpassword":"密码"}
-  ##### [成绩查询接口] http://47.94.255.154:8080/test/cjinfo
+  ##### [成绩查询接口] http://dyzuis.cn:8080/test/cjinfo
   {"kksj": "开课时间","kcxz": "课程性质","kcmc": "","xsfs": "显示方式","cookie": "cookie"}
   开课时间:2018-2019-1
   课程性质:(全部)'',(公共课)01,(专业基础课)03,(专业课)04,(公共选修课)06,(其他)07
   显示方式:(显示全部成绩)all,(显示最好成绩)max
 * 图书馆接口
-   ##### [获取图书馆验证码以及身份接口]http://47.94.255.154:8080/test/tsyzinfo
+   ##### [获取图书馆验证码以及身份接口]http://dyzuis.cn:8080/test/tsyzinfo
    调用其他图书馆接口前必须调用此接口获取相应的验证码以及身份，验证码返回格式是base64请自行转码。
-   ##### [图书馆登陆接口]http://47.94.255.154:8080/test/tslogininfo
+   ##### [图书馆登陆接口]http://dyzuis.cn:8080/test/tslogininfo
     {"number": "学号","passwd": "密码","captcha": "验证码","cookie": ""}
     此处建议保存验证码后面有相应接口需要用到验证码验证，到时只需要把这里保存的验证码提取出来发送过去即可。
-   ##### [图书馆个人信息接口]http://47.94.255.154:8080/test/tsmyinfo
+   ##### [图书馆个人信息接口]http://dyzuis.cn:8080/test/tsmyinfo
       {"cookie": ""}
-   ##### [图书馆借阅历史接口]http://47.94.255.154:8080/test/tshistorylbinfo
+   ##### [图书馆借阅历史接口]http://dyzuis.cn:8080/test/tshistorylbinfo
    {"para_string":"all","cookie": ""}
-   ##### [图书馆当前借阅接口]http://47.94.255.154:8080/test/tsdqjyinfo
+   ##### [图书馆当前借阅接口]http://dyzuis.cn:8080/test/tsdqjyinfo
      {"cookie": ""}
-   ##### [图书馆续借图书接口]http://47.94.255.154:8080/test/tsxjinfo
+   ##### [图书馆续借图书接口]http://dyzuis.cn:8080/test/tsxjinfo
    {"bar_code": "从相应接口传回来的信息获取","check": "从相应接口传回来的信息获取","captcha": "登陆时保存的验证码","cookie": ""}
-   ##### [图书馆取消预约接口]http://47.94.255.154:8080/test/tsqxydinfo
+   ##### [图书馆取消预约接口]http://dyzuis.cn:8080/test/tsqxydinfo
    {"call_no": "从相应接口传回来的信息获取","marc_no": "从相应接口传回来的信息获取","loca": "从相应接口传回来的信息获取","time": "","cookie": ""}
-   ##### [图书馆获取账单信息接口]http://47.94.255.154:8080/test/tszmqdinfo
+   ##### [图书馆获取账单信息接口]http://dyzuis.cn:8080/test/tszmqdinfo
    {"cookie": ""}
-   ##### [图书馆获取账单信息接口]http://47.94.255.154:8080/test/tsqxydlbinfo
+   ##### [图书馆获取账单信息接口]http://dyzuis.cn:8080/test/tsqxydlbinfo
    {"cookie": ""}
-   ##### [图书馆获取账单信息接口]http://47.94.255.154:8080/test/tsjylbinfo
+   ##### [图书馆获取账单信息接口]http://dyzuis.cn:8080/test/tsjylbinfo
    {"id":"从相应接口传回来的信息获取","cookie": ""}
    
    ps:这里说的相应接口指的是你获取图书信息的接口，里面会有相应参数返回，请自行查看。

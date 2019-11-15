@@ -71,11 +71,11 @@ class Collection_State extends State<Collection> {
       children: <Widget>[
         Expanded(
           flex: 1,
-          child: new Image(image: new NetworkImage('http://47.94.255.154:8080/zhximage/wxyb1.png'),height: 200,),
+          child: new Image(image: new NetworkImage('http://dyzuis.cn:8080/zhximage/wxyb1.png'),height: 200,),
         ),
         Expanded(
           flex: 1,
-          child: new Image(image: new NetworkImage('http://47.94.255.154:8080/zhximage/zfbyb1.png'),height: 200,),
+          child: new Image(image: new NetworkImage('http://dyzuis.cn:8080/zhximage/zfbyb1.png'),height: 200,),
         ),
       ],
     ),
@@ -415,7 +415,7 @@ class Collection_State extends State<Collection> {
                       new GestureDetector(
                         onTap: (){
                           Navigator.push(context,
-                              new MaterialPageRoute(builder: (context) => new WebViewPage(url:'http://47.94.255.154:8080/zhxword/jzxms_collection_sm.html',title:'收款使用说明')));
+                              new MaterialPageRoute(builder: (context) => new WebViewPage(url:'http://dyzuis.cn:8080/zhxword/jzxms_collection_sm.html',title:'收款使用说明')));
                         },
                         child:  Align(
                           alignment: Alignment.topRight,

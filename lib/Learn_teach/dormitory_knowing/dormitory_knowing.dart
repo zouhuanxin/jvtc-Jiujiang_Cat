@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:meta/meta.dart';
 import 'package:flutter_app01/Learn_teach/learn_teach.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
@@ -27,6 +28,35 @@ class dormitory_knowing_State extends State<dormitory_knowing>{
   num sum_page=0;
   num page_nmber=10;
   num now_loading_entry_sum=10;
+
+  num hongbang=0,baibang=0,anquan=0;
+
+  Widget head_card(){
+    for(int i=0;i<dormitory_knowing_list.length;i++){
+      Map<String,Object> tempmap=json.decode(json.encode(dormitory_knowing_list[i]));
+      if(tempmap['grade']=='红榜寝室'){
+        hongbang++;
+      }else if(tempmap['grade']=='白榜寝室'){
+        baibang++;
+      }else{
+        anquan++;
+      }
+    }
+    return new Container(
+      height:ScreenUtil().setHeight(60),
+      child: new Column(
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              Expanded(child: Text('红榜'+hongbang.toString(),style: TextStyle(color: Colors.red),textAlign: TextAlign.center,),flex: 1,),
+              Expanded(child: Text('白榜'+baibang.toString(),style: TextStyle(color: Colors.grey),textAlign: TextAlign.center,),flex: 1,),
+              Expanded(child: Text('安全'+anquan.toString(),style: TextStyle(color: Colors.green),textAlign: TextAlign.center,),flex: 1,)
+            ],
+          )
+        ],
+      ),
+    );
+  }
 
   Widget activity_eevaluation_Card(){
     return new Container(
@@ -88,7 +118,8 @@ class dormitory_knowing_State extends State<dormitory_knowing>{
                 new Text('状态',textAlign: TextAlign.center),
                 Expanded(
                   flex: 1,
-                  child: new Text(tempmap==null?'':tempmap['grade'],textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,),
+                  child: new Text(tempmap==null?'':tempmap['grade'],textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,
+                  style: TextStyle(color: tempmap['grade']=='红榜寝室'?Colors.blue:tempmap['grade']=='白榜寝室'?Colors.red:Colors.black),),
                 ),
               ],
             ),
@@ -175,6 +206,7 @@ class dormitory_knowing_State extends State<dormitory_knowing>{
           child: new ListView(
             padding: EdgeInsets.all(10.0),
             children: <Widget>[
+              head_card(),
               activity_eevaluation_Card(),
               paging_component(),
             ],

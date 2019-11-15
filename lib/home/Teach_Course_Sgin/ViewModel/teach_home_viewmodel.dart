@@ -110,7 +110,7 @@ class teach_home_viewmodel with ChangeNotifier {
         new MaterialPageRoute(
             builder: (context) => new WebViewPage(
                 url:
-                    'http://47.94.255.154:8080/imagetable/index.html?teachid=' +
+                    'http://dyzuis.cn:8080/imagetable/index.html?teachid=' +
                         now_studentid +
                         '&sid=' +
                         input1 +

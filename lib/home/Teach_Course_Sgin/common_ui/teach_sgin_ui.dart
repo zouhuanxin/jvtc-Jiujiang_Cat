@@ -65,12 +65,12 @@ class teach_sgin_ui{
             color: Colors.blue,
             icon: Icons.format_align_center,
             onTap: () {
-              //http://47.94.255.154:8080/bjtable/index.html?id=11041&name=%E8%BD%AF%E4%BB%B6%E5%BB%BA%E6%A8%A1-%E7%A7%BB%E5%8A%A8%E4%BA%92%E8%81%941801%E7%8F%AD
+              //http://dyzuis.cn:8080/bjtable/index.html?id=11041&name=%E8%BD%AF%E4%BB%B6%E5%BB%BA%E6%A8%A1-%E7%A7%BB%E5%8A%A8%E4%BA%92%E8%81%941801%E7%8F%AD
               Navigator.push(
                   context,
                   new MaterialPageRoute(
                       builder: (context) => new WebViewPage(
-                          url: 'http://47.94.255.154:8080/bjtable/index.html?id='+cs.teachid+'&name='+cs.course_name+'',
+                          url: 'http://dyzuis.cn:8080/bjtable/index.html?id='+cs.teachid+'&name='+cs.course_name+'',
                           title: '班级签到统计')));
             },
             closeOnTap: true,

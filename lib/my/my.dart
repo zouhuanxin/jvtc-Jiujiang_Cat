@@ -92,7 +92,7 @@ class my_State extends State<my>{
         break;
       case '免责声明':
         Navigator.push(context,
-            new MaterialPageRoute(builder: (context) => new WebViewPage(url:'http://47.94.255.154:8080/zhxword/九职小猫手免责声明.html',title:'免责声明')));
+            new MaterialPageRoute(builder: (context) => new WebViewPage(url:'http://dyzuis.cn:8080/zhxword/九职小猫手免责声明.html',title:'免责声明')));
         break;
       case '退出登陆':
         _showmodel_cancel_login_stystem('退出登陆','你确定退出登陆吗?');

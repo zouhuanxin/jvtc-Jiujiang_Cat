@@ -222,7 +222,7 @@ class library_login_State extends State<library_login>{
   }
   
   void _get_Verification_code_image() async{
-    http.Response response=await http.get('http://47.94.255.154:8080/test/tsyzinfo');
+    http.Response response=await http.get('http://dyzuis.cn:8080/test/tsyzinfo');
     Map<String,Object>map1=json.decode(response.body.toString());
     prefs.setString('tscookie', map1['cookie'].toString().split(";")[0].split("=")[1]);
     setState(() {

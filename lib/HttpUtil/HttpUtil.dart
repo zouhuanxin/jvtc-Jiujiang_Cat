@@ -8,14 +8,14 @@ class HttpUtil {
   static String token;
 
   //Learn platform Server address
-  static final learn_host = 'http://47.94.255.154:8080';
+  static final learn_host = 'http://dyzuis.cn:8080';
   static final learn_baseUrl = learn_host + '/test/';
 
   //node Server //192.168.0.104
-  static final node_host = 'http://47.94.255.154:3000';
+  static final node_host = 'http://dyzuis.cn:3000';
   static final node_baseUrl = node_host + '/rjxhmange/collection/';
 
-  static final node_host2 = 'http://47.94.255.154:3000';
+  static final node_host2 = 'http://dyzuis.cn:3000';
   static final node_baseUrl2 = node_host2 + '/rjxhmange';
 
   //Teach platform Server address

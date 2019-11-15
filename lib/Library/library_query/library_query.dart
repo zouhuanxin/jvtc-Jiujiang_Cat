@@ -290,7 +290,7 @@ class library_reservation_State extends State<library_reservation> {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     var temp = {'id': id, 'cookie': sharedPreferences.getString('tscookie')};
     http.Response response = await http.post(
-        'http://47.94.255.154:8080/test/tsjylbinfo', body: json.encode(temp));
+        'http://dyzuis.cn:8080/test/tsjylbinfo', body: json.encode(temp));
     //print(response.body);
     library_reservation_list =
         json.decode(json.encode(json.decode(response.body.toString())['data']));
@@ -415,7 +415,7 @@ class library_reservation_State extends State<library_reservation> {
       ,'pregKeepDays1':json.decode(json.encode(map['td8']))['pregKeepDays1'],'check':json.decode(json.encode(map['td8']))['check'],'csrf_token':''
       ,'cookie':sharedPreferences.getString('tscookie')};
     http.Response response = await http.post(
-        'http://47.94.255.154:8080/test/tsydinfo', body: json.encode(temp));
+        'http://dyzuis.cn:8080/test/tsydinfo', body: json.encode(temp));
     if(int.parse(json.decode(response.body)['code'].toString().trim())==0){
       Fluttertoast.showToast(
           msg: "预约成功",
