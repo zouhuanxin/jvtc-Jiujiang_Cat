@@ -290,6 +290,14 @@ class _HomePageState extends State<HomePage> {
             new MaterialPageRoute(
                 builder: (context) => new teach_student_uploadpass_view()));
         break;
+      case '寝室报修':
+        Navigator.push(
+            context,
+            new MaterialPageRoute(
+                builder: (context) => new WebViewPage(
+                    url: 'http://sso.jvtc.jx.cn/cas/login?service=http%3A%2F%2Fhqbx.jvtc.jx.cn%2FCASLogin',
+                    title: '寝室维修')));
+        break;
     }
   }
 
@@ -436,7 +444,7 @@ class _HomePageState extends State<HomePage> {
 //  }
 
 
-  Widget buildButtonColumn2(String imageurl, String label1, label2) {
+  Widget buildButtonColumn2(String imageurl, String label1, label2,double size) {
     Color color = Color(int.parse(color2));
     return new Container(
       margin: EdgeInsets.all(3.0),
@@ -449,8 +457,9 @@ class _HomePageState extends State<HomePage> {
             child: new ClipOval(
               child: new Image(
                 image: imageurl.indexOf('http')==-1?new AssetImage(imageurl):new NetworkImage(imageurl),
-                height: MediaQueryData.fromWindow(ui.window).size.height*0.09,
-                width: MediaQueryData.fromWindow(ui.window).size.height*0.09,
+                height: MediaQueryData.fromWindow(ui.window).size.height*size,
+                width: MediaQueryData.fromWindow(ui.window).size.height*size,
+                fit: BoxFit.fill
               ),
             ),
             onTap: () {
@@ -494,6 +503,66 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             flex: 23,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget buildButtonColumn4(String imageurl, String label1, label2,double size) {
+    Color color = Color(int.parse(color2));
+    return new Container(
+      margin: EdgeInsets.all(5.0),
+      child: new Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Expanded(child: Text(''),flex: 1,),
+          new ClipOval(
+            child: new Image(
+                image: new AssetImage(imageurl),
+                height: MediaQueryData.fromWindow(ui.window).size.height*size,
+                width: MediaQueryData.fromWindow(ui.window).size.height*size,
+                fit: BoxFit.fill
+            ),
+          ),
+          Expanded(child: Text(''),flex: 1,),
+          Expanded(
+            child: new Align(
+              alignment: FractionalOffset.bottomLeft,
+              child: new GestureDetector(
+                child: new Column(
+                  children: <Widget>[
+                    new Align(
+                      alignment: FractionalOffset.bottomLeft,
+                      child: new Text(
+                        label1,
+                        style: new TextStyle(
+                          fontSize: 15.0,
+                          fontWeight: FontWeight.w600,
+                          color: color,
+                        ),
+                      ),
+                    ),
+                    new Align(
+                      alignment: FractionalOffset.bottomLeft,
+                      child: new Text(
+                        label2,
+                        style: new TextStyle(
+                          fontSize: 10.0,
+                          fontWeight: FontWeight.w100,
+                          color: color,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                onTap: () {
+                  _model_click(label1);
+                },
+              ),
+            ),
+            flex: 16,
           ),
         ],
       ),
@@ -636,9 +705,10 @@ class _HomePageState extends State<HomePage> {
           new Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
+              buildButtonColumn4('images/2.2.1.x/qswx.png', '寝室报修', '九江职业技术学院宿舍损坏情况报修',0.072),
               buildButtonColumn2(
-                  'images/2.2.1.x/tug.png', '图书馆', '包含图书馆个人信息查看，书籍查询，预约书籍，取消预约，书籍续借，缴费信息等功能'),
-              buildButtonColumn2('images/2.2.1.x/zxsj.png', '作息时间', '可以查看作息时间表'),
+                  'images/2.2.1.x/tug.png', '图书馆', '包含图书馆个人信息查看，书籍查询，预约书籍，取消预约，书籍续借，缴费信息等功能',0.09),
+              buildButtonColumn2('images/2.2.1.x/zxsj.png', '作息时间', '可以查看作息时间表',0.09),
             ],
           ),
         ],
@@ -666,9 +736,9 @@ class _HomePageState extends State<HomePage> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               buildButtonColumn2(
-                  'images/2.2.1.x/xjpt.png', '学教平台', '学生信息，成绩查询，活动评价，素拓分查询，寝室情况查询'),
-              buildButtonColumn2('images/2.2.1.x/xsqd.png', '学生上课签到', '学生可以在此签到!'),
-              buildButtonColumn2('images/2.2.1.x/cjfx.png', '成绩分析', '数据分析仅供参考。'),
+                  'images/2.2.1.x/xjpt.png', '学教平台', '学生信息，成绩查询，活动评价，素拓分查询，寝室情况查询',0.09),
+              buildButtonColumn2('images/2.2.1.x/xsqd.png', '学生上课签到', '学生可以在此签到!',0.09),
+              buildButtonColumn2('images/2.2.1.x/cjfx.png', '成绩分析', '数据分析仅供参考。',0.09),
             ],
           ),
         ],
@@ -693,10 +763,10 @@ class _HomePageState extends State<HomePage> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           buildButtonColumn2(
-              'images/2.2.1.x/swzl.png', '失物招领', '采用AI识别技术帮助你尽可能的准确快速找到你的物品'),
-          buildButtonColumn2('images/2.2.1.x/sthd.png', '社团活动', '社团活动投票，投票需谨慎。'),
-          buildButtonColumn2('images/2.2.1.x/ywwx.png', '义务维修', '电脑，平板，手机，系统重装，需要请发表'),
-          buildButtonColumn2('images/2.2.1.x/djs.png', '倒计时', '帮助你记录重要的事情'),
+              'images/2.2.1.x/swzl.png', '失物招领', '采用AI识别技术帮助你尽可能的准确快速找到你的物品',0.09),
+          buildButtonColumn2('images/2.2.1.x/sthd.png', '社团活动', '社团活动投票，投票需谨慎。',0.09),
+          buildButtonColumn2('images/2.2.1.x/ywwx.png', '义务维修', '电脑，平板，手机，系统重装，需要请发表',0.09),
+          buildButtonColumn2('images/2.2.1.x/djs.png', '倒计时', '帮助你记录重要的事情',0.09),
         ],
       ),
     );
@@ -719,9 +789,9 @@ class _HomePageState extends State<HomePage> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           buildButtonColumn2('images/2.2.1.x/xxzq.png', '学习周期',
-              '不拼命久了，学习一个小时你觉得自己在拼命！记录你的学习时间,采集你学习周期时间给予建议，并用数据告诉你自己有没有拼命学习。'),
+              '不拼命久了，学习一个小时你觉得自己在拼命！记录你的学习时间,采集你学习周期时间给予建议，并用数据告诉你自己有没有拼命学习。',0.09),
           buildButtonColumn2('images/2.2.1.x/qzqqlt.png', '强制qq聊天',
-              '输入对方qq号可以强制拉起qq与对方进行交流,如果对方没有打开在线咨询则无法发送消息,你可以直接加为好友。'),
+              '输入对方qq号可以强制拉起qq与对方进行交流,如果对方没有打开在线咨询则无法发送消息,你可以直接加为好友。',0.09),
           //buildButtonColumn(Icons.supervisor_account, '情侣空间','你和对象的私人空间.'), //no open
         ],
       ),
@@ -744,11 +814,11 @@ class _HomePageState extends State<HomePage> {
       child: new Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          buildButtonColumn2('images/2.2.1.x/rjxh.png', '软件协会官方网站', '软件协会欢迎您!'),
+          buildButtonColumn2('images/2.2.1.x/rjxh.png', '软件协会官方网站', '软件协会欢迎您!',0.09),
           buildButtonColumn2('images/2.2.1.x/xhsk.png', '协会收款',
-              '九职协会收款助手，帮助协会活动招新收款项目的整理以及归纳，谨慎交钱，开心你我他。'),
+              '九职协会收款助手，帮助协会活动招新收款项目的整理以及归纳，谨慎交钱，开心你我他。',0.09),
           buildButtonColumn2(
-              'images/2.2.1.x/xhqhm.png', '协会群号码', '输入你的学号然后就会出现相应你加入的协会群号码。'),
+              'images/2.2.1.x/xhqhm.png', '协会群号码', '输入你的学号然后就会出现相应你加入的协会群号码。',0.09),
           //buildButtonColumn(Icons.supervisor_account, '情侣空间','你和对象的私人空间.'), //no open
         ],
       ),
@@ -771,7 +841,7 @@ class _HomePageState extends State<HomePage> {
       child: new Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          buildButtonColumn2('images/2.2.1.x/ppball.png', '碰碰球', '来吧，拼酒量，拼手速吧!'),
+          buildButtonColumn2('images/2.2.1.x/ppball.png', '碰碰球', '来吧，拼酒量，拼手速吧!',0.09),
         ],
       ),
     );
@@ -819,10 +889,10 @@ class _HomePageState extends State<HomePage> {
       child: new Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          buildButtonColumn2('images/2.2.1.x/jsxg.png', '教师教务系统', '课表查看需登陆此平台!'),
-          buildButtonColumn2('images/2.2.1.x/jsjw.png', '教师学工平台', '请假审批，困难学生认证，销假，学生密码修改等!'),
-          buildButtonColumn2('images/2.2.1.x/jsqd.png', '教师上课签到记录', '教师可以在此查看签到记录!'),
-          buildButtonColumn2('images/2.2.1.x/jsxjmmxg.png', '教师学教密码修改', '教师在这里进行教务系统，学工平台的密码统一修改!'),
+          buildButtonColumn2('images/2.2.1.x/jsxg.png', '教师教务系统', '课表查看需登陆此平台!',0.09),
+          buildButtonColumn2('images/2.2.1.x/jsjw.png', '教师学工平台', '请假审批，困难学生认证，销假，学生密码修改等!',0.09),
+          buildButtonColumn2('images/2.2.1.x/jsqd.png', '教师上课签到记录', '教师可以在此查看签到记录!',0.09),
+          buildButtonColumn2('images/2.2.1.x/jsxjmmxg.png', '教师学教密码修改', '教师在这里进行教务系统，学工平台的密码统一修改!',0.09),
         ],
       ),
     );

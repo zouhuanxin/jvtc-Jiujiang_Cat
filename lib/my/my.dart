@@ -108,6 +108,10 @@ class my_State extends State<my>{
           _showmodel('请先登陆',Toast.LENGTH_SHORT,Colors.red);
         }
         break;
+      case "意见反馈":
+        Navigator.push(context,
+            new MaterialPageRoute(builder: (context) => new WebViewPage(url:'http://dyzuis.cn:8080/D_1114/index.html',title:'意见反馈')));
+        break;
     }
   }
 
@@ -227,6 +231,7 @@ class my_State extends State<my>{
         body_component02('images/2.2.1.x/yswp.png',40, '遗失物品'),
         // body_component02('images/2.0.x/myzlxg.png',40, '资料修改'),
         body_component02('images/2.2.1.x/jcgx.png',45, '检查更新'),
+        body_component03('images/2.2.x/yijianfankui.png',32,50, '意见反馈'),
         body_component02('images/2.2.1.x/mzsm.png',45, '免责声明'),
         body_component02('images/2.2.1.x/tcdl.png',35, '退出登陆'),
         SizedBox(height: 10,)
@@ -251,6 +256,7 @@ class my_State extends State<my>{
         body_component02('images/2.2.1.x/ghtx.png',35, '更换头像'),
         // body_component02('images/2.0.x/myzlxg.png',40, '资料修改'),
         body_component02('images/2.2.1.x/jcgx.png',45, '检查更新'),
+        body_component03('images/2.2.x/yijianfankui.png',32,50, '意见反馈'),
         body_component02('images/2.2.1.x/mzsm.png',45, '免责声明'),
         body_component02('images/2.2.1.x/tcdl.png',35, '退出登陆'),
         SizedBox(height: 10,)
@@ -448,6 +454,42 @@ class my_State extends State<my>{
                 image: new AssetImage(imageurl),
                 height: 50,
                 width: 50,
+              ),
+            ),
+            Expanded(
+              child: new Text(label,
+                textAlign: TextAlign.left,style: TextStyle(fontSize: 20,color: Color(int.parse(color2)),),),
+              flex: 10,
+            ),
+            Expanded(
+              child: new Text(''),
+              flex: 1,
+            ),
+          ],
+        ),
+        onTap:(){
+          component02_click(label);
+        },
+      ),
+    );
+  }
+
+  Widget body_component03(String imageurl,double height,double width,String label){
+    return new Container(
+      decoration: new BoxDecoration(
+        border: new Border.all(width: 1.0, color: Color(int.parse(color1))),
+        color: Color(int.parse(color1)),
+      ),
+      padding: const EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0),
+      // margin: const EdgeInsets.all(5.0),
+      child:  new GestureDetector(
+        child: new Row(
+          children: <Widget>[
+            new ClipOval(
+              child: new Image(
+                image: new AssetImage(imageurl),
+                height: height,
+                width: width,
               ),
             ),
             Expanded(

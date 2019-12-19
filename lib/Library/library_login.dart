@@ -176,7 +176,7 @@ class library_login_State extends State<library_login>{
       ),
       validator: (String value) {
         var emailReg = RegExp(
-            r"(([0-9])){9}$");
+            r"(([0-9])){4}$");
         if (!emailReg.hasMatch(value)) {
           return '请输入正确的学号';
         }
