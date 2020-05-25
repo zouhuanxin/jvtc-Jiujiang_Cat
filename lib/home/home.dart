@@ -85,8 +85,8 @@ class _HomePageState extends State<HomePage> {
 
       }).catchError((e) {});
     }).catchError((e) {
-      print(BmobError.convert(e).error);
-      _showmodel('获取通知信息失败', Toast.LENGTH_SHORT,Colors.red);
+      //print(BmobError.convert(e).error);
+      //_showmodel('获取通知信息失败', Toast.LENGTH_SHORT,Colors.red);
     });
   }
   //修改用户浏览系统通知
@@ -116,7 +116,7 @@ class _HomePageState extends State<HomePage> {
 
   void _model_click(String str) {
     if(login_state==false){
-      Util.showTaost('请先登陆小猫手', Toast.LENGTH_SHORT, Colors.red);
+      Util.showTaost('请先登陆小猫', Toast.LENGTH_SHORT, Colors.red);
       return;
     }
     if(now_studentid==null||now_studentid.length<2){
@@ -211,7 +211,7 @@ class _HomePageState extends State<HomePage> {
           Navigator.push(context,
               new MaterialPageRoute(builder: (context) => new Collection()));
         } else {
-          _showmodel('请先登陆九职小猫手', Toast.LENGTH_SHORT, Colors.red);
+          _showmodel('请先登陆九职小猫', Toast.LENGTH_SHORT, Colors.red);
         }
         break;
       case '协会群号码':
@@ -231,7 +231,7 @@ class _HomePageState extends State<HomePage> {
           Navigator.push(context,
               new MaterialPageRoute(builder: (context) => new lf_main()));
         } else {
-          _showmodel('请先登陆九职小猫手', Toast.LENGTH_SHORT, Colors.red);
+          _showmodel('请先登陆九职小猫', Toast.LENGTH_SHORT, Colors.red);
         }
         break;
       case '社团活动':
@@ -350,7 +350,7 @@ class _HomePageState extends State<HomePage> {
             new MaterialPageRoute(
                 builder: (context) => new Student_assistant()));
       } else {
-        _showmodel('请先登陆九职小猫手', Toast.LENGTH_SHORT, Colors.red);
+        _showmodel('请先登陆九职小猫', Toast.LENGTH_SHORT, Colors.red);
       }
     }
   }
@@ -738,7 +738,7 @@ class _HomePageState extends State<HomePage> {
               buildButtonColumn2(
                   'images/2.2.1.x/xjpt.png', '学教平台', '学生信息，成绩查询，活动评价，素拓分查询，寝室情况查询',0.09),
               buildButtonColumn2('images/2.2.1.x/xsqd.png', '学生上课签到', '学生可以在此签到!',0.09),
-              buildButtonColumn2('images/2.2.1.x/cjfx.png', '成绩分析', '数据分析仅供参考。',0.09),
+              //buildButtonColumn2('images/2.2.1.x/cjfx.png', '成绩分析', '数据分析仅供参考。',0.09),
             ],
           ),
         ],
@@ -788,8 +788,8 @@ class _HomePageState extends State<HomePage> {
       child: new Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          buildButtonColumn2('images/2.2.1.x/xxzq.png', '学习周期',
-              '不拼命久了，学习一个小时你觉得自己在拼命！记录你的学习时间,采集你学习周期时间给予建议，并用数据告诉你自己有没有拼命学习。',0.09),
+          buildButtonColumn2('images/2.2.1.x/xxzq.png', '学习计时',
+              '系统计时器，优势在于不管你退没退出程序，系统计时都会一直在，不用担心计时不准确。',0.09),
           buildButtonColumn2('images/2.2.1.x/qzqqlt.png', '强制qq聊天',
               '输入对方qq号可以强制拉起qq与对方进行交流,如果对方没有打开在线咨询则无法发送消息,你可以直接加为好友。',0.09),
           //buildButtonColumn(Icons.supervisor_account, '情侣空间','你和对象的私人空间.'), //no open
@@ -847,12 +847,12 @@ class _HomePageState extends State<HomePage> {
     );
 
     //博客模块
-    Widget blog_text = new Offstage(
+    Widget other_text = new Offstage(
       offstage: blog_list.length==0?true:false,
       child: new Container(
         padding: const EdgeInsets.fromLTRB(32, 10, 32, 15),
         child: new Text(
-          '个人博客',
+          '推荐内容', //个人博客 //此次更新后不为博客
           softWrap: true,
           style: new TextStyle(
             color: Color(int.parse(color2)),
@@ -862,7 +862,7 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
-    Widget blog_button = new Offstage(
+    Widget other_button = new Offstage(
       offstage: blog_list.length==0?true:false,
       child: new Container(
         child: new Column(
@@ -905,16 +905,16 @@ class _HomePageState extends State<HomePage> {
           campus_student_button,
           campus_funcation_text,
           campus_funcation_button,
-          campus_life_text,
-          campus_life_button,
+//          campus_life_text,
+//          campus_life_button,
           campus_toolkit_text,
           campus_toolkit_button,
-          blog_text,
-          blog_button,
-          entertainment_text,
-          entertainment_button,
-          campus_xh_text,
-          campus_xh_button,
+//          entertainment_text,
+//          entertainment_button,
+//          campus_xh_text,
+//          campus_xh_button,
+          other_text,
+          other_button,
           SizedBox(
             height: 30,
           ),
@@ -930,8 +930,8 @@ class _HomePageState extends State<HomePage> {
           teach_button,
           campus_funcation_text,
           campus_funcation_button,
-          blog_text,
-          blog_button,
+//          blog_text,
+//          blog_button,
           SizedBox(
             height: 30,
           ),

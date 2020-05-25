@@ -204,6 +204,8 @@ class learn_teach_State extends State<learn_tach>{
         ),
         child: new ListView(
           children: <Widget>[
+            new Text("如无数据显示，请重新登陆。",style: TextStyle(color: Color(int.parse(color2)),fontWeight: FontWeight.w500,
+                fontSize: 17),textAlign: TextAlign.center,),
             topmodel(),
             bodymodel
           ],

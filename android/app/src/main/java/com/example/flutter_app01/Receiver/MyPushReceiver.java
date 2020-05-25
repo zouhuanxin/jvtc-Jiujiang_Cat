@@ -5,32 +5,26 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
 
-import com.example.flutter_app01.Util.Utils;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import cn.bmob.push.PushConstants;
 
 public class MyPushReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        System.out.println("开始执行push监听");
-        if(intent.getAction().equals(PushConstants.ACTION_MESSAGE)){
-            String str=intent.getStringExtra(PushConstants.EXTRA_PUSH_MESSAGE_STRING);
-            JSONObject json=null;
-            try {
-                json=new JSONObject(str);
-                System.out.println("str:"+json.getString("title"));
-                System.out.println("str:"+json.getString("content"));
-                Toast.makeText(context,intent.getStringExtra(PushConstants.EXTRA_PUSH_MESSAGE_STRING),Toast.LENGTH_SHORT).show();
-                //{"content":"这是测试内容","title":"标题测试"}
-                Utils.tz(context,json.getString("title"),json.getString("content"),json.getString("url"));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
+//        System.out.println("开始执行push监听");
+//        if(intent.getAction().equals(PushConstants.ACTION_MESSAGE)){
+//            String str=intent.getStringExtra(PushConstants.EXTRA_PUSH_MESSAGE_STRING);
+//            JSONObject json=null;
+//            try {
+//                json=new JSONObject(str);
+//                System.out.println("str:"+json.getString("title"));
+//                System.out.println("str:"+json.getString("content"));
+//                Toast.makeText(context,intent.getStringExtra(PushConstants.EXTRA_PUSH_MESSAGE_STRING),Toast.LENGTH_SHORT).show();
+//                //{"content":"这是测试内容","title":"标题测试"}
+//                Utils.tz(context,json.getString("title"),json.getString("content"),json.getString("url"));
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
+//        }
     }
 
 }

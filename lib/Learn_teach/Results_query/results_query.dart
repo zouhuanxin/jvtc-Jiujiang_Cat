@@ -67,6 +67,16 @@ class results_query_State extends State<results_query>{
       value: '2019-2020-2',
     );
     items.add(dropdownMenuItem8);
+    DropdownMenuItem dropdownMenuItem9=new DropdownMenuItem(
+      child:new Text('2020-2021-1'),
+      value: '2020-2021-1',
+    );
+    items.add(dropdownMenuItem9);
+    DropdownMenuItem dropdownMenuItem10=new DropdownMenuItem(
+      child:new Text('2020-2021-2'),
+      value: '2020-2021-2',
+    );
+    items.add(dropdownMenuItem10);
     return items;
   }
 

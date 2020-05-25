@@ -179,18 +179,22 @@ class my_State extends State<my>{
               onSelected: (String action) {
                 switch (action) {
                   case "学生版":
-                    setState(() {
-                      ui_model='学生版';
-                      Util.open_zbui(context);
-                    });
                     sharedPreferences.setString('ui_model', ui_model);
+                    if(sharedPreferences.getString("ui_model") != "学生版"){
+                      setState(() {
+                        ui_model='学生版';
+                        Util.open_zbui(context);
+                      });
+                    }
                     break;
                   case "教师版":
-                    setState(() {
-                      ui_model='教师版';
-                      Util.open_zbui(context);
-                    });
                     sharedPreferences.setString('ui_model', ui_model);
+                    if(sharedPreferences.getString("ui_model") != "教师版"){
+                      setState(() {
+                        ui_model='教师版';
+                        Util.open_zbui(context);
+                      });
+                    }
                     break;
                 }
               },
@@ -227,13 +231,16 @@ class my_State extends State<my>{
         body_component02('images/2.2.1.x/sdxh.png',40, '绑定学号'),
         body_component02('images/2.2.1.x/xgmm.png',40, '修改密码'),
         body_component02('images/2.2.1.x/ghtx.png',35, '更换头像'),
-        body_component02('images/2.2.1.x/sqwp.png',40, '拾取物品'),
-        body_component02('images/2.2.1.x/yswp.png',40, '遗失物品'),
+//        body_component02('images/2.2.1.x/sqwp.png',40, '拾取物品'),
+//        body_component02('images/2.2.1.x/yswp.png',40, '遗失物品'),
         // body_component02('images/2.0.x/myzlxg.png',40, '资料修改'),
         body_component02('images/2.2.1.x/jcgx.png',45, '检查更新'),
-        body_component03('images/2.2.x/yijianfankui.png',32,50, '意见反馈'),
+//        body_component03('images/2.2.x/yijianfankui.png',32,50, '意见反馈'),
         body_component02('images/2.2.1.x/mzsm.png',45, '免责声明'),
         body_component02('images/2.2.1.x/tcdl.png',35, '退出登陆'),
+        SizedBox(height: 10,),
+        new Text("联系开发者email:634448817@qq.com",textAlign: TextAlign.center,style: TextStyle(color: Color(int.parse(color2)),fontWeight:
+        FontWeight.w400,fontSize: 18),),
         SizedBox(height: 10,)
       ],
     );
@@ -256,9 +263,12 @@ class my_State extends State<my>{
         body_component02('images/2.2.1.x/ghtx.png',35, '更换头像'),
         // body_component02('images/2.0.x/myzlxg.png',40, '资料修改'),
         body_component02('images/2.2.1.x/jcgx.png',45, '检查更新'),
-        body_component03('images/2.2.x/yijianfankui.png',32,50, '意见反馈'),
+//        body_component03('images/2.2.x/yijianfankui.png',32,50, '意见反馈'),
         body_component02('images/2.2.1.x/mzsm.png',45, '免责声明'),
         body_component02('images/2.2.1.x/tcdl.png',35, '退出登陆'),
+        SizedBox(height: 10,),
+        new Text("联系开发者email:634448817@qq.com",textAlign: TextAlign.center,style: TextStyle(color: Color(int.parse(color2)),fontWeight:
+        FontWeight.w400,fontSize: 18),),
         SizedBox(height: 10,)
       ],
     );

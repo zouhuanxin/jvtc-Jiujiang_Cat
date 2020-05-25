@@ -13,10 +13,6 @@ import android.widget.TextView;
 
 import com.example.flutter_app01.*;
 
-import org.w3c.dom.Text;
-
-import androidx.appcompat.app.AppCompatActivity;
-
 public class MyWebView extends Activity {
 
     @Override

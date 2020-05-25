@@ -52,7 +52,7 @@ class Student_assistant_State extends State<Student_assistant>{
       appbar_bol=sharedPreferences.getBool('appbar_bol');
       if(appbar_bol){
         _starttime=sharedPreferences.getString('starttime');
-        print('_starttime:$_starttime');
+        //print('_starttime:$_starttime');
         _codeCountdownStr='结束学习';
         check_minutes();
         reGetCountdown();
@@ -382,8 +382,8 @@ class Student_assistant_State extends State<Student_assistant>{
           today_learn_minutes=json.decode(json.encode(learn_list[0].learn02))['sum'].toString();
         });
       }).catchError((e) {
-        print(BmobError.convert(e).error);
-        Toastmodel(BmobError.convert(e).error, Colors.red);
+        // print(BmobError.convert(e).error);
+       // Toastmodel(BmobError.convert(e).error, Colors.red);
       });
     }else{
       Toastmodel('请先登陆', Colors.red);

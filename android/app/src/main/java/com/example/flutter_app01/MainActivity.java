@@ -32,13 +32,6 @@ import java.util.TimeZone;
 import java.util.logging.Logger;
 
 import androidx.core.app.NotificationCompat;
-import cn.bmob.push.BmobPush;
-import cn.bmob.v3.Bmob;
-import cn.bmob.push.*;
-import cn.bmob.v3.BmobInstallation;
-import cn.bmob.v3.BmobInstallationManager;
-import cn.bmob.v3.InstallationListener;
-import cn.bmob.v3.exception.BmobException;
 import io.flutter.app.FlutterActivity;
 import io.flutter.plugin.common.EventChannel;
 import io.flutter.plugin.common.MethodCall;
@@ -209,7 +202,7 @@ public class MainActivity extends FlutterActivity {
     //开启一个手机通知栏信息
     public void androidpush(List<String> list){
         String channelId = "my_channel_01";
-        String channelName="我是九职小猫手课表通知";
+        String channelName="我是九职小猫课表通知";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy年MM月dd日");// HH:mm:ss
         //获取当前时间
         Date date = new Date(System.currentTimeMillis());
@@ -320,7 +313,7 @@ public class MainActivity extends FlutterActivity {
                 .setChannelId(channelId)
                 //.setContent(views)
                 .setSmallIcon(this.getResources().getIdentifier("cat1", "drawable",this.getPackageName()))
-                .setContentTitle("九职小猫手提醒你课表信息")
+                .setContentTitle("九职小猫提醒你课表信息")
                 .setContentText(simpleDateFormat.format(date))
                 .setOngoing(true)
                 .setShowWhen(false)
@@ -368,7 +361,7 @@ public class MainActivity extends FlutterActivity {
     //开启一个时间通知
     public void androidpush2(List<String>list){
         String channelId = "my_channel_02";
-        String channelName="我是九职小猫手时间通知";
+        String channelName="我是九职小猫时间通知";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy年MM月dd日");// HH:mm:ss
         //获取当前时间
         Date date = new Date(System.currentTimeMillis());
@@ -388,7 +381,7 @@ public class MainActivity extends FlutterActivity {
                 .setChannelId(channelId)
                 //.setContent(views)
                 .setSmallIcon(this.getResources().getIdentifier("cat1", "drawable",this.getPackageName()))
-                .setContentTitle("九职小猫手正在为你进行学习计时")
+                .setContentTitle("九职小猫正在为你进行学习计时")
                 .setContentText(list.get(0))
                 .setOngoing(true)
                 .setShowWhen(false)

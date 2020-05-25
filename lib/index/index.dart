@@ -305,7 +305,7 @@ class IndexState extends State<Index> with TickerProviderStateMixin {
                           offstage: url != '' ? false : true,
                           child: new FlatButton(
                             child: new Text(
-                              "${url != '' ? '更新线路1' : ''}",
+                              "${url != '' ? '线路一' : ''}",
                               style: TextStyle(color: Colors.red),
                             ),
                             onPressed: () {
@@ -322,7 +322,7 @@ class IndexState extends State<Index> with TickerProviderStateMixin {
                           offstage: url2 != '' ? false : true,
                           child: new FlatButton(
                             child: new Text(
-                              "${url2 != '' ? '更新线路2' : ''}",
+                              "${url2 != '' ? '线路二' : ''}",
                               style: TextStyle(color: Colors.red),
                             ),
                             onPressed: () {
@@ -335,7 +335,7 @@ class IndexState extends State<Index> with TickerProviderStateMixin {
                           offstage: url3 != '' ? false : true,
                           child: new FlatButton(
                             child: new Text(
-                              "${url3 != '' ? '更新线路3' : ''}",
+                              "${url3 != '' ? '线路三' : ''}",
                               style: TextStyle(color: Colors.red),
                             ),
                             onPressed: () {
