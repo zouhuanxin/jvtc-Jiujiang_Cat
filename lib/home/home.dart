@@ -57,41 +57,42 @@ class _HomePageState extends State<HomePage> {
   String qqnumber = '';
 
   //当前未读通知数量
-  String unread='';
+  String unread = '';
 
-  void _bmob_get_System_Notice_size() async{
-    if(login_state==false){
+  void _bmob_get_System_Notice_size() async {
+    if (login_state == false) {
       return;
     }
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     BmobQuery<System_Notice> query = BmobQuery();
     query.addWhereNotEqualTo("imageurl", "12%%%3");
     query.queryObjects().then((data) {
       List<System_Notice> list1 = data.map((i) => System_Notice.fromJson(i)).toList();
-      BmobQuery<QTuser> query = BmobQuery();
-      query.addWhereEqualTo("phone", phone.toString().trim());
-      query.queryObjects().then((data) {
+      BmobQuery<QTuser> query2 = BmobQuery();
+      query2.addWhereEqualTo("phone", sharedPreferences.getString('phone'));
+      query2.queryObjects().then((data) {
         List<QTuser> list2 = data.map((i) => QTuser.fromJson(i)).toList();
         setState(() {
-          if(list2[0].notice!=null&&list2[0].notice.length!=0){
-            if(int.parse(list2[0].notice.toString())<list1.length){
-              unread=(list1.length-int.parse(list2[0].notice.toString())).toString();
-            }else{
-              unread='';
+          if (list2[0].notice != null && list2[0].notice.length != 0) {
+            if (int.parse(list2[0].notice.toString()) < list1.length) {
+              unread = (list1.length - int.parse(list2[0].notice.toString())).toString();
+            } else {
+              unread = '';
             }
-          }else{
-            unread=list1.length.toString();
+          } else {
+            unread = list1.length.toString();
           }
         });
-
       }).catchError((e) {});
     }).catchError((e) {
       //print(BmobError.convert(e).error);
       //_showmodel('获取通知信息失败', Toast.LENGTH_SHORT,Colors.red);
     });
   }
+
   //修改用户浏览系统通知
-  _updatenotify() async{
-    if(login_state==false){
+  _updatenotify() async {
+    if (login_state == false) {
       return;
     }
     BmobQuery<QTuser> query = BmobQuery();
@@ -100,10 +101,11 @@ class _HomePageState extends State<HomePage> {
       List<QTuser>templist = data.map((i) => QTuser.fromJson(i)).toList();
       QTuser blog = QTuser();
       blog.objectId = templist[0].objectId;
-      if(templist[0].notice==null||templist[0].notice.length==0){
-        blog.notice=unread;
-      }else{
-        blog.notice=(int.parse(unread)+int.parse(templist[0].notice)).toString();
+      if (templist[0].notice == null || templist[0].notice.length == 0) {
+        blog.notice = unread;
+      } else {
+        blog.notice =
+            (int.parse(unread) + int.parse(templist[0].notice)).toString();
       }
       blog.update().then((BmobUpdated bmobUpdated) {
         _bmob_get_System_Notice_size();
@@ -115,18 +117,18 @@ class _HomePageState extends State<HomePage> {
 
 
   void _model_click(String str) {
-    if(login_state==false){
+    if (login_state == false) {
       Util.showTaost('请先登陆小猫', Toast.LENGTH_SHORT, Colors.red);
       return;
     }
-    if(now_studentid==null||now_studentid.length<2){
+    if (now_studentid == null || now_studentid.length < 2) {
       Util.showTaost('请先绑定学号', Toast.LENGTH_SHORT, Colors.red);
       return;
     }
     //print(str);
     switch (str) {
       case '学教平台':
-        if(now_studentid.length!=9){
+        if (now_studentid.length != 9) {
           Util.showTaost('你不是学生，暂无权限。', Toast.LENGTH_SHORT, Colors.grey);
           return;
         }
@@ -188,7 +190,7 @@ class _HomePageState extends State<HomePage> {
               }),
         ));
         break;
-      case '学习周期':
+      case '学习计时':
         Navigator.push(
             context,
             new MaterialPageRoute(
@@ -202,7 +204,8 @@ class _HomePageState extends State<HomePage> {
         Navigator.push(
             context,
             new MaterialPageRoute(
-                builder: (context) => new WebViewPage(
+                builder: (context) =>
+                new WebViewPage(
                     url: 'http://dyzuis.cn:8080/software2.0/index.html',
                     title: '软件协会官方网站')));
         break;
@@ -222,7 +225,8 @@ class _HomePageState extends State<HomePage> {
         Navigator.push(
             context,
             new MaterialPageRoute(
-                builder: (context) => new WebViewPage(
+                builder: (context) =>
+                new WebViewPage(
                     url: 'http://dyzuis.cn:8080/PPball/index.html',
                     title: '碰碰球')));
         break;
@@ -241,7 +245,7 @@ class _HomePageState extends State<HomePage> {
                 builder: (context) => new competition_entrance()));
         break;
       case '教师上课签到记录':
-        if(now_studentid.length!=5){
+        if (now_studentid.length != 5) {
           Util.showTaost('你不是教师，暂无权限。', Toast.LENGTH_SHORT, Colors.grey);
           return;
         }
@@ -251,7 +255,7 @@ class _HomePageState extends State<HomePage> {
                 builder: (context) => new teach_home_view()));
         break;
       case '教师教务系统':
-        if(now_studentid.length!=5){
+        if (now_studentid.length != 5) {
           Util.showTaost('你不是教师，暂无权限。', Toast.LENGTH_SHORT, Colors.grey);
           return;
         }
@@ -261,7 +265,7 @@ class _HomePageState extends State<HomePage> {
                 builder: (context) => new teach_jw_main_view()));
         break;
       case '教师学工平台':
-        if(now_studentid.length!=5){
+        if (now_studentid.length != 5) {
           Util.showTaost('你不是教师，暂无权限。', Toast.LENGTH_SHORT, Colors.grey);
           return;
         }
@@ -271,7 +275,7 @@ class _HomePageState extends State<HomePage> {
                 builder: (context) => new teach_xg_main_view()));
         break;
       case '学生上课签到':
-        if(now_studentid.length!=9){
+        if (now_studentid.length != 9) {
           Util.showTaost('你不是学生，暂无权限。', Toast.LENGTH_SHORT, Colors.grey);
           return;
         }
@@ -281,7 +285,7 @@ class _HomePageState extends State<HomePage> {
                 builder: (context) => new student_home_view()));
         break;
       case '教师学教密码修改':
-        if(now_studentid.length!=5){
+        if (now_studentid.length != 5) {
           Util.showTaost('你不是教师，暂无权限。', Toast.LENGTH_SHORT, Colors.grey);
           return;
         }
@@ -294,7 +298,8 @@ class _HomePageState extends State<HomePage> {
         Navigator.push(
             context,
             new MaterialPageRoute(
-                builder: (context) => new WebViewPage(
+                builder: (context) =>
+                new WebViewPage(
                     url: 'http://sso.jvtc.jx.cn/cas/login?service=http%3A%2F%2Fhqbx.jvtc.jx.cn%2FCASLogin',
                     title: '寝室维修')));
         break;
@@ -336,7 +341,6 @@ class _HomePageState extends State<HomePage> {
           });
         }
       }
-      _bmob_get_System_Notice_size();
     }).catchError((e) {});
   }
 
@@ -361,21 +365,24 @@ class _HomePageState extends State<HomePage> {
           context,
           new MaterialPageRoute(
               builder: (context) =>
-                  new WebViewPage(url: sfs[index].url, title: '详情内容')));
+              new WebViewPage(url: sfs[index].url, title: '详情内容')));
     }
   }
 
   List<home_blog> blog_list = [];
-  List<Widget> blog_button_list=[];
+  List<Widget> blog_button_list = [];
+
   void _bmob_get_blog_information() {
     BmobQuery<home_blog> query = BmobQuery();
     query.addWhereEqualTo("vis", "true");
     query.queryObjects().then((data) {
       blog_list = data.map((i) => home_blog.fromJson(i)).toList();
-      for(home_blog hb in blog_list){
+      for (home_blog hb in blog_list) {
         blog_button_list.add(buildButtonColumn3(hb.blog_image,
-            hb.blog_name!=null?hb.blog_name:'',hb.blog_introduce!=null?hb.blog_introduce:'',hb));
+            hb.blog_name != null ? hb.blog_name : '',
+            hb.blog_introduce != null ? hb.blog_introduce : '', hb));
       }
+      _bmob_get_System_Notice_size();
       //print('blog_list:$blog_list');
     }).catchError((e) {});
   }
@@ -444,7 +451,8 @@ class _HomePageState extends State<HomePage> {
 //  }
 
 
-  Widget buildButtonColumn2(String imageurl, String label1, label2,double size) {
+  Widget buildButtonColumn2(String imageurl, String label1, label2,
+      double size) {
     Color color = Color(int.parse(color2));
     return new Container(
       margin: EdgeInsets.all(3.0),
@@ -452,21 +460,28 @@ class _HomePageState extends State<HomePage> {
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Expanded(child: Text(''),flex: 1,),
+          Expanded(child: Text(''), flex: 1,),
           new GestureDetector(
             child: new ClipOval(
               child: new Image(
-                image: imageurl.indexOf('http')==-1?new AssetImage(imageurl):new NetworkImage(imageurl),
-                height: MediaQueryData.fromWindow(ui.window).size.height*size,
-                width: MediaQueryData.fromWindow(ui.window).size.height*size,
-                fit: BoxFit.fill
+                  image: imageurl.indexOf('http') == -1 ? new AssetImage(
+                      imageurl) : new NetworkImage(imageurl),
+                  height: MediaQueryData
+                      .fromWindow(ui.window)
+                      .size
+                      .height * size,
+                  width: MediaQueryData
+                      .fromWindow(ui.window)
+                      .size
+                      .height * size,
+                  fit: BoxFit.fill
               ),
             ),
             onTap: () {
               _model_click(label1);
             },
           ),
-          Expanded(child: Text(''),flex: 1,),
+          Expanded(child: Text(''), flex: 1,),
           Expanded(
             child: new Align(
               alignment: FractionalOffset.bottomLeft,
@@ -509,7 +524,8 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget buildButtonColumn4(String imageurl, String label1, label2,double size) {
+  Widget buildButtonColumn4(String imageurl, String label1, label2,
+      double size) {
     Color color = Color(int.parse(color2));
     return new Container(
       margin: EdgeInsets.all(5.0),
@@ -517,16 +533,22 @@ class _HomePageState extends State<HomePage> {
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Expanded(child: Text(''),flex: 1,),
+          Expanded(child: Text(''), flex: 1,),
           new ClipOval(
             child: new Image(
                 image: new AssetImage(imageurl),
-                height: MediaQueryData.fromWindow(ui.window).size.height*size,
-                width: MediaQueryData.fromWindow(ui.window).size.height*size,
+                height: MediaQueryData
+                    .fromWindow(ui.window)
+                    .size
+                    .height * size,
+                width: MediaQueryData
+                    .fromWindow(ui.window)
+                    .size
+                    .height * size,
                 fit: BoxFit.fill
             ),
           ),
-          Expanded(child: Text(''),flex: 1,),
+          Expanded(child: Text(''), flex: 1,),
           Expanded(
             child: new Align(
               alignment: FractionalOffset.bottomLeft,
@@ -569,9 +591,10 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget buildButtonColumn3(String imageurl, String label1, label2,home_blog hb) {
-    if(imageurl==null){
-      imageurl='';
+  Widget buildButtonColumn3(String imageurl, String label1, label2,
+      home_blog hb) {
+    if (imageurl == null) {
+      imageurl = '';
     }
     Color color = Color(int.parse(color2));
     return new Container(
@@ -580,16 +603,23 @@ class _HomePageState extends State<HomePage> {
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Expanded(child: Text(''),flex: 1,),
+          Expanded(child: Text(''), flex: 1,),
           new ClipOval(
             child: new Image(
-                image: imageurl.length<1?new AssetImage('images/2.2.x/loading01.png'):new NetworkImage(imageurl),
-                height: MediaQueryData.fromWindow(ui.window).size.height*0.07,
-                width: MediaQueryData.fromWindow(ui.window).size.height*0.07,
+                image: imageurl.length < 1 ? new AssetImage(
+                    'images/2.2.x/loading01.png') : new NetworkImage(imageurl),
+                height: MediaQueryData
+                    .fromWindow(ui.window)
+                    .size
+                    .height * 0.07,
+                width: MediaQueryData
+                    .fromWindow(ui.window)
+                    .size
+                    .height * 0.07,
                 fit: BoxFit.fill
             ),
           ),
-          Expanded(child: Text(''),flex: 1,),
+          Expanded(child: Text(''), flex: 1,),
           Expanded(
             child: new Align(
               alignment: FractionalOffset.bottomLeft,
@@ -624,7 +654,8 @@ class _HomePageState extends State<HomePage> {
                   Navigator.push(
                       context,
                       new MaterialPageRoute(
-                          builder: (context) => new WebViewPage(
+                          builder: (context) =>
+                          new WebViewPage(
                               url: hb.blog_url,
                               title: hb.blog_name)));
                 },
@@ -659,13 +690,19 @@ class _HomePageState extends State<HomePage> {
           borderRadius: BorderRadius.all(Radius.circular(10.0)),
         ),
         margin: EdgeInsets.all(10.0),
-        width: MediaQuery.of(context).size.width,
+        width: MediaQuery
+            .of(context)
+            .size
+            .width,
         height: 150,
         child: Swiper(
           layout: SwiperLayout.STACK,
           itemCount: imageList.length,
           itemBuilder: _swiperBuilder,
-          itemWidth: MediaQueryData.fromWindow(ui.window).size.width*0.9,
+          itemWidth: MediaQueryData
+              .fromWindow(ui.window)
+              .size
+              .width * 0.9,
           viewportFraction: 0.8,
           scale: 0.8,
           pagination: SwiperPagination(
@@ -705,10 +742,13 @@ class _HomePageState extends State<HomePage> {
           new Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              buildButtonColumn4('images/2.2.1.x/qswx.png', '寝室报修', '九江职业技术学院宿舍损坏情况报修',0.072),
+              buildButtonColumn4(
+                  'images/2.2.1.x/qswx.png', '寝室报修', '九江职业技术学院宿舍损坏情况报修', 0.072),
               buildButtonColumn2(
-                  'images/2.2.1.x/tug.png', '图书馆', '包含图书馆个人信息查看，书籍查询，预约书籍，取消预约，书籍续借，缴费信息等功能',0.09),
-              buildButtonColumn2('images/2.2.1.x/zxsj.png', '作息时间', '可以查看作息时间表',0.09),
+                  'images/2.2.1.x/tug.png', '图书馆',
+                  '包含图书馆个人信息查看，书籍查询，预约书籍，取消预约，书籍续借，缴费信息等功能', 0.09),
+              buildButtonColumn2(
+                  'images/2.2.1.x/zxsj.png', '作息时间', '可以查看作息时间表', 0.09),
             ],
           ),
         ],
@@ -736,8 +776,10 @@ class _HomePageState extends State<HomePage> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               buildButtonColumn2(
-                  'images/2.2.1.x/xjpt.png', '学教平台', '学生信息，成绩查询，活动评价，素拓分查询，寝室情况查询',0.09),
-              buildButtonColumn2('images/2.2.1.x/xsqd.png', '学生上课签到', '学生可以在此签到!',0.09),
+                  'images/2.2.1.x/xjpt.png', '学教平台',
+                  '学生信息，成绩查询，活动评价，素拓分查询，寝室情况查询', 0.09),
+              buildButtonColumn2(
+                  'images/2.2.1.x/xsqd.png', '学生上课签到', '学生可以在此签到!', 0.09),
               //buildButtonColumn2('images/2.2.1.x/cjfx.png', '成绩分析', '数据分析仅供参考。',0.09),
             ],
           ),
@@ -763,10 +805,14 @@ class _HomePageState extends State<HomePage> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           buildButtonColumn2(
-              'images/2.2.1.x/swzl.png', '失物招领', '采用AI识别技术帮助你尽可能的准确快速找到你的物品',0.09),
-          buildButtonColumn2('images/2.2.1.x/sthd.png', '社团活动', '社团活动投票，投票需谨慎。',0.09),
-          buildButtonColumn2('images/2.2.1.x/ywwx.png', '义务维修', '电脑，平板，手机，系统重装，需要请发表',0.09),
-          buildButtonColumn2('images/2.2.1.x/djs.png', '倒计时', '帮助你记录重要的事情',0.09),
+              'images/2.2.1.x/swzl.png', '失物招领', '采用AI识别技术帮助你尽可能的准确快速找到你的物品',
+              0.09),
+          buildButtonColumn2(
+              'images/2.2.1.x/sthd.png', '社团活动', '社团活动投票，投票需谨慎。', 0.09),
+          buildButtonColumn2(
+              'images/2.2.1.x/ywwx.png', '义务维修', '电脑，平板，手机，系统重装，需要请发表', 0.09),
+          buildButtonColumn2(
+              'images/2.2.1.x/djs.png', '倒计时', '帮助你记录重要的事情', 0.09),
         ],
       ),
     );
@@ -789,9 +835,9 @@ class _HomePageState extends State<HomePage> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           buildButtonColumn2('images/2.2.1.x/xxzq.png', '学习计时',
-              '系统计时器，优势在于不管你退没退出程序，系统计时都会一直在，不用担心计时不准确。',0.09),
+              '系统计时器，优势在于不管你退没退出程序，系统计时都会一直在，不用担心计时不准确。', 0.09),
           buildButtonColumn2('images/2.2.1.x/qzqqlt.png', '强制qq聊天',
-              '输入对方qq号可以强制拉起qq与对方进行交流,如果对方没有打开在线咨询则无法发送消息,你可以直接加为好友。',0.09),
+              '输入对方qq号可以强制拉起qq与对方进行交流,如果对方没有打开在线咨询则无法发送消息,你可以直接加为好友。', 0.09),
           //buildButtonColumn(Icons.supervisor_account, '情侣空间','你和对象的私人空间.'), //no open
         ],
       ),
@@ -814,11 +860,13 @@ class _HomePageState extends State<HomePage> {
       child: new Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          buildButtonColumn2('images/2.2.1.x/rjxh.png', '软件协会官方网站', '软件协会欢迎您!',0.09),
-          buildButtonColumn2('images/2.2.1.x/xhsk.png', '协会收款',
-              '九职协会收款助手，帮助协会活动招新收款项目的整理以及归纳，谨慎交钱，开心你我他。',0.09),
           buildButtonColumn2(
-              'images/2.2.1.x/xhqhm.png', '协会群号码', '输入你的学号然后就会出现相应你加入的协会群号码。',0.09),
+              'images/2.2.1.x/rjxh.png', '软件协会官方网站', '软件协会欢迎您!', 0.09),
+          buildButtonColumn2('images/2.2.1.x/xhsk.png', '协会收款',
+              '九职协会收款助手，帮助协会活动招新收款项目的整理以及归纳，谨慎交钱，开心你我他。', 0.09),
+          buildButtonColumn2(
+              'images/2.2.1.x/xhqhm.png', '协会群号码', '输入你的学号然后就会出现相应你加入的协会群号码。',
+              0.09),
           //buildButtonColumn(Icons.supervisor_account, '情侣空间','你和对象的私人空间.'), //no open
         ],
       ),
@@ -841,14 +889,15 @@ class _HomePageState extends State<HomePage> {
       child: new Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          buildButtonColumn2('images/2.2.1.x/ppball.png', '碰碰球', '来吧，拼酒量，拼手速吧!',0.09),
+          buildButtonColumn2(
+              'images/2.2.1.x/ppball.png', '碰碰球', '来吧，拼酒量，拼手速吧!', 0.09),
         ],
       ),
     );
 
     //博客模块
     Widget other_text = new Offstage(
-      offstage: blog_list.length==0?true:false,
+      offstage: blog_list.length == 0 ? true : false,
       child: new Container(
         padding: const EdgeInsets.fromLTRB(32, 10, 32, 15),
         child: new Text(
@@ -863,7 +912,7 @@ class _HomePageState extends State<HomePage> {
       ),
     );
     Widget other_button = new Offstage(
-      offstage: blog_list.length==0?true:false,
+      offstage: blog_list.length == 0 ? true : false,
       child: new Container(
         child: new Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -889,15 +938,20 @@ class _HomePageState extends State<HomePage> {
       child: new Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          buildButtonColumn2('images/2.2.1.x/jsxg.png', '教师教务系统', '课表查看需登陆此平台!',0.09),
-          buildButtonColumn2('images/2.2.1.x/jsjw.png', '教师学工平台', '请假审批，困难学生认证，销假，学生密码修改等!',0.09),
-          buildButtonColumn2('images/2.2.1.x/jsqd.png', '教师上课签到记录', '教师可以在此查看签到记录!',0.09),
-          buildButtonColumn2('images/2.2.1.x/jsxjmmxg.png', '教师学教密码修改', '教师在这里进行教务系统，学工平台的密码统一修改!',0.09),
+          buildButtonColumn2(
+              'images/2.2.1.x/jsxg.png', '教师教务系统', '课表查看需登陆此平台!', 0.09),
+          buildButtonColumn2(
+              'images/2.2.1.x/jsjw.png', '教师学工平台', '请假审批，困难学生认证，销假，学生密码修改等!',
+              0.09),
+          buildButtonColumn2(
+              'images/2.2.1.x/jsqd.png', '教师上课签到记录', '教师可以在此查看签到记录!', 0.09),
+          buildButtonColumn2('images/2.2.1.x/jsxjmmxg.png', '教师学教密码修改',
+              '教师在这里进行教务系统，学工平台的密码统一修改!', 0.09),
         ],
       ),
     );
 
-    Widget student_ui(){
+    Widget student_ui() {
       return new ListView(
         children: [
           SwiperView(),
@@ -922,7 +976,7 @@ class _HomePageState extends State<HomePage> {
       );
     }
 
-    Widget teach_ui(){
+    Widget teach_ui() {
       return new ListView(
         children: [
           SwiperView(),
@@ -978,9 +1032,13 @@ class _HomePageState extends State<HomePage> {
                   Container(
                     child: Column(
                       children: <Widget>[
-                        SizedBox(height: MediaQueryData.fromWindow(ui.window).size.height*0.005,),
+                        SizedBox(height: MediaQueryData
+                            .fromWindow(ui.window)
+                            .size
+                            .height * 0.005,),
                         IconButton(
-                          icon: Icon(Icons.notifications, color: Color(int.parse(color2))),
+                          icon: Icon(Icons.notifications, color: Color(
+                              int.parse(color2))),
                           onPressed: () {
                             _updatenotify();
                             Navigator.push(
@@ -993,10 +1051,19 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   Container(
-                    width: MediaQueryData.fromWindow(ui.window).size.width*0.11,
+                    width: MediaQueryData
+                        .fromWindow(ui.window)
+                        .size
+                        .width * 0.11,
                     child: Align(
                       alignment: Alignment.centerRight,
-                      child: Text('\n'+unread,style: TextStyle(fontSize: MediaQueryData.fromWindow(ui.window).size.height*0.018,fontWeight: FontWeight.bold, color: Colors.red,),textAlign: TextAlign.right,),
+                      child: Text(
+                        '\n' + unread, style: TextStyle(fontSize: MediaQueryData
+                          .fromWindow(ui.window)
+                          .size
+                          .height * 0.018,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.red,), textAlign: TextAlign.right,),
                     ),
                   ),
                 ],
@@ -1012,7 +1079,7 @@ class _HomePageState extends State<HomePage> {
                     CustomRouteJianBian(Index(
                       index: 0,
                     )),
-                    (check) => false);
+                        (check) => false);
                 //Navigator.push(context, CustomRouteJianBian(HomePage()));
               },
             ),
@@ -1022,7 +1089,7 @@ class _HomePageState extends State<HomePage> {
         ),
         body: new Container(
           decoration: BoxDecoration(color: Color(int.parse(color1))),
-          child: ui_model=='学生版'?student_ui():teach_ui(),
+          child: ui_model == '学生版' ? student_ui() : teach_ui(),
         ),
       ),
     );
@@ -1042,9 +1109,10 @@ class _HomePageState extends State<HomePage> {
     bus.on("dart_event", (arg) {
       setState(() {
         blog_button_list.clear();
-        for(home_blog hb in blog_list){
+        for (home_blog hb in blog_list) {
           blog_button_list.add(buildButtonColumn3(hb.blog_image,
-              hb.blog_name!=null?hb.blog_name:'',hb.blog_introduce!=null?hb.blog_introduce:'',hb));
+              hb.blog_name != null ? hb.blog_name : '',
+              hb.blog_introduce != null ? hb.blog_introduce : '', hb));
         }
       });
     });

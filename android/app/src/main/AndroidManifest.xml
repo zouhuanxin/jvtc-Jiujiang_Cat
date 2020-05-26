@@ -22,7 +22,7 @@
     <application
         android:name="io.flutter.app.FlutterApplication"
         android:icon="@mipmap/icon"
-        android:label="九职小猫"
+        android:label="小猫校园"
         android:usesCleartextTraffic="true"
         tools:replace="label">
         <activity

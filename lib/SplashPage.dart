@@ -60,7 +60,7 @@ class _SplashPageState extends State<SplashPage> {
 //            padding: EdgeInsets.all(0.0),
             color: Colors.grey,
             child: new Text(
-              "$count 小猫奔跑",
+              "$count 倒计时",
               style: new TextStyle(color: Colors.white, fontSize: 12.0),
             ),
           ),

@@ -24,9 +24,9 @@ class MyApp extends StatelessWidget {
         "9e1c0370c480f4c47053d155b6d3b251", "349f886cee56a52891715a8a8b1960e0");
 
     return new MaterialApp(
-      title: '九职小猫手',
+      title: '小猫校园',
       debugShowCheckedModeBanner: false,
-      home: new SplashPage(),     // 指定去加载 Index页面。
+      home: new Index(),     // 指定去加载 Index页面。
       localizationsDelegates: [
         //此处
         GlobalMaterialLocalizations.delegate,
