@@ -11,7 +11,7 @@ description: A new Flutter application.
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 2.3.7+1
+version: 2.4.1+1
 
 environment:
   sdk: ">=2.2.0 <3.0.0"
@@ -58,7 +58,7 @@ flutter:
     - images/2.0.x/
     - images/2.2.x/
     - images/2.2.1.x/
-    - images/teach/
+    - images/teach/ 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

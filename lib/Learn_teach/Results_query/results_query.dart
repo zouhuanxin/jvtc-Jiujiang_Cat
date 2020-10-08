@@ -27,16 +27,6 @@ class results_query_State extends State<results_query>{
 
   List<DropdownMenuItem> getListData1(){
     List<DropdownMenuItem> items=new List();
-    DropdownMenuItem dropdownMenuItem1=new DropdownMenuItem(
-      child:new Text('2016-2017-1'),
-      value: '2016-2017-1',
-    );
-    items.add(dropdownMenuItem1);
-    DropdownMenuItem dropdownMenuItem2=new DropdownMenuItem(
-      child:new Text('2016-2017-2'),
-      value: '2016-2017-2',
-    );
-    items.add(dropdownMenuItem2);
     DropdownMenuItem dropdownMenuItem3=new DropdownMenuItem(
       child:new Text('2017-2018-1'),
       value: '2017-2018-1',
@@ -77,6 +67,16 @@ class results_query_State extends State<results_query>{
       value: '2020-2021-2',
     );
     items.add(dropdownMenuItem10);
+    DropdownMenuItem dropdownMenuItem11=new DropdownMenuItem(
+      child:new Text('2021-2022-1'),
+      value: '2021-2022-1',
+    );
+    items.add(dropdownMenuItem11);
+    DropdownMenuItem dropdownMenuItem12=new DropdownMenuItem(
+      child:new Text('2021-2022-2'),
+      value: '2021-2022-2',
+    );
+    items.add(dropdownMenuItem12);
     return items;
   }
 

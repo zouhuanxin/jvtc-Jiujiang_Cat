@@ -92,7 +92,7 @@ class my_State extends State<my>{
         break;
       case '免责声明':
         Navigator.push(context,
-            new MaterialPageRoute(builder: (context) => new WebViewPage(url:'http://dyzuis.cn:8080/zhxword/九职小猫手免责声明.html',title:'免责声明')));
+            new MaterialPageRoute(builder: (context) => new WebViewPage(url:serverUrl+serverWord+'/九职小猫手免责声明.html',title:'免责声明')));
         break;
       case '退出登陆':
         _showmodel_cancel_login_stystem('退出登陆','你确定退出登陆吗?');
@@ -236,10 +236,10 @@ class my_State extends State<my>{
         // body_component02('images/2.0.x/myzlxg.png',40, '资料修改'),
         body_component02('images/2.2.1.x/jcgx.png',45, '检查更新'),
 //        body_component03('images/2.2.x/yijianfankui.png',32,50, '意见反馈'),
-        body_component02('images/2.2.1.x/mzsm.png',45, '免责声明'),
+//        body_component02('images/2.2.1.x/mzsm.png',45, '免责声明'),
         body_component02('images/2.2.1.x/tcdl.png',35, '退出登陆'),
         SizedBox(height: 10,),
-        new Text("联系开发者email:634448817@qq.com",textAlign: TextAlign.center,style: TextStyle(color: Color(int.parse(color2)),fontWeight:
+        new Text("我的email:634448817@qq.com",textAlign: TextAlign.center,style: TextStyle(color: Color(int.parse(color2)),fontWeight:
         FontWeight.w400,fontSize: 18),),
         SizedBox(height: 10,)
       ],
@@ -264,10 +264,10 @@ class my_State extends State<my>{
         // body_component02('images/2.0.x/myzlxg.png',40, '资料修改'),
         body_component02('images/2.2.1.x/jcgx.png',45, '检查更新'),
 //        body_component03('images/2.2.x/yijianfankui.png',32,50, '意见反馈'),
-        body_component02('images/2.2.1.x/mzsm.png',45, '免责声明'),
+//        body_component02('images/2.2.1.x/mzsm.png',45, '免责声明'),
         body_component02('images/2.2.1.x/tcdl.png',35, '退出登陆'),
         SizedBox(height: 10,),
-        new Text("联系开发者email:634448817@qq.com",textAlign: TextAlign.center,style: TextStyle(color: Color(int.parse(color2)),fontWeight:
+        new Text("我的email:634448817@qq.com",textAlign: TextAlign.center,style: TextStyle(color: Color(int.parse(color2)),fontWeight:
         FontWeight.w400,fontSize: 18),),
         SizedBox(height: 10,)
       ],
@@ -303,7 +303,7 @@ class my_State extends State<my>{
     String bs64=base64Encode(bytes);
     if (bs64.length > 180000) {
       bs64 = null;
-      _showmodel('图片过大,请重新选择头像', Toast.LENGTH_SHORT, Colors.blue);
+      _showmodel('图片过大,请重新选择', Toast.LENGTH_SHORT, Colors.blue);
     }else{
       _uploadimage(bs64);
     }
@@ -529,7 +529,7 @@ class my_State extends State<my>{
           content: Text((content)),
           actions: <Widget>[
             new FlatButton(
-              child: new Text("取消"),
+              child: new Text("手滑"),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -550,17 +550,17 @@ class my_State extends State<my>{
     showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: Text('系统提示'),
-          content: Text(('确定更换头像嘛')),
+          title: Text('温馨提示'),
+          content: Text(('你需要更换头像嘛')),
           actions: <Widget>[
             new FlatButton(
-              child: new Text("取消"),
+              child: new Text("手滑"),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             new FlatButton(
-              child: new Text("确定",style: TextStyle(color: Colors.red),),
+              child: new Text("是的",style: TextStyle(color: Colors.red),),
               onPressed: () {
                 _openGallery();
                 Navigator.of(context).pop();
@@ -589,7 +589,7 @@ class my_State extends State<my>{
     sharedPreferences.setString('login_state', 'false');
 
     now_login_image_base64=default_image;
-    username='点击左上角登陆';
+    username='左上角登陆';
     phone='未登陆';
     login_state=false;
 

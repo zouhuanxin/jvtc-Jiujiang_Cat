@@ -53,7 +53,7 @@ class my_login_State extends State<my_login>{
 
     return new Scaffold(
         appBar: new AppBar(
-          title: new Text('QT登陆                                       ',
+          title: new Text('登陆                                       ',
             textAlign:TextAlign.left,style: TextStyle(color: Color(int.parse(color2)),fontWeight: FontWeight.w800,fontSize: 17),),
           elevation: 0.0,
           iconTheme: IconThemeData(color: Color(int.parse(color2))),

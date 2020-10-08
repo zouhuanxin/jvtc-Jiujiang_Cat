@@ -132,7 +132,7 @@ class CoursePageState extends State<CoursPage> {
           //showmodel('请先登录学教平台', Colors.red);
         }
       } else {
-        showmodel('无课程信息,可以尝试重新登陆', Colors.red);
+        showmodel('没有课程信息😔', Colors.red);
       }
     } else {
       if (resh_state == 1) {

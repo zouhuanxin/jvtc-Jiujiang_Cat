@@ -1,7 +1,7 @@
 
 import 'package:flutter_app01/Bean/QTuser.dart';
 
-String app_version='2.3.7'; // Current app version number
+String app_version='2.4.1'; // Current app version number
 String app_describe=''; // Current app version describe
 
 //Currently logged in user avatar
@@ -18,6 +18,9 @@ String objectid='未登陆';
 String now_studentid='未登陆';
 bool login_state=false;
 QTuser now_qTuser=QTuser();
+String serverUrl = "http://autotask.xiaoxingxing.online:2002";
+String serverWord = "/app/zhx/zhxword";
+String serverImage = "/app/zhx/rjxhmange";
 
 //System color configuration
 /**

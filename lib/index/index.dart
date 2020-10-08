@@ -287,6 +287,7 @@ class IndexState extends State<Index> with TickerProviderStateMixin {
       String url2, String url3) {
     showDialog(
         context: context,
+        barrierDismissible: true,
         builder: (context) => AlertDialog(
               title: Text(title),
               content: Text((content)),

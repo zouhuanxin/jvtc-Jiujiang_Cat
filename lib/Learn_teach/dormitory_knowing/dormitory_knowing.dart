@@ -26,7 +26,7 @@ class dormitory_knowing_State extends State<dormitory_knowing> {
   num now_page = 1;
   num sum_page = 0;
   num page_nmber = 100;
-  num now_loading_entry_sum = 100;
+  num now_loading_entry_sum = 5;
 
   num hongbang = 0, baibang = 0, anquan = 0;
 
@@ -284,7 +284,7 @@ class dormitory_knowing_State extends State<dormitory_knowing> {
             children: <Widget>[
               head_card(),
               activity_eevaluation_Card(),
-              paging_component(),
+              //paging_component(),
             ],
           ),
         ));
