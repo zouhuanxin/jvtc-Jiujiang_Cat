@@ -22,6 +22,8 @@ String serverUrl = "http://autotask.xiaoxingxing.online:2002";
 String serverWord = "/app/zhx/zhxword";
 String serverImage = "/app/zhx/rjxhmange";
 
+//
+
 //System color configuration
 /**
  * default color
