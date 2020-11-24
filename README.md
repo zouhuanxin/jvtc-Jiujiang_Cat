@@ -8,7 +8,7 @@
 
 ### 并为技术交流的同学提供部分教务系统以及图书馆接口 (接口如有设计不合理之处望多指教)
 
-### apk文件下载连接 http://dyzuis.cn:8080/test/downloadfile 你也可以在build\app\outputs\apk\release目录中提取  （文件大小在20M左右,下载可能较慢请耐心等待）
+### apk文件下载连接 https://app.mi.com/details?id=com.example.flutter_app01&ref=search 你也可以在build\app\outputs\apk\release目录中提取 
 
 #### 目前程序全部功能仅支持九江技术学院学生使用非本校学生支持处学工平台，教务系统，图书馆系统外的功能使用。
 
